@@ -1,0 +1,247 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Postulación de Empleo - Portal del Vecino{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0 glass-card">
+                <div class="card-body p-5">
+                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                        <i class="fa-solid fa-briefcase fa-3x text-success me-3"></i>
+                        <div>
+                            <h2 class="h3 mb-0 fw-bold">Perfil Laboral y CV</h2>
+                            <p class="text-muted mb-0">{% if is_update %}Actualiza de tu información y aptitudes{% else %}Completa tu currículum al máximo nivel de detalle{% endif %}</p>
+                        </div>
+                    </div>
+
+                    {% if form.errors or formset_postulacion.errors or formset_experiencia.errors or formset_estudio.errors or formset_curso.errors or formset_idioma.errors %}
+                        <div class="alert alert-danger shadow-sm">
+                            <h5 class="alert-heading fw-bold mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Hay errores en su solicitud</h5>
+                            <p class="mb-2">Por favor revise y corrija los siguientes campos (despliegue las pestañas para localizarlos):</p>
+                            <ul class="mb-0 small">
+                                {% for field, errs in form.errors.items %}
+                                    <li><b>Datos Personales ({{ field }}):</b> {{ errs.0 }}</li>
+                                {% endfor %}
+                                {% for fs_errs in formset_postulacion.errors %}{% for field, errs in fs_errs.items %}<li><b>Postulaciones:</b> Fila inválida en <i>{{ field }}</i> - {{ errs.0 }}</li>{% endfor %}{% endfor %}
+                                {% for fs_errs in formset_experiencia.errors %}{% for field, errs in fs_errs.items %}<li><b>Experiencias:</b> Fila inválida en <i>{{ field }}</i> - {{ errs.0 }}</li>{% endfor %}{% endfor %}
+                                {% for fs_errs in formset_estudio.errors %}{% for field, errs in fs_errs.items %}<li><b>Estudios:</b> Fila inválida en <i>{{ field }}</i> - {{ errs.0 }}</li>{% endfor %}{% endfor %}
+                                {% for fs_errs in formset_curso.errors %}{% for field, errs in fs_errs.items %}<li><b>Cursos:</b> Fila inválida en <i>{{ field }}</i> - {{ errs.0 }}</li>{% endfor %}{% endfor %}
+                                {% for fs_errs in formset_idioma.errors %}{% for field, errs in fs_errs.items %}<li><b>Idiomas:</b> Fila inválida en <i>{{ field }}</i> - {{ errs.0 }}</li>{% endfor %}{% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Acordeón para organizar la info -->
+                        <div class="accordion" id="cvAccordion">
+                            
+                            <!-- 1. Datos Personales -->
+                            <div class="accordion-item shadow-sm mb-3 border-0">
+                                <h2 class="accordion-header" id="hDatosPersonales">
+                                    <button class="accordion-button fw-bold text-success bg-white border" type="button" data-bs-toggle="collapse" data-bs-target="#cDatosPersonales" aria-expanded="true">
+                                        <i class="fa-solid fa-address-card me-2"></i> Datos Personales y Disponibilidad
+                                    </button>
+                                </h2>
+                                <div id="cDatosPersonales" class="accordion-collapse collapse show" data-bs-parent="#cvAccordion">
+                                    <div class="accordion-body bg-light">
+                                        <div class="row g-4">
+                                            {% for field in form %}
+                                                {% if field.name == 'sobre_mi' %}
+                                                    <div class="col-12">
+                                                {% else %}
+                                                    <div class="col-md-6 mt-3">
+                                                {% endif %}
+                                                    <label class="form-label fw-semibold text-capitalize">{{ field.label }}</label>
+                                                    {{ field }}
+                                                    {% if field.help_text %}
+                                                        <div class="form-text mt-1">{{ field.help_text }}</div>
+                                                    {% endif %}
+                                                    {% if field.errors %}
+                                                        <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Postulaciones y Puestos -->
+                            <div class="accordion-item shadow-sm mb-3 border-0">
+                                <h2 class="accordion-header" id="hPostulaciones">
+                                    <button class="accordion-button collapsed fw-bold text-success bg-white border" type="button" data-bs-toggle="collapse" data-bs-target="#cPostulaciones">
+                                        <i class="fa-solid fa-crosshairs me-2"></i> Rubros y Puestos de Interés
+                                    </button>
+                                </h2>
+                                <div id="cPostulaciones" class="accordion-collapse collapse" data-bs-parent="#cvAccordion">
+                                    <div class="accordion-body bg-light">
+                                        {{ formset_postulacion.management_form }}
+                                        <div class="table-responsive">
+                                            <table class="table align-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Rubro</th>
+                                                        <th>Puesto de Interés</th>
+                                                        <th>Orden/Prioridad</th>
+                                                        <th>Borrar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for fs in formset_postulacion %}
+                                                    <tr class="fs-row">
+                                                        <td>{{ fs.id }}{{ fs.rubro }}</td>
+                                                        <td>{{ fs.puesto }}</td>
+                                                        <td>{{ fs.orden }}</td>
+                                                        <td class="text-center">{{ fs.DELETE }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Experiencia Laboral -->
+                            <div class="accordion-item shadow-sm mb-3 border-0">
+                                <h2 class="accordion-header" id="hExperiencias">
+                                    <button class="accordion-button collapsed fw-bold text-success bg-white border" type="button" data-bs-toggle="collapse" data-bs-target="#cExperiencias">
+                                        <i class="fa-solid fa-briefcase me-2"></i> Experiencias Laborales
+                                    </button>
+                                </h2>
+                                <div id="cExperiencias" class="accordion-collapse collapse" data-bs-parent="#cvAccordion">
+                                    <div class="accordion-body bg-light">
+                                        {{ formset_experiencia.management_form }}
+                                        {% for fs in formset_experiencia %}
+                                        <div class="card mb-3 border-secondary">
+                                            <div class="card-body">
+                                                {{ fs.id }}
+                                                <div class="row g-2">
+                                                    <div class="col-md-4"><label class="fw-bold small">Empresa</label>{{ fs.empresa }}</div>
+                                                    <div class="col-md-4"><label class="fw-bold small">Rubro</label>{{ fs.rubro }}</div>
+                                                    <div class="col-md-4"><label class="fw-bold small">Puesto</label>{{ fs.puesto }}</div>
+                                                    <div class="col-md-4"><label class="fw-bold small">Desde</label>{{ fs.fecha_desde }}</div>
+                                                    <div class="col-md-4"><label class="fw-bold small">Hasta</label>{{ fs.fecha_hasta }}</div>
+                                                    <div class="col-md-2 d-flex align-items-end"><label class="text-danger small fw-bold me-2">Eliminar</label>{{ fs.DELETE }}</div>
+                                                    <div class="col-12 mt-2"><label class="fw-bold small">Descripción (Tareas)</label>{{ fs.descripcion }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4. Estudios -->
+                            <div class="accordion-item shadow-sm mb-3 border-0">
+                                <h2 class="accordion-header" id="hEstudios">
+                                    <button class="accordion-button collapsed fw-bold text-success bg-white border" type="button" data-bs-toggle="collapse" data-bs-target="#cEstudios">
+                                        <i class="fa-solid fa-graduation-cap me-2"></i> Estudios Formales
+                                    </button>
+                                </h2>
+                                <div id="cEstudios" class="accordion-collapse collapse" data-bs-parent="#cvAccordion">
+                                    <div class="accordion-body bg-light">
+                                        {{ formset_estudio.management_form }}
+                                        <div class="table-responsive">
+                                            <table class="table align-middle">
+                                                <thead class="table-light"><tr><th>Nivel</th><th>Estado</th><th>Título</th><th>Institución</th><th>Borrar</th></tr></thead>
+                                                <tbody>
+                                                {% for fs in formset_estudio %}
+                                                    <tr>
+                                                        <td>{{ fs.id }}{{ fs.nivel }}</td>
+                                                        <td>{{ fs.estado }}</td>
+                                                        <td>{{ fs.titulo }}</td>
+                                                        <td>{{ fs.institucion }}</td>
+                                                        <td class="text-center">{{ fs.DELETE }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5. Cursos Adicionales y 6. Idiomas -->
+                            <div class="row g-3">
+                                <div class="col-xl-6">
+                                    <div class="accordion-item shadow-sm border-0 h-100">
+                                        <h2 class="accordion-header" id="hCursos">
+                                            <button class="accordion-button collapsed fw-bold text-success bg-white border" type="button" data-bs-toggle="collapse" data-bs-target="#cCursos">
+                                                <i class="fa-solid fa-certificate me-2"></i> Cursos
+                                            </button>
+                                        </h2>
+                                        <div id="cCursos" class="accordion-collapse collapse" data-bs-parent="#cvAccordion">
+                                            <div class="accordion-body bg-light p-2">
+                                                {{ formset_curso.management_form }}
+                                                {% for fs in formset_curso %}
+                                                <div class="border p-2 mb-2 bg-white">
+                                                    {{ fs.id }}
+                                                    <label class="small fw-bold">Nombre</label>{{ fs.nombre }}
+                                                    <label class="small fw-bold mt-1">Institución</label>{{ fs.institucion }}
+                                                    <div class="d-flex mt-1 gap-2">
+                                                        <div><label class="small fw-bold">Año</label>{{ fs.anio }}</div>
+                                                        <div><label class="small fw-bold">Duración</label>{{ fs.duracion }}</div>
+                                                        <div class="d-flex align-items-end ms-auto"><label class="text-danger small me-1">X</label>{{ fs.DELETE }}</div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-xl-6">
+                                    <div class="accordion-item shadow-sm border-0 h-100">
+                                        <h2 class="accordion-header" id="hIdiomas">
+                                            <button class="accordion-button collapsed fw-bold text-success bg-white border" type="button" data-bs-toggle="collapse" data-bs-target="#cIdiomas">
+                                                <i class="fa-solid fa-language me-2"></i> Idiomas
+                                            </button>
+                                        </h2>
+                                        <div id="cIdiomas" class="accordion-collapse collapse" data-bs-parent="#cvAccordion">
+                                            <div class="accordion-body bg-light p-2">
+                                                {{ formset_idioma.management_form }}
+                                                {% for fs in formset_idioma %}
+                                                <div class="border p-2 mb-2 bg-white d-flex gap-2 flex-wrap">
+                                                    {{ fs.id }}
+                                                    <div class="flex-grow-1"><label class="small fw-bold">Idioma</label>{{ fs.idioma }}</div>
+                                                    <div><label class="small fw-bold">Lee</label>{{ fs.lee }}</div>
+                                                    <div><label class="small fw-bold">Habla</label>{{ fs.habla }}</div>
+                                                    <div><label class="small fw-bold">Escribe</label>{{ fs.escribe }}</div>
+                                                    <div class="d-flex align-items-end"><label class="text-danger small fw-bold me-1">X</label>{{ fs.DELETE }}</div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!-- Fin Acordeon -->
+
+                        <div class="d-flex justify-content-end gap-3 mt-4 pt-4 border-top">
+                            <a href="{% url 'portal:dashboard' %}" class="btn btn-outline-secondary">Volver / Cancelar</a>
+                            <button type="submit" class="btn btn-success px-5 bg-gradient fw-bold shadow-sm">
+                                <i class="fa-solid fa-save me-2"></i>{% if is_update %}Guardar y Actualizar CV{% else %}Enviar Ficha Completa{% endif %}
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pequeño ajuste en los CSS del django (ocultar etiquetas basura extra) -->
+<style>
+    .accordion-body label { font-size: 0.9em; margin-bottom: 2px; }
+    .form-check-input { width: 1.5em; height: 1.5em; }
+</style>
+{% endblock %}

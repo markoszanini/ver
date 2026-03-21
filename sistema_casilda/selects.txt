@@ -1,0 +1,27 @@
+ALL SELECT IDs IN HTML:
+ - id_localidad
+ - id_situacion_actual
+ - id_movilidad_propia
+ - id_licencia_conducir
+ - id_licencia_categoria
+ - id_disponibilidad_viajar
+ - id_disponibilidad_horaria
+ - id_puestos
+ - id_postulaciones-0-rubro
+ - id_postulaciones-0-puesto
+ - id_postulaciones-__prefix__-rubro
+ - id_postulaciones-__prefix__-puesto
+ - id_experiencias-0-rubro
+ - id_experiencias-0-puesto
+ - id_experiencias-__prefix__-rubro
+ - id_experiencias-__prefix__-puesto
+ - id_idiomas-0-idioma
+ - id_idiomas-0-lee
+ - id_idiomas-0-habla
+ - id_idiomas-0-escribe
+ - id_idiomas-0-nivel_idiomas
+ - id_idiomas-__prefix__-idioma
+ - id_idiomas-__prefix__-lee
+ - id_idiomas-__prefix__-habla
+ - id_idiomas-__prefix__-escribe
+ - id_idiomas-__prefix__-nivel_idiomas

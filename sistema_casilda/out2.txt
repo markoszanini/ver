@@ -1,0 +1,5 @@
+Rubros en DB: 20
+Puestos en DB: 19
+Puestos de Rubro 2: 2
+STATUS: 200
+CONTENT: [{"id_puesto": 2, "descripcion": "Operario de l\u00ednea"}, {"id_puesto": 61, "descripcion": "Operario general"}]

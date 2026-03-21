@@ -1,0 +1,152 @@
+<!-- Librería html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<!-- BOTÓN -->
+<div style="text-align:center; margin-top:20px; margin-bottom: 20px;">
+  <button type="button"
+          onclick="descargarPDF()"
+          style="
+            padding:10px 25px;
+            font-size:14px;
+            font-weight:bold;
+            border:none;
+            border-radius:6px;
+            background:#1f6feb;
+            color:#fff;
+            cursor:pointer;">
+    Descargar PDF
+  </button>
+  <br><br>
+  <a href="javascript:history.back()" style="color:#555; text-decoration:none;">⬅ Volver al Listado</a>
+</div>
+
+<div id="pdf_extraccion" style="
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #000;
+      padding: 25px;
+      border: 2px solid #000;
+      background: #fff;
+      max-width: 900px;
+      margin: 0 auto;
+  ">
+    <table width="100%" style="margin-bottom:15px;">
+      <tr>
+        <td width="15%">
+          <!-- Un recuadro simple para el logo, puedes insertar la imagen real luego -->
+          <div style="height:60px; width:60px; border:1px solid #000; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold;">LOGO</div>
+        </td>
+        <td width="65%">
+          <div style="font-size:15px; font-weight:bold;">MUNICIPALIDAD DE CASILDA</div>
+          <div style="font-size:13px;">Área Producción – Sala de Extracción</div>
+          <div style="font-size:12px; font-weight:bold; margin-top:4px;">
+            ACTA DE BALANCE – PAGO EN {{ tipo_pago }}
+          </div>
+        </td>
+        <td width="20%" align="right">
+          <img src="{{ qr_url|safe }}" alt="QR">
+          <div style="font-size:9px; text-align:center;">Validación digital</div>
+        </td>
+      </tr>
+    </table>
+
+    <hr style="border:1px solid #000;">
+
+    <div style="margin-bottom:10px;">
+      <b>Destinatario:</b> Área de Economía y Finanzas
+    </div>
+
+    <div style="margin-bottom:10px;">
+      Se eleva la presente Acta de Balance al Área de Economía y Finanzas para su control,
+      registración contable y archivo correspondiente.
+    </div>
+
+    <div style="margin-bottom:15px;">
+      <b>Período:</b> {{ desde|date:"d/m/Y" }} al {{ hasta|date:"d/m/Y" }}
+    </div>
+
+    <table border="1" width="100%" cellspacing="0" cellpadding="5" style="border-collapse:collapse;">
+      <tr style="background:#e6e6e6; font-weight:bold; text-align:center;">
+        <th>Extracción</th>
+        <th>Apicultor</th>
+        <th>Kg</th>
+        {% if tipo_pago == 'DINERO' %}
+        <th>Precio/Kg</th>
+        <th>Total Bruto</th>
+        <th>10%</th>
+        <th>Servicio Extracción (2%)</th>
+        <th>Servicio Mantenimiento (5%)</th>
+        <th>Municipalidad (3%)</th>
+        {% else %}
+        <th>Servicio Extracción (Kg)</th>
+        <th>Servicio Mantenimiento (Kg)</th>
+        <th>Municipalidad (Kg)</th>
+        {% endif %}
+      </tr>
+
+      {% for r in extracciones %}
+      <tr>
+        <td align="center">{{ r.id_extraccion }}</td>
+        <td>{{ r.apicultor }}</td>
+        <td align="right">{{ r.total_kg|floatformat:2 }}</td>
+        {% if tipo_pago == 'DINERO' %}
+        <td align="right">$ {{ r.precio_por_kg|floatformat:2 }}</td>
+        <td align="right">$ {{ r.total_bruto|floatformat:2 }}</td>
+        <td align="right">$ {{ r.pago_10|floatformat:2 }}</td>
+        <td align="right">$ {{ r.servicio_ext|floatformat:2 }}</td>
+        <td align="right">$ {{ r.servicio_mant|floatformat:2 }}</td>
+        <td align="right">$ {{ r.municipalidad|floatformat:2 }}</td>
+        {% else %}
+        <td align="right">{{ r.servicio_ext|floatformat:2 }}</td>
+        <td align="right">{{ r.servicio_mant|floatformat:2 }}</td>
+        <td align="right">{{ r.municipalidad|floatformat:2 }}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+
+      <tr style="font-weight:bold; background:#f2f2f2;">
+        <td colspan="2">TOTALES</td>
+        <td align="right">{{ totales.sum_kg|floatformat:2 }}</td>
+        {% if tipo_pago == 'DINERO' %}
+        <td></td>
+        <td align="right">$ {{ totales.sum_bruto|floatformat:2 }}</td>
+        <td align="right">$ {{ totales.sum_10|floatformat:2 }}</td>
+        {% endif %}
+        <td align="right">{% if tipo_pago == 'DINERO' %}$ {% endif %}{{ totales.sum_serv_ext|floatformat:2 }}</td>
+        <td align="right">{% if tipo_pago == 'DINERO' %}$ {% endif %}{{ totales.sum_serv_mant|floatformat:2 }}</td>
+        <td align="right">{% if tipo_pago == 'DINERO' %}$ {% endif %}{{ totales.sum_muni|floatformat:2 }}</td>
+      </tr>
+    </table>
+
+    <div style="margin-top:25px; padding:10px; border:1px dashed #555; font-size:10px;">
+      Documento generado digitalmente por el usuario <b>{{ app_user }}</b><br>
+      Fecha de emisión: {% now "d/m/Y H:i" %}<br>
+      Sistema de Gestión Python – Municipalidad de Casilda
+    </div>
+
+    <table width="100%" style="margin-top:40px; text-align:center;">
+      <tr>
+        <td width="50%">___________________________<br>Responsable Sala de Extracción</td>
+        <td width="50%">___________________________<br>Economía y Finanzas</td>
+      </tr>
+    </table>
+</div>
+
+<script>
+function descargarPDF(){
+  const element = document.getElementById('pdf_extraccion');
+  const fechaDesde = '{{ desde|date:"Ymd" }}';
+  const fechaHasta = '{{ hasta|date:"Ymd" }}';
+  const tipoPago   = '{{ tipo_pago }}';
+
+  setTimeout(function () {
+    html2pdf().set({
+      margin: 8,
+      filename: 'Acta_Balance_' + tipoPago + '_' + fechaDesde + '_a_' + fechaHasta + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    }).from(element).save();
+  }, 300);
+}
+</script>

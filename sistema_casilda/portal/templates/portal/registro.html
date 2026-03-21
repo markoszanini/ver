@@ -1,0 +1,85 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block title %}Registro - Portal del Vecino{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-10">
+            <div class="glass-card p-5">
+                <div class="text-center mb-4">
+                    <i class="fa-solid fa-id-card fa-3x text-primary mb-3"></i>
+                    <h2 class="fw-bold">Crear Cuenta</h2>
+                    <p class="text-muted">Completá tus datos para acceder a los servicios municipales online</p>
+                </div>
+
+                {% if form.errors %}
+                <div class="alert alert-danger shadow-sm">
+                    <strong>Por favor, corregí los siguientes errores:</strong><br>
+                    {{ form.errors }}
+                </div>
+                {% endif %}
+
+                <form method="POST" action="{% url 'portal:registro' %}">
+                    {% csrf_token %}
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Nombre/s</label>
+                            <input type="text" name="first_name" class="form-control" required placeholder="Juan Pablo" value="{{ form.first_name.value|default:'' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Apellido/s</label>
+                            <input type="text" name="last_name" class="form-control" required placeholder="Pérez" value="{{ form.last_name.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">DNI (Será tu Usuario)</label>
+                            <input type="text" name="dni" class="form-control" required placeholder="Ej: 30123456" value="{{ form.dni.value|default:'' }}">
+                            <div class="form-text">Sin puntos ni espacios.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Correo Electrónico</label>
+                            <input type="email" name="email" class="form-control" required placeholder="juan@email.com" value="{{ form.email.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Teléfono (Opcional)</label>
+                            <input type="text" name="telefono" class="form-control" placeholder="Ej: 3464-123456" value="{{ form.telefono.value|default:'' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Domicilio (Opcional)</label>
+                            <input type="text" name="domicilio" class="form-control" placeholder="Calle 123" value="{{ form.domicilio.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Contraseña</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-semibold">Confirmar Contraseña</label>
+                            <input type="password" name="password_confirm" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Completar Registro</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0">¿Ya tenés una cuenta? <a href="{% url 'portal:login' %}" class="fw-bold text-decoration-none">Ingresá acá</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

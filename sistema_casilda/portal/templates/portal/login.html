@@ -1,0 +1,41 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block title %}Iniciar Sesión - Portal del Vecino{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="glass-card p-5">
+                <div class="text-center mb-4">
+                    <i class="fa-solid fa-user-circle fa-3x text-primary mb-3"></i>
+                    <h2 class="fw-bold">Ingresar al Portal</h2>
+                    <p class="text-muted">Acceda usando su DNI como usuario</p>
+                </div>
+
+                <form method="POST" action="{% url 'portal:login' %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label fw-semibold">Número de DNI</label>
+                        <input type="text" name="username" class="form-control form-control-lg" id="id_username" placeholder="Ingresá tu DNI sin puntos" required autofocus>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_password" class="form-label fw-semibold">Contraseña</label>
+                        <input type="password" name="password" class="form-control form-control-lg" id="id_password" placeholder="Tu contraseña" required>
+                    </div>
+
+                    <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Entrar a Mi Panel</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0">¿No tenés una cuenta? <a href="{% url 'portal:registro' %}" class="fw-bold text-decoration-none">Registrate acá</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

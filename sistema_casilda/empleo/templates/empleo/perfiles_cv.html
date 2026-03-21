@@ -1,0 +1,134 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block content %}
+<div style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
+  <h2>Buscador Avanzado: Perfiles Laborales y CV</h2>
+  
+  <form method="GET" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; margin-bottom:20px; background:#f9f9f9; padding:15px; border:1px solid #ddd;">
+    
+    <div>
+        <label><b>Edad Desde:</b></label><br>
+        <input type="number" name="edad_desde" value="{{ filtros.edad_desde }}" style="width:100%; padding:5px;">
+    </div>
+    <div>
+        <label><b>Edad Hasta:</b></label><br>
+        <input type="number" name="edad_hasta" value="{{ filtros.edad_hasta }}" style="width:100%; padding:5px;">
+    </div>
+    <div>
+        <label><b>Sexo:</b></label><br>
+        <select name="sexo" style="width:100%; padding:5px;">
+            <option value="">Todos</option>
+            <option value="M" {% if filtros.sexo == 'M' %}selected{% endif %}>Masculino</option>
+            <option value="F" {% if filtros.sexo == 'F' %}selected{% endif %}>Femenino</option>
+        </select>
+    </div>
+    
+    <div>
+        <label><b>Localidad:</b></label><br>
+        <select name="localidad" style="width:100%; padding:5px;">
+            <option value="">Todas</option>
+            {% for id_loc, desc in localidades %}
+                <option value="{{ id_loc }}" {% if filtros.localidad == id_loc %}selected{% endif %}>{{ desc }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label><b>Disponibil. Viajar:</b></label><br>
+        <select name="viajar" style="width:100%; padding:5px;">
+            <option value="">Todos</option>
+            <option value="S" {% if filtros.viajar == 'S' %}selected{% endif %}>Sí</option>
+            <option value="N" {% if filtros.viajar == 'N' %}selected{% endif %}>No</option>
+        </select>
+    </div>
+    <div>
+        <label><b>Movilidad Propia:</b></label><br>
+        <select name="movilidad" style="width:100%; padding:5px;">
+            <option value="">Todos</option>
+            <option value="S" {% if filtros.movilidad == 'S' %}selected{% endif %}>Sí</option>
+            <option value="N" {% if filtros.movilidad == 'N' %}selected{% endif %}>No</option>
+        </select>
+    </div>
+    
+    <div>
+        <label><b>Rubro Seleccionado:</b></label><br>
+        <select name="rubro" style="width:100%; padding:5px;">
+            <option value="">Todos</option>
+            {% for r in rubros %}
+                <option value="{{ r.id_rubro }}" {% if filtros.rubro == r.id_rubro|stringformat:"s" %}selected{% endif %}>{{ r.descripcion }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label><b>Puesto o Palabra Clave:</b></label><br>
+        <input type="text" name="puesto" value="{{ filtros.puesto }}" style="width:100%; padding:5px;">
+    </div>
+    <div>
+        <label><b>Nivel de Estudio:</b></label><br>
+        <input type="text" name="nivel_estudio" value="{{ filtros.nivel_estudio }}" style="width:100%; padding:5px;">
+    </div>
+    
+    <div>
+        <label><b>Idioma:</b></label><br>
+        <select name="idioma" style="width:100%; padding:5px;">
+            <option value="">Todos</option>
+            {% for id_val, desc in idiomas %}
+                <option value="{{ id_val }}" {% if filtros.idioma == id_val %}selected{% endif %}>{{ desc }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div style="grid-column: span 3; text-align:right;">
+        <button type="submit" style="padding:10px 20px; background:#28a745; color:#fff; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Buscar Perfiles</button>
+        <a href="?" style="padding:10px 20px; background:#dc3545; color:#fff; border:none; border-radius:4px; text-decoration:none; margin-left:10px;">Limpiar</a>
+    </div>
+  </form>
+
+  <hr style="margin-bottom:20px;">
+
+  {% if not has_filters %}
+    <div style="text-align:center; padding:30px; color:#666;">
+        <i class="fas fa-search" style="font-size:30px; margin-bottom:10px;"></i><br>
+        <i>Utilice los filtros superiores para iniciar la búsqueda de perfiles laborales. (Vacío por defecto igual que en APEX).</i>
+    </div>
+  {% elif resultados %}
+    <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; text-align:left;">
+        <tr style="background:#e9ecef; color:#333;">
+            <th>DNI</th>
+            <th>Apellido y Nombre</th>
+            <th>Edad</th>
+            <th>Teléfono</th>
+            <th>Nivel Educativo</th>
+            <th>Acciones</th>
+        </tr>
+        {% for info in resultados %}
+        <tr>
+            <td>
+                <a href="{% url 'admin:empleo_postulante_change' info.postulante.id_postulante %}" target="_blank" style="text-decoration:none; font-weight:bold; color:#0b3d91;">
+                    {{ info.dni }}
+                </a>
+            </td>
+            <td><strong>{{ info.postulante.apellido }}, {{ info.postulante.nombre }}</strong></td>
+            <td>{{ info.edad }} años</td>
+            <td>{{ info.telefono }}</td>
+            <td>{{ info.estudios }}</td>
+            <td>
+                <a href="{% url 'admin:empleo_postulante_change' info.postulante.id_postulante %}" target="_blank" style="color:#007bff; text-decoration:none; font-weight:bold; margin-right: 15px;">
+                    <i class="fas fa-edit"></i> Completar Ficha
+                </a>
+                {% if info.postulante.cv %}
+                <a href="{{ info.postulante.cv.url }}" target="_blank" style="color:#28a745; text-decoration:none; font-weight:bold;">
+                    <i class="fas fa-file-pdf"></i> Ver CV Original
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+  {% else %}
+    <div style="text-align:center; padding:30px; color:#666;">
+        <i>No se encontraron candidatos con los filtros aplicados. Intentá ser menos específico.</i>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

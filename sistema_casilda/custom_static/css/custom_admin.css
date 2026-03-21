@@ -1,0 +1,157 @@
+/* Custom Global Admin CSS (APEX Inspired) for Jazzmin */
+
+:root {
+    --apex-bg: #aaadb3;
+    --apex-card: #f7f6f2;
+    --apex-main: #2b3a42;
+    --apex-secondary: #497174;
+    --apex-btn: #1e4a55;
+    --apex-btn-hover: #2b6a78;
+    --apex-text: #333333;
+}
+
+/* Base Body and Wrapper Content Background */
+body, .wrapper, .content-wrapper, .layout-navbar-fixed .wrapper .content-wrapper {
+    background-color: var(--apex-bg) !important;
+}
+
+/* Main Navbar */
+.main-header.navbar {
+    background: linear-gradient(to right, var(--apex-main), var(--apex-secondary)) !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.main-header.navbar .nav-link,
+.main-header.navbar .navbar-brand,
+.brand-link .brand-text {
+    color: #ffffff !important;
+}
+
+/* Sidebar and Branding */
+.main-sidebar, .sidebar {
+    background-color: var(--apex-main) !important;
+}
+
+.brand-link {
+    background-color: var(--apex-main) !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid var(--apex-secondary) !important;
+}
+
+.brand-link .brand-image {
+    filter: brightness(0) invert(1);
+}
+
+.sidebar .nav-link {
+    color: #e0e0e0 !important;
+}
+
+.sidebar .nav-link p {
+    color: #e0e0e0 !important;
+}
+
+.nav-sidebar .nav-item > .nav-link.active,
+.nav-sidebar .nav-item > .nav-link:hover {
+    background-color: var(--apex-secondary) !important;
+    color: #ffffff !important;
+}
+
+/* Cards (Panels) */
+.card, .info-box {
+    background-color: var(--apex-card) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+    color: var(--apex-text) !important;
+}
+
+.card-header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    color: var(--apex-text) !important;
+    font-weight: bold !important;
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+
+.card-footer {
+    background-color: #ffffff !important;
+    border-top: 1px solid #e0e0e0 !important;
+}
+
+/* Inputs and Forms */
+.form-control {
+    background-color: #fcfcfc !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    color: var(--apex-text) !important;
+}
+.form-control:focus {
+    border-color: var(--apex-secondary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(73, 113, 116, 0.25) !important;
+}
+
+/* Buttons */
+.btn-primary, .btn-info, .btn-success, .btn-default {
+    background-color: var(--apex-btn) !important;
+    border-color: var(--apex-btn) !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+.btn-primary:hover, .btn-info:hover, .btn-success:hover, .btn-default:hover {
+    background-color: var(--apex-btn-hover) !important;
+    border-color: var(--apex-btn-hover) !important;
+}
+
+.btn-danger {
+    background-color: #d9534f !important;
+    border-color: #d43f3a !important;
+}
+
+/* Tables */
+table.table, table.dataTable {
+    background-color: transparent !important;
+    color: var(--apex-text) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0,0,0,0.03) !important;
+}
+
+.table-bordered th, .table-bordered td {
+    border-color: #e0e0e0 !important;
+}
+
+/* Content Headers (Titles) */
+.content-header h1 {
+    color: var(--apex-text) !important;
+    font-weight: bold !important;
+    text-shadow: 0px 1px 1px rgba(255,255,255,0.5) !important;
+}
+
+.breadcrumb-item a {
+    color: var(--apex-main) !important;
+}
+
+.breadcrumb-item.active {
+    color: #555555 !important;
+}
+
+/* Popups / Modals */
+.modal-content {
+    background-color: var(--apex-card) !important;
+}
+.modal-header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Change Form Toolbars (Save row) */
+.submit-row {
+    background-color: #ffffff !important;
+    border-top: 1px solid #e0e0e0 !important;
+    padding: 15px !important;
+    border-radius: 0 0 8px 8px !important;
+}

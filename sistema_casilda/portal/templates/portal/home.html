@@ -1,0 +1,62 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block title %}Portal del Vecino - Inicio{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #0b3d91 0%, #001e4c 100%); color: white;">
+    <div class="container py-5 z-1 position-relative">
+        <h1 class="display-4 fw-bold mb-3">Portal del Vecino</h1>
+        <p class="lead mb-4 fw-light opacity-75">Realice sus trámites, consulte expedientes y aplique a ofertas de empleo desde casa.</p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{% url 'portal:registro' %}" class="btn btn-accent btn-lg px-5 rounded-pill shadow-lg">Crear Cuenta</a>
+            <a href="{% url 'portal:login' %}" class="btn btn-outline-light btn-lg px-5 rounded-pill">Ingresar</a>
+        </div>
+    </div>
+    <!-- Decorative background elements -->
+    <div class="position-absolute rounded-circle" style="width: 300px; height: 300px; background: rgba(255,255,255,0.05); top: -50px; left: -50px;"></div>
+    <div class="position-absolute rounded-circle" style="width: 200px; height: 200px; background: rgba(255, 202, 40, 0.1); bottom: -50px; right: -50px;"></div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5" style="margin-top: -50px;">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            
+            <!-- Expedientes -->
+            <div class="col-md-4">
+                <div class="glass-card p-4 h-100 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary mb-4" style="width: 80px; height: 80px;">
+                        <i class="fa-solid fa-folder-open fa-2x"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Mis Expedientes</h3>
+                    <p class="text-muted small">Cree una cuenta para asociar y hacer un seguimiento en tiempo real de todos sus expedientes municipales.</p>
+                </div>
+            </div>
+
+            <!-- Empleo -->
+            <div class="col-md-4">
+                <div class="glass-card p-4 h-100 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10 text-success mb-4" style="width: 80px; height: 80px;">
+                        <i class="fa-solid fa-briefcase fa-2x"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Portal de Empleo</h3>
+                    <p class="text-muted small">Cargue su Curriculum Vitae y postúlese rápidamente a diferentes oportunidades laborales o ferias de la ciudad.</p>
+                </div>
+            </div>
+
+            <!-- Feriantes -->
+            <div class="col-md-4">
+                <div class="glass-card p-4 h-100 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-warning bg-opacity-10 text-warning mb-4" style="width: 80px; height: 80px;">
+                        <i class="fa-solid fa-store fa-2x"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Feriantes y Apicultura</h3>
+                    <p class="text-muted small">Regístrese como feriante o productor apícola y gestione sus puestos o cuotas de manera sencilla.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
