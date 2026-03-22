@@ -106,6 +106,16 @@
                             </a>
                         </li>
                         {% endif %}
+                        <li class="nav-item me-2">
+                            <a class="nav-link text-white position-relative" href="{% url 'reclamos:mis_reclamos' %}">
+                                <i class="fa-solid fa-bell"></i>
+                                {% if unread_vecino_count and unread_vecino_count > 0 %}
+                                    <span class="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                                        {{ unread_vecino_count }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        </li>
                         <li class="nav-item ms-3">
                             <span class="text-white-50 me-3">Hola, {{ user.first_name|default:user.username }}</span>
                             <a class="btn btn-outline-light btn-sm" href="{% url 'portal:logout' %}">Salir</a>

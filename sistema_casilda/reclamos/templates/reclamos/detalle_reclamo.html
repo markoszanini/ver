@@ -1,0 +1,144 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block title %}Detalle de Reclamo - Portal del Vecino{% endblock %}
+
+{% block content %}
+<div class="bg-white border-bottom py-4 mb-4 shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="h3 mb-1 fw-bold">Reclamo #{{ reclamo.id }}</h1>
+            <p class="text-muted mb-0">Registrado el {{ reclamo.fecha_creacion|date:"d/m/Y" }}</p>
+        </div>
+        <div>
+            <a href="{% url 'reclamos:mis_reclamos' %}" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Volver</a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-card mb-4">
+                <div class="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-primary">Información del Reclamo</h5>
+                    <span>
+                        {% if reclamo.estado == 'Resuelto' %}
+                            <span class="badge bg-success fs-6">{{ reclamo.estado }}</span>
+                        {% elif reclamo.estado == 'En Proceso' %}
+                            <span class="badge bg-primary fs-6">{{ reclamo.estado }}</span>
+                        {% elif reclamo.estado == 'Rechazado' %}
+                            <span class="badge bg-danger fs-6">{{ reclamo.estado }}</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark fs-6">{{ reclamo.estado }}</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <span class="text-muted small d-block mb-1">Área</span>
+                            <span class="fw-bold fs-5">{{ reclamo.area }}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block mb-1">Tipo de Reclamo</span>
+                            <span class="fw-bold fs-5">{{ reclamo.tipo_reclamo }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="text-muted small d-block mb-1">Ubicación del Incidente</span>
+                        <div class="bg-light p-3 rounded d-flex align-items-center">
+                            <i class="fa-solid fa-location-dot text-danger fa-fw me-3 fs-4"></i>
+                            <div>
+                                <strong>{{ reclamo.calle }} {{ reclamo.numero }}</strong><br>
+                                <span class="text-muted">Barrio: {{ reclamo.barrio }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="text-muted small d-block mb-1">Observaciones / Detalles</span>
+                        <p class="mb-0">{{ reclamo.observacion|linebreaks }}</p>
+                    </div>
+
+                    {% if reclamo.foto %}
+                    <div>
+                        <span class="text-muted small d-block mb-2">Fotografía Adjunta</span>
+                        <img src="{{ reclamo.foto.url }}" alt="Foto del reclamo" class="img-fluid rounded border shadow-sm" style="max-height: 400px; object-fit: cover;">
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Historial de Pases -->
+                    {% if pases %}
+                    <div class="mt-5 border-top pt-4">
+                        <h5 class="fw-bold mb-4"><i class="fa-solid fa-exchange-alt text-secondary me-2"></i>Historial de Movimientos</h5>
+                        <div class="timeline ps-3 border-start border-2 border-secondary">
+                            {% for pase in pases %}
+                            <div class="mb-4 position-relative">
+                                <span class="position-absolute translate-middle bg-secondary rounded-circle" style="width: 12px; height: 12px; left: -16px; top: 6px;"></span>
+                                <div class="ms-3">
+                                    <div class="fw-bold text-dark d-flex justify-content-between">
+                                        <span>
+                                            Enviado a: 
+                                            {% if pase.area_destino %}<span class="badge bg-secondary">{{ pase.area_destino.nombre }}</span>{% endif %}
+                                            {% if pase.oficina_destino %}<span class="badge bg-light text-dark border">{{ pase.oficina_destino.nombre }}</span>{% endif %}
+                                        </span>
+                                        <small class="text-muted">{{ pase.fecha_pase|date:"d/m/Y H:i" }}</small>
+                                    </div>
+                                    {% if pase.observacion %}
+                                    <p class="text-muted small mt-2 mb-0 border-start border-3 ps-2">"{{ pase.observacion }}"</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Mensajes/Consultas -->
+                    <div class="mt-5 border-top pt-4">
+                        <h5 class="fw-bold mb-4"><i class="fa-solid fa-comments text-primary me-2"></i>Historial de Mensajes</h5>
+                        
+                        {% if mensajes %}
+                            <div class="d-flex flex-column gap-3 mb-4">
+                                {% for msg in mensajes %}
+                                    <div class="card {% if msg.es_empleado %}border-primary bg-light ms-0 me-5{% else %}border-secondary bg-white ms-5 me-0{% endif %}">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <small class="fw-bold {% if msg.es_empleado %}text-primary{% else %}text-secondary{% endif %}">
+                                                    {% if msg.es_empleado %}Municipalidad (Empleado){% else %}Usted{% endif %}
+                                                </small>
+                                                <small class="text-muted" style="font-size: 0.75rem;">{{ msg.fecha|date:"d/m/Y H:i" }}</small>
+                                            </div>
+                                            <p class="mb-0">{{ msg.mensaje|linebreaksbr }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted small">No hay mensajes ni consultas en este reclamo por el momento.</p>
+                        {% endif %}
+
+                        {% if puede_responder %}
+                            <form method="post" class="mt-4 bg-light p-4 rounded border">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Escribir una respuesta</label>
+                                    <textarea name="mensaje" class="form-control" rows="3" placeholder="Escriba su mensaje aquí..." required></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane me-2"></i>Enviar Respuesta</button>
+                                </div>
+                            </form>
+                        {% elif reclamo.estado != 'Resuelto' and reclamo.estado != 'Rechazado' %}
+                            <div class="alert alert-info mt-3 small">
+                                <i class="fa-solid fa-circle-info me-2"></i> La opción de enviar mensajes se habilitará si el municipio solicita información adicional.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

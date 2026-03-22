@@ -1,0 +1,204 @@
+{% extends 'portal/base_portal.html' %}
+{% block title %}Solicitar Turno{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+        <a href="{% url 'turnos:mis_turnos' %}" class="text-decoration-none text-muted mb-2 d-inline-block">
+            <i class="fa-solid fa-arrow-left me-1"></i> Volver a mis turnos
+        </a>
+        <h2 class="fw-bold text-dark">Agendar Nuevo Turno</h2>
+        <p class="text-muted">Por favor completa los datos solicitados. Para atención médica o de tránsito <strong>se ruega puntualidad o su turno será reprogramado</strong>.</p>
+    </div>
+
+    <div class="row align-items-start">
+        <div class="col-lg-8">
+            <div class="glass-card p-4 p-md-5">
+                <form method="post" id="form-turno">
+                    {% csrf_token %}
+                    
+                    <h5 class="fw-bold border-bottom pb-2 mb-4 text-primary">1. Motivo del Turno</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <input type="radio" class="btn-check" name="tipo_turno" id="tipo_psicofisico" value="PSICOFISICO" autocomplete="off" required>
+                            <label class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2" for="tipo_psicofisico">
+                                <i class="fa-solid fa-stethoscope fs-3"></i>
+                                <span>Psicofísico</span>
+                            </label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="radio" class="btn-check" name="tipo_turno" id="tipo_licencia" value="LICENCIA" autocomplete="off" required>
+                            <label class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2" for="tipo_licencia">
+                                <i class="fa-solid fa-id-card fs-3"></i>
+                                <span>Licencia de Conducir</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="campos-licencia" class="mb-4 p-4 bg-light rounded-3 border d-none">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-car me-2"></i>Datos de Licencia</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Clase Solicitada</label>
+                                <select name="tipo_licencia" id="tipo_licencia_input" class="form-select">
+                                    <option value="">Seleccione...</option>
+                                    <option value="A">Clase A (Motos)</option>
+                                    <option value="B1">Clase B1 (Autos)</option>
+                                    <option value="B2">Clase B2 (Camionetas)</option>
+                                    <option value="C">Clase C (Camiones)</option>
+                                    <option value="D">Clase D (Pasajeros)</option>
+                                    <option value="E">Clase E (Especial)</option>
+                                    <option value="F">Clase F (Adaptados)</option>
+                                    <option value="G">Clase G (Agrícolas)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Vencimiento Licencia Actual</label>
+                                <input type="date" name="vencimiento_licencia" id="vencimiento_licencia_input" class="form-control">
+                                <div class="form-text">Si es la primera vez, ingrese la fecha de hoy.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold border-bottom pb-2 mb-4 text-primary">2. Fecha y Horario</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Fecha Deseada</label>
+                            <input type="date" name="fecha" id="fecha" class="form-control" required disabled>
+                            <div class="form-text text-muted" id="fecha-help">Seleccione primero el motivo del turno.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Horario Disponible</label>
+                            <select name="hora" id="hora" class="form-select" required disabled>
+                                <option value="">Seleccione una fecha primero...</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="loader-horarios" class="text-center d-none mb-3">
+                        <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                        <span class="ms-2 text-muted small">Buscando franjas disponibles...</span>
+                    </div>
+
+                    <div class="text-end pt-3 border-top mt-4">
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 shadow-sm" id="btn-submit" disabled>
+                            Confirmar Reserva <i class="fa-solid fa-check ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="glass-card p-4 bg-primary text-white border-0 shadow">
+                <h5 class="fw-bold mb-3 border-bottom border-light pb-2"><i class="fa-solid fa-circle-info me-2"></i>Importante</h5>
+                <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
+                    <li class="d-flex align-items-start gap-2">
+                        <i class="fa-solid fa-clock mt-1 text-warning"></i>
+                        <span>Los turnos caducan automáticamente a los 5 minutos de demora. Asista con 10 minutos de anticipación.</span>
+                    </li>
+                    <li class="d-flex align-items-start gap-2">
+                        <i class="fa-solid fa-id-card mt-1 text-warning"></i>
+                        <span>Presentarse con DNI físico titular, constancia de CUIL y documentación correspondiente al trámite.</span>
+                    </li>
+                    <li class="d-flex align-items-start gap-2">
+                        <i class="fa-solid fa-ban mt-1 text-warning"></i>
+                        <span>En caso de inasistencia sin cancelación previa de 24hs, el sistema penalizará futuras reservas.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const radiosTipo = document.querySelectorAll('input[name="tipo_turno"]');
+    const panelLicencia = document.getElementById('campos-licencia');
+    const reqLicenciaInputs = document.querySelectorAll('#campos-licencia select, #campos-licencia input');
+    
+    const inputFecha = document.getElementById('fecha');
+    const selectHora = document.getElementById('hora');
+    const btnSubmit = document.getElementById('btn-submit');
+    const loader = document.getElementById('loader-horarios');
+    const fechaHelp = document.getElementById('fecha-help');
+    
+    // Configurar mínimo al día de hoy para no pedir turnos vencidos
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(Date.now() - tzOffset)).toISOString().split('T')[0];
+    inputFecha.min = localISOTime;
+
+    function getSelectedTipo() {
+        const checked = document.querySelector('input[name="tipo_turno"]:checked');
+        return checked ? checked.value : null;
+    }
+
+    radiosTipo.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Manejo de condicional de licencia
+            if (this.value === 'LICENCIA') {
+                panelLicencia.classList.remove('d-none');
+                reqLicenciaInputs.forEach(i => i.setAttribute('required', 'true'));
+            } else {
+                panelLicencia.classList.add('d-none');
+                reqLicenciaInputs.forEach(i => {
+                    i.removeAttribute('required');
+                    i.value = '';
+                });
+            }
+            
+            // Recién cuando escoge el tipo, le permitimos seleccionar fecha (ya que depende del config del tipo)
+            inputFecha.disabled = false;
+            fechaHelp.innerText = "Por favor, seleccione un día de lunes a viernes.";
+            
+            if (inputFecha.value) {
+                fetchHorarios();
+            }
+        });
+    });
+
+    inputFecha.addEventListener('change', fetchHorarios);
+
+    function fetchHorarios() {
+        const fechaVal = inputFecha.value;
+        const tipoVal = getSelectedTipo();
+        
+        if (!fechaVal || !tipoVal) return;
+        
+        selectHora.innerHTML = '<option value="">Cargando horarios...</option>';
+        selectHora.disabled = true;
+        btnSubmit.disabled = true;
+        loader.classList.remove('d-none');
+        
+        fetch(`/turnos/api/horarios/?fecha=${fechaVal}&tipo=${tipoVal}`)
+            .then(res => res.json())
+            .then(data => {
+                loader.classList.add('d-none');
+                selectHora.innerHTML = '';
+                
+                if (data.mensaje) {
+                    selectHora.innerHTML = `<option value="">${data.mensaje}</option>`;
+                } else if (data.horarios && data.horarios.length > 0) {
+                    selectHora.innerHTML = `<option value="">Seleccione el horario (quedan ${data.horarios.length})</option>`;
+                    data.horarios.forEach(h => {
+                        const opt = document.createElement('option');
+                        opt.value = h;
+                        opt.textContent = `${h} hs`;
+                        selectHora.appendChild(opt);
+                    });
+                    selectHora.disabled = false;
+                } else {
+                    selectHora.innerHTML = '<option value="">No hay horarios disponibles para el día seleccionado</option>';
+                }
+            })
+            .catch(err => {
+                loader.classList.add('d-none');
+                selectHora.innerHTML = '<option value="">Error de conexión. Intente luego.</option>';
+            });
+    }
+
+    selectHora.addEventListener('change', function() {
+        btnSubmit.disabled = !this.value;
+    });
+});
+</script>
+{% endblock %}

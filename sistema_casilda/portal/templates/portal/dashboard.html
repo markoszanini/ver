@@ -24,9 +24,12 @@
                 <h5 class="fw-bold mb-3 border-bottom pb-2">Servicios Disponibles</h5>
                 <div class="d-flex flex-column gap-2">
                     <a href="{% url 'portal:dashboard' %}" class="btn btn-outline-primary text-start active"><i class="fa-solid fa-folder fa-fw me-2"></i> Mis Expedientes</a>
+                    <a href="{% url 'turnos:mis_turnos' %}" class="btn btn-outline-dark text-start"><i class="fa-solid fa-calendar-alt fa-fw me-2"></i> Mis Turnos</a>
+                    <a href="{% url 'impuestos:mis_impuestos' %}" class="btn btn-outline-success text-start"><i class="fa-solid fa-file-invoice-dollar fa-fw me-2"></i> Mis Impuestos</a>
                     <a href="{% url 'multas:index_consultas' %}" class="btn btn-outline-info text-start"><i class="fa-solid fa-file-invoice fa-fw me-2"></i> Mis Multas</a>
                     <a href="{% url 'portal:postular_empleo' %}" class="btn btn-outline-success text-start"><i class="fa-solid fa-briefcase fa-fw me-2"></i> Portal de Empleo</a>
                     <a href="{% url 'portal:registro_feriante' %}" class="btn btn-outline-warning text-start"><i class="fa-solid fa-store fa-fw me-2"></i> Trámites Feriantes</a>
+                    <a href="{% url 'reclamos:mis_reclamos' %}" class="btn btn-outline-danger text-start"><i class="fa-solid fa-bullhorn fa-fw me-2"></i> Mis Reclamos</a>
                 </div>
             </div>
         </div>

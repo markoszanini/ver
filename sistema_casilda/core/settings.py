@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'portal',
     'multas',
     'organigrama',
+    'reclamos',
+    'impuestos',
+    'turnos',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'reclamos.context_processors.unread_messages_processor',
             ],
         },
     },
@@ -158,7 +162,32 @@ JAZZMIN_SETTINGS = {
             "organigrama.Oficina"
         ],"show_ui_builder": False,
     "custom_css": "css/custom_admin.css",
+    "custom_js": "js/admin_bell.js",
     "custom_links": {
+        "impuestos": [
+            {
+                "name": "Gestión de Deuda",
+                "url": "admin:impuestos_deuda_changelist",
+                "icon": "fas fa-file-invoice-dollar",
+            },
+            {
+                "name": "Carga Masiva",
+                "url": "admin:impuestos_deuda_changelist",
+                "icon": "fas fa-upload",
+            }
+        ],
+        "turnos": [
+            {
+                "name": "Ver Turnos Solicitados",
+                "url": "admin:turnos_turno_changelist",
+                "icon": "fas fa-calendar-check",
+            },
+            {
+                "name": "Generar Franjas (Config)",
+                "url": "admin:turnos_configuracionturno_changelist",
+                "icon": "fas fa-cogs",
+            }
+        ],
         "multas": [
             {
                 "name": "Carga Acta",

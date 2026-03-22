@@ -26,6 +26,9 @@ urlpatterns = [
     path('ferias/', include('ferias.urls')),
     path('multas/', include('multas.urls')),
     path('organigrama/', include('organigrama.urls')),
+    path('reclamos/', include('reclamos.urls')),
+    path('impuestos/', include('impuestos.urls')),
+    path('turnos/', include('turnos.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,71 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block title %}Mis Reclamos - Portal del Vecino{% endblock %}
+
+{% block content %}
+<div class="bg-white border-bottom py-4 mb-4 shadow-sm">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div>
+            <h1 class="h3 mb-1 fw-bold">Mis Reclamos</h1>
+            <p class="text-muted mb-0">Gestione y haga seguimiento de sus reportes.</p>
+        </div>
+        <div>
+            <a href="{% url 'reclamos:nuevo_reclamo' %}" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i> Nuevo Reclamo</a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="glass-card mb-4">
+        <div class="card-body p-4">
+            {% if reclamos %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Área</th>
+                                <th>Tipo de Reclamo</th>
+                                <th>Ubicación</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reclamo in reclamos %}
+                            <tr>
+                                <td>{{ reclamo.fecha_creacion|date:'d/m/Y H:i' }}</td>
+                                <td>{{ reclamo.area }}</td>
+                                <td><strong>{{ reclamo.tipo_reclamo }}</strong></td>
+                                <td>{{ reclamo.calle }} {{ reclamo.numero }}, {{ reclamo.barrio }}</td>
+                                <td>
+                                    {% if reclamo.estado == 'Resuelto' %}
+                                        <span class="badge bg-success">{{ reclamo.estado }}</span>
+                                    {% elif reclamo.estado == 'En Proceso' %}
+                                        <span class="badge bg-primary">{{ reclamo.estado }}</span>
+                                    {% elif reclamo.estado == 'Rechazado' %}
+                                        <span class="badge bg-danger">{{ reclamo.estado }}</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">{{ reclamo.estado }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'reclamos:detalle_reclamo' reclamo.id %}" class="btn btn-sm btn-outline-secondary">Ver detalle</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fa-solid fa-bullhorn fa-3x text-muted mb-3 opacity-50"></i>
+                    <h5 class="text-muted">Aún no ha registrado ningún reclamo.</h5>
+                    <p class="text-muted small">Puede reportar irregularidades de inspección, mantenimiento o salud.</p>
+                    <a href="{% url 'reclamos:nuevo_reclamo' %}" class="btn btn-primary mt-3">Registrar Nuevo Reclamo</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

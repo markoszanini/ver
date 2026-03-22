@@ -39,6 +39,18 @@ def asignar_permisos_automaticos(sender, instance, created, **kwargs):
     # Regla 3: Rango de Secretario o Jefe en CUALQUIER área -> Compras y Expedientes
     if instance.rango in ['SECRETARIO', 'JEFE']:
         apps_permitidas.update(['compras', 'expedientes'])
+        
+    # Regla 4: Área de Economía y Finanzas + Departamento de Ingresos Públicos -> Impuestos
+    if 'econom' in nombre_area and 'ingreso' in nombre_depto:
+        apps_permitidas.add('impuestos')
+        
+    # Regla 5: Tránsito -> Turnos (Licencias)
+    if 'gobierno' in nombre_area and 'tránsito' in nombre_depto:
+        apps_permitidas.add('turnos')
+
+    # Regla 6: Desarrollo y Bienestar -> Turnos (Psicofísicos)
+    if 'desarrollo' in nombre_area and 'bienestar' in nombre_area:
+        apps_permitidas.add('turnos')
 
     # Otorgar los permisos resultantes
     if apps_permitidas:
