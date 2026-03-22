@@ -1,0 +1,22 @@
+/* Archivo de estilos para la vista de Actas Admin - Forza un rediseño más legible */
+
+/* Hacer que todas las cajas Select y Autocompletado sean super anchas y visibles */
+.select2-container {
+    width: 100% !important;
+    min-width: 320px !important;
+}
+
+/* Espaciado adicional para mejor lectura (altura y alineación vertical) */
+.select2-container .select2-selection--single {
+    height: 38px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 38px !important;
+    font-size: 15px !important;
+}
+
+/* Aumentar el tamaño de la flechita del final */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+}

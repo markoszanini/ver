@@ -23,8 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('portal.urls')),
     path('empleo/', include('empleo.urls')),
-    path('apicultura/', include('apicultura.urls')),
     path('ferias/', include('ferias.urls')),
+    path('multas/', include('multas.urls')),
+    path('organigrama/', include('organigrama.urls')),
 ]
 
 if settings.DEBUG:

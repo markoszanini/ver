@@ -155,3 +155,45 @@ table.table, table.dataTable {
     padding: 15px !important;
     border-radius: 0 0 8px 8px !important;
 }
+
+/* ------------------------------------------------------------------------- */
+/* FIX GLOBAL P/ QUE LOS FORMULARIOS TENGAN LAS ETIQUETAS A LA IZQUIERDA     */
+/* ------------------------------------------------------------------------- */
+.form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 1rem;
+}
+
+.form-group > label {
+    margin-bottom: 0;
+    min-width: 180px; 
+    text-align: right;
+    font-weight: 600;
+    padding-right: 10px;
+}
+
+/* Todo lo que no sea la etiqueta, ocupa el resto del espacio */
+.form-group > div,
+.form-group > input,
+.form-group > select,
+.form-group > textarea,
+.form-group > .select2-container {
+    flex-grow: 1;
+    width: 100%; 
+}
+
+/* En mobile, volvemos al comportamiento apilado nativo para que no se rompa */
+@media (max-width: 768px) {
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .form-group > label {
+        text-align: left;
+        min-width: auto;
+    }
+}

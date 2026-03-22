@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acta de Infracción N° {{ acta.numero_acta|default:acta.id_acta }}</title>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; padding: 40px; color: #222; }
+        .header { text-align: center; border-bottom: 3px double #333; margin-bottom: 30px; padding-bottom: 10px; }
+        h1, h2, h3 { margin: 5px 0; }
+        .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .table th, .table td { border: 1px solid #aaa; padding: 10px; text-align: left; }
+        .table th { background-color: #f0f0f0; width: 30%; }
+        .status { font-weight: bold; color: red; font-size: 1.2em; text-align: center; border: 2px solid red; padding: 5px; margin-bottom: 20px; display: inline-block; }
+        .footer { margin-top: 50px; font-size: 0.8em; text-align: center; color: #555; }
+        @media print {
+            button.print-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: right; margin-bottom: 20px;">
+        <button class="print-btn" onclick="window.print()" style="padding: 10px 20px; background: #333; color: white; border: none; cursor: pointer;">Imprimir Acta / Guardar PDF</button>
+    </div>
+
+    <div class="header">
+        <h2>MUNICIPALIDAD DE CASILDA</h2>
+        <h3>ACTA DE INFRACCIÓN N° {{ acta.numero_acta|default:acta.id_acta }}</h3>
+    </div>
+
+    <div style="text-align: center;">
+        <div class="status">ESTADO: {{ acta.get_estado_display|upper }}</div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>Fecha de Infracción</th>
+            <td>{{ acta.fecha_infraccion|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+            <th>Lugar de Infracción</th>
+            <td>{{ acta.lugar_infraccion|default:"No detallado" }}</td>
+        </tr>
+        <tr>
+            <th>Motivo (Atte. Ley/Ord.)</th>
+            <td>{{ acta.motivo.descripcion|default:acta.tipo_acta }}</td>
+        </tr>
+        <tr>
+            <th>Descripción de Hechos</th>
+            <td>{{ acta.descripcion|default:"-" }}</td>
+        </tr>
+        {% if acta.persona %}
+        <tr>
+            <th>Infractor / Involucrado</th>
+            <td>{{ acta.persona.apellido|default:"" }}, {{ acta.persona.nombre|default:"" }} (DNI: {{ acta.persona.dni }})</td>
+        </tr>
+        {% endif %}
+        {% if acta.vehiculo %}
+        <tr>
+            <th>Vehículo Involucrado</th>
+            <td>Patente: {{ acta.vehiculo.patente }} - {{ acta.vehiculo.marca|default:"" }} {{ acta.vehiculo.modelo|default:"" }}</td>
+        </tr>
+        {% endif %}
+        {% if acta.inmueble %}
+        <tr>
+            <th>Inmueble Relacionado</th>
+            <td>{{ acta.inmueble.nomenclatura }} ({{ acta.inmueble.calle }} {{ acta.inmueble.numero }})</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <th>Agente / Inspector</th>
+            <td>{{ acta.inspector.apellido|default:"-" }}, {{ acta.inspector.nombre|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Valor / Sanción Estipulada</th>
+            <td>
+                {% if acta.importe %}
+                    <strong>${{ acta.importe }}</strong>
+                {% elif acta.uf %}
+                    <strong>{{ acta.uf }} U.F.</strong> al valor actual
+                {% else %}
+                    A determinar por Juez de Faltas
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <p style="text-align: justify; font-size: 0.9em; margin-top: 30px;">
+        Se notifica al infractor que dispone de 5 (cinco) días hábiles para presentar su descargo ante el Juzgado de Faltas de la Municipalidad de Casilda. De no comparecer, será juzgado en rebeldía. El pago voluntario previo a la sentencia puede implicar un beneficio de reducción según la ordenanza vigente.
+    </p>
+
+    <div class="footer">
+        Firma del Inspector / Agente Interviniente<br><br>
+        _____________________________________ <br>
+        Documento generado en sistema digital - Municipalidad de Casilda
+    </div>
+
+    <script>
+        // Auto print on load
+        window.onload = function() {
+            setTimeout(function() { window.print(); }, 500);
+        }
+    </script>
+</body>
+</html>

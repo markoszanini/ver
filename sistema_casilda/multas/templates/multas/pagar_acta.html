@@ -1,0 +1,45 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block title %}Pagar Infracción - Casilda{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="glass-card p-4 p-md-5 text-center">
+                <h2 style="color: #0b3d91;">Proceso de Pago Electrónico</h2>
+                <hr>
+                <div class="my-4">
+                    <i class="fa-solid fa-file-invoice-dollar" style="font-size: 4rem; color: #ffca28;"></i>
+                </div>
+                <h4>Acta N° {{ acta.numero_acta|default:acta.id_acta }}</h4>
+                <p class="text-muted">Concepto: {{ acta.motivo.descripcion|default:"Infracción de tránsito/convivencia" }}</p>
+                <h2 class="text-success mb-4 mt-3">
+                    Total a pagar: 
+                    {% if acta.importe %}
+                        ${{ acta.importe }}
+                    {% elif acta.uf %}
+                        {{ acta.uf }} UF
+                    {% else %}
+                        No definido
+                    {% endif %}
+                </h2>
+                
+                <div class="bg-light p-3 rounded mb-4 text-start" style="font-size: 0.9rem;">
+                    <p class="mb-1"><i class="fa-solid fa-circle-info text-info me-2"></i><strong>Importante:</strong> Esta es una pasarela de pruebas (Mock). Al confirmar, la multa quedará registrada como pagada en el sistema.</p>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill" {% if not acta.importe and not acta.uf %}disabled{% endif %}>
+                            <i class="fa-brands fa-cc-visa me-2"></i> Confirmar y Pagar
+                        </button>
+                        <a href="{% url 'multas:consulta_publica' %}" class="btn btn-outline-secondary rounded-pill">Volver</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'apicultura',
     'empleo',
     'portal',
+    'multas',
+    'organigrama',
 ]
 
 MIDDLEWARE = [
@@ -138,10 +140,59 @@ JAZZMIN_SETTINGS = {
     "site_header": "Municipalidad de Casilda",
     "site_brand": "Gestión de Módulos",
     "welcome_sign": "Bienvenido al Sistema Central",
-    "search_model": ["expedientes.Expediente", "ferias.Feriante"],
-    "show_ui_builder": False,
+        "hide_models": [
+            "multas.Persona",
+            "multas.Vehiculo",
+            "multas.Inmueble",
+            "multas.Animal",
+            "multas.Inspector",
+            "multas.Acta",
+            "ferias.Subrubro",
+            "empleo.Puesto",
+            "organigrama.Area",
+            "organigrama.Direccion",
+            "organigrama.Departamento",
+            "organigrama.Division",
+            "organigrama.Subdivision",
+            "organigrama.Seccion",
+            "organigrama.Oficina"
+        ],"show_ui_builder": False,
     "custom_css": "css/custom_admin.css",
     "custom_links": {
+        "multas": [
+            {
+                "name": "Carga Acta",
+                "url": "admin:multas_acta_add",
+                "icon": "fas fa-plus",
+            },
+            {
+                "name": "Consulta y Edición",
+                "url": "admin:multas_acta_changelist",
+                "icon": "fas fa-edit",
+            },
+            {
+                "name": "Inspectores",
+                "url": "admin:multas_inspector_changelist",
+                "icon": "fas fa-user-shield",
+            },
+            {
+                "name": "Página del Vecino", 
+                "url": "multas:index_consultas", 
+                "icon": "fas fa-globe",
+            }
+        ],
+        "organigrama": [
+            {
+                "name": "Nuevo Empleado",
+                "url": "admin:organigrama_funcionario_add",
+                "icon": "fas fa-user-plus",
+            },
+            {
+                "name": "Nómina de Empleados",
+                "url": "admin:organigrama_funcionario_changelist",
+                "icon": "fas fa-users-cog",
+            }
+        ],
         "empleo": [{
             "name": "Nuevo postulante", 
             "url": "admin:empleo_postulante_add", 

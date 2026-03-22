@@ -1,0 +1,138 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block title %}Consulta de Multas - Casilda{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gradient-header {
+        background: linear-gradient(90deg, #1aa37a 0%, #35b08c 40%, #c4b542 80%, #dacb34 100%);
+        border-radius: 12px;
+        color: white;
+        padding: 2.5rem 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .gradient-header-bg-icon {
+        position: absolute;
+        right: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 5rem;
+        color: rgba(255,255,255,0.2);
+    }
+    .consult-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .consult-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+        border-color: #d0d0d0;
+    }
+    .card-icon-container {
+        font-size: 1.5rem;
+        margin-right: 15px;
+        color: #1aa37a; /* matching the green theme from the image */
+    }
+    .general-icon-container {
+        color: #0d6efd; /* blueish for general search */
+    }
+    .btn-orange {
+        background-color: #f39c12;
+        color: white;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        padding: 5px 20px;
+    }
+    .btn-orange:hover {
+        background-color: #e67e22;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header APEX style -->
+    <div class="gradient-header text-center shadow-sm">
+        <h2 class="fw-bold mb-1">Municipalidad de Casilda</h2>
+        <h4 class="fw-normal mb-0">Consulta de Multas</h4>
+        <i class="fa-solid fa-file-invoice gradient-header-bg-icon"></i>
+    </div>
+
+    <!-- 4 Cards -->
+    <div class="row g-4">
+        <!-- DNI -->
+        <div class="col-md-6">
+            <div class="consult-card p-4 d-flex flex-row align-items-center">
+                <div class="card-icon-container">
+                    <i class="fa-regular fa-id-card text-success"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-1">Libre de Multa para Licencia de Conducir</h6>
+                    <p class="text-muted small mb-0">Verifique si posee infracciones registradas antes de iniciar su trámite de licencia.</p>
+                </div>
+                <div class="ms-3">
+                    <a href="{% url 'multas:consulta_publica' 'dni' %}" class="btn btn-orange">Consultar <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patente -->
+        <div class="col-md-6">
+            <div class="consult-card p-4 d-flex flex-row align-items-center">
+                <div class="card-icon-container">
+                    <i class="fa-solid fa-car text-success"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-1">Libre de Multa para Trámites Vehiculares</h6>
+                    <p class="text-muted small mb-0">Consulta de infracciones asociadas a un dominio automotor.</p>
+                </div>
+                <div class="ms-3">
+                    <a href="{% url 'multas:consulta_publica' 'patente' %}" class="btn btn-orange">Consultar <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nomenclatura -->
+        <div class="col-md-6">
+            <div class="consult-card p-4 d-flex flex-row align-items-center">
+                <div class="card-icon-container">
+                    <i class="fa-solid fa-house text-success"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-1">Libre de Multa por Nomenclatura Catastral</h6>
+                    <p class="text-muted small mb-0">Consulte infracciones vinculadas a un inmueble o terreno registrado.</p>
+                </div>
+                <div class="ms-3">
+                    <a href="{% url 'multas:consulta_publica' 'nomenclatura' %}" class="btn btn-orange">Consultar <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- General -->
+        <div class="col-md-6">
+            <div class="consult-card p-4 d-flex flex-row align-items-center">
+                <div class="card-icon-container general-icon-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-1">Consulta General de Multas</h6>
+                    <p class="text-muted small mb-0">Búsqueda integral por persona, vehículo o inmueble.</p>
+                </div>
+                <div class="ms-3">
+                    <a href="{% url 'multas:consulta_publica' 'general' %}" class="btn btn-orange">Consultar <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
