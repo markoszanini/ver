@@ -1,0 +1,64 @@
+{% extends 'portal/base_portal.html' %}
+{% block title %}Mis Capacitaciones - Vecino{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+        <a href="{% url 'portal:dashboard' %}" class="text-decoration-none text-muted mb-2 d-inline-block">
+            <i class="fa-solid fa-arrow-left me-1"></i> Volver al panel
+        </a>
+        <h2 class="fw-bold text-dark"><i class="fa-solid fa-user-graduate text-primary me-2"></i>Mis Capacitaciones</h2>
+        <p class="text-muted">A continuación se listan los cursos o talleres en los que te encuentras anotado o has participado en el pasado.</p>
+        
+        <div class="d-flex gap-2 mt-3">
+            <a href="{% url 'capacitaciones:explorar' %}" class="btn btn-outline-primary rounded-pill px-4">
+                <i class="fa-solid fa-search me-1"></i> Buscar nuevos cursos
+            </a>
+        </div>
+    </div>
+
+    {% if inscripciones %}
+        <div class="glass-card overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="py-3 ps-4">Curso / Taller</th>
+                            <th class="py-3">Área Responsable</th>
+                            <th class="py-3">Fecha Inicio</th>
+                            <th class="py-3 text-center pe-4">Estado de Mi Inscripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ins in inscripciones %}
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark">{{ ins.capacitacion.nombre }}</td>
+                                <td class="text-muted small">
+                                    <i class="fa-solid fa-building text-primary opacity-50 me-1"></i> 
+                                    {{ ins.capacitacion.get_area_responsable_display }}
+                                </td>
+                                <td><i class="fa-regular fa-calendar-alt text-muted me-1"></i> {{ ins.capacitacion.fecha_inicio|date:"d/m/Y" }}</td>
+                                <td class="text-center pe-4">
+                                    {% if ins.estado == 'INSCRIPTO' %}
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3">Inscripto Activo</span>
+                                    {% elif ins.estado == 'CANCELADO' %}
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger rounded-pill px-3">Baja / Cancelado</span>
+                                    {% elif ins.estado == 'FINALIZADO' %}
+                                        <span class="badge bg-info bg-opacity-10 text-info border border-info rounded-pill px-3">Finalizado / Egresado</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5 bg-white rounded-4 shadow-sm border mt-4">
+            <i class="fa-solid fa-clipboard-list text-muted opacity-50 mb-3" style="font-size: 3rem;"></i>
+            <h5 class="fw-bold text-dark">Aún no te has inscrito a nada</h5>
+            <p class="text-muted mb-4">Puedes anotarte a talleres culturales o de oficio usando la cartelera de ofertas.</p>
+            <a href="{% url 'capacitaciones:explorar' %}" class="btn btn-primary rounded-pill px-4">Explorar Cursos</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

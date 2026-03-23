@@ -27,6 +27,11 @@ def asignar_permisos_automaticos(sender, instance, created, **kwargs):
     
     nombre_area = instance.area.nombre.lower() if instance.area else ""
     nombre_depto = instance.departamento.nombre.lower() if instance.departamento else ""
+    nombre_dir = instance.direccion.nombre.lower() if instance.direccion else ""
+    nombre_ofi = instance.oficina.nombre.lower() if instance.oficina else ""
+
+    # Regla 0: Todos los empleados tienen acceso a expedientes, el admin restringe la vista a sus propias oficinas
+    apps_permitidas.add('expedientes')
 
     # Regla 1: Área de Gobierno y Gestión + Departamento Tribunal de Faltas -> Multas
     if 'gobierno' in nombre_area and 'gesti' in nombre_area and 'falta' in nombre_depto:
@@ -36,9 +41,9 @@ def asignar_permisos_automaticos(sender, instance, created, **kwargs):
     if 'producc' in nombre_area and 'ciencia' in nombre_area:
         apps_permitidas.update(['apicultura', 'empleo', 'ferias'])
 
-    # Regla 3: Rango de Secretario o Jefe en CUALQUIER área -> Compras y Expedientes
+    # Regla 3: Rango de Secretario o Jefe en CUALQUIER área -> Compras
     if instance.rango in ['SECRETARIO', 'JEFE']:
-        apps_permitidas.update(['compras', 'expedientes'])
+        apps_permitidas.add('compras')
         
     # Regla 4: Área de Economía y Finanzas + Departamento de Ingresos Públicos -> Impuestos
     if 'econom' in nombre_area and 'ingreso' in nombre_depto:
@@ -51,6 +56,10 @@ def asignar_permisos_automaticos(sender, instance, created, **kwargs):
     # Regla 6: Desarrollo y Bienestar -> Turnos (Psicofísicos)
     if 'desarrollo' in nombre_area and 'bienestar' in nombre_area:
         apps_permitidas.add('turnos')
+        
+    # Regla 7: Capacitaciones (ASAC, Producción, Quinquela)
+    if 'seguridad alimentaria' in nombre_depto or 'producc' in nombre_area or 'quinquela' in nombre_ofi or 'cultura' in nombre_dir:
+        apps_permitidas.add('capacitaciones')
 
     # Otorgar los permisos resultantes
     if apps_permitidas:

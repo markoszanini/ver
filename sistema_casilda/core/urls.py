@@ -29,6 +29,8 @@ urlpatterns = [
     path('reclamos/', include('reclamos.urls')),
     path('impuestos/', include('impuestos.urls')),
     path('turnos/', include('turnos.urls')),
+    path('capacitaciones/', include('capacitaciones.urls')),
+    path('expedientes/', include('expedientes.urls')),
 ]
 
 if settings.DEBUG:

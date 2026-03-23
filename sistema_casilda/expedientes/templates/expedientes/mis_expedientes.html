@@ -1,0 +1,59 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-bottom align-items-center mb-4 border-bottom pb-3">
+        <h2 class="text-primary mb-0"><i class="fa-solid fa-folder-open me-2"></i> Mis Expedientes</h2>
+    </div>
+
+    {% if expedientes %}
+        <div class="row g-4">
+            {% for exp in expedientes %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0" style="border-radius: 12px; transition: transform 0.2s;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-secondary rounded-pill px-3 py-2"><i class="fa-solid fa-hashtag me-1"></i> {{ exp.nro_expediente }}</span>
+                            <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> {{ exp.fecha_ingreso|date:'d/m/Y' }}</small>
+                        </div>
+                        <h5 class="card-title fw-bold text-dark mb-3">{{ exp.asunto|truncatechars:60 }}</h5>
+                        
+                        <div class="mb-3">
+                            <p class="mb-1 text-muted small"><i class="fa-solid fa-building me-2"></i> Ubicación actual:</p>
+                            <p class="mb-0 fw-semibold text-dark">
+                                {% if exp.actual_oficina %}{{ exp.actual_oficina.nombre }}
+                                {% elif exp.actual_departamento %}{{ exp.actual_departamento.nombre }}
+                                {% elif exp.actual_area %}{{ exp.actual_area.nombre }}
+                                {% else %}Mesa de Entrada
+                                {% endif %}
+                            </p>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            {% if exp.estado == 'En trámite' %}
+                                <span class="badge bg-warning text-dark"><i class="fa-solid fa-clock me-1"></i> En Trámite</span>
+                            {% elif exp.estado == 'Finalizado' %}
+                                <span class="badge bg-success"><i class="fa-solid fa-check-circle me-1"></i> Finalizado</span>
+                            {% else %}
+                                <span class="badge bg-info text-dark"><i class="fa-solid fa-info-circle me-1"></i> {{ exp.estado }}</span>
+                            {% endif %}
+                            
+                            <a href="{% url 'expedientes:seguimiento_expediente' exp.id_expediente %}" class="btn btn-primary btn-sm rounded-pill px-4">
+                                Ver Seguimiento <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info shadow-sm text-center py-5" style="border-radius: 15px;">
+            <i class="fa-regular fa-folder-open fa-3x mb-3 text-info"></i>
+            <h4 class="alert-heading">No tienes expedientes activos</h4>
+            <p>Acércate a la oficina de Mesa de Entrada para iniciar un trámite formal si lo necesitas.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

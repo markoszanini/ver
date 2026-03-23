@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'reclamos',
     'impuestos',
     'turnos',
+    'capacitaciones',
 ]
 
 MIDDLEWARE = [
@@ -159,7 +160,11 @@ JAZZMIN_SETTINGS = {
             "organigrama.Division",
             "organigrama.Subdivision",
             "organigrama.Seccion",
-            "organigrama.Oficina"
+            "organigrama.Oficina",
+            "capacitaciones.Capacitacion",
+            "capacitaciones.Inscripcion",
+            "expedientes.Expediente",
+            "expedientes.MovimientoExpediente"
         ],"show_ui_builder": False,
     "custom_css": "css/custom_admin.css",
     "custom_js": "js/admin_bell.js",
@@ -186,6 +191,40 @@ JAZZMIN_SETTINGS = {
                 "name": "Generar Franjas (Config)",
                 "url": "admin:turnos_configuracionturno_changelist",
                 "icon": "fas fa-cogs",
+            }
+        ],
+        "capacitaciones": [
+            {
+                "name": "Crear capacitacion",
+                "url": "admin:capacitaciones_capacitacion_add",
+                "icon": "fas fa-plus",
+            },
+            {
+                "name": "Lista de Capacitaciones",
+                "url": "admin:capacitaciones_capacitacion_changelist",
+                "icon": "fas fa-chalkboard-teacher",
+            },
+            {
+                "name": "Inscriptos",
+                "url": "admin:capacitaciones_inscripcion_changelist",
+                "icon": "fas fa-users",
+            }
+        ],
+        "expedientes": [
+            {
+                "name": "Nuevo Expediente",
+                "url": "admin:expedientes_expediente_add",
+                "icon": "fas fa-file-alt",
+            },
+            {
+                "name": "Responder (Dar Pase)",
+                "url": "admin:expedientes_movimientoexpediente_add",
+                "icon": "fas fa-share",
+            },
+            {
+                "name": "Gestión de Expedientes",
+                "url": "admin:expedientes_expediente_changelist",
+                "icon": "fas fa-folder-open",
             }
         ],
         "multas": [
@@ -238,11 +277,6 @@ JAZZMIN_SETTINGS = {
             "icon": "fas fa-user-plus",
         }],
         "apicultura": [{
-            "name": "Dashboard Sala de Extracción", 
-            "url": "apicultura:dashboard", 
-            "icon": "fas fa-chart-line",
-        },
-        {
             "name": "Nuevo apicultor", 
             "url": "admin:apicultura_apicultor_add", 
             "icon": "fas fa-user-plus",

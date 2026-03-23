@@ -1,0 +1,82 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="mb-4">
+        <a href="{% url 'expedientes:mis_expedientes' %}" class="btn btn-outline-secondary btn-sm mb-3 rounded-pill px-3">
+            <i class="fa-solid fa-arrow-left me-1"></i> Volver a Mis Expedientes
+        </a>
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2 class="text-primary fw-bold mb-1">Expediente {{ expediente.nro_expediente }}</h2>
+                        <p class="text-muted"><i class="fa-regular fa-calendar me-1"></i> Ingresado el {{ expediente.fecha_ingreso|date:'d/m/Y' }}</p>
+                    </div>
+                    {% if expediente.estado == 'En trámite' %}
+                        <span class="badge bg-warning text-dark fs-6 rounded-pill px-4 py-2"><i class="fa-solid fa-clock me-1"></i> En Trámite</span>
+                    {% elif expediente.estado == 'Finalizado' %}
+                        <span class="badge bg-success fs-6 rounded-pill px-4 py-2"><i class="fa-solid fa-check-circle me-1"></i> Finalizado</span>
+                    {% else %}
+                        <span class="badge bg-info text-dark fs-6 rounded-pill px-4 py-2">{{ expediente.estado }}</span>
+                    {% endif %}
+                </div>
+                
+                <h5 class="mt-4 mb-3">Asunto:</h5>
+                <div class="p-3 bg-light rounded text-dark fs-5">
+                    {{ expediente.asunto }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-4 text-secondary"><i class="fa-solid fa-route me-2"></i> Trazabilidad y Pases</h4>
+
+    <!-- Timeline UI -->
+    <div class="position-relative ms-3 mb-5" style="border-left: 3px solid #dee2e6;">
+        <!-- Initial creation node -->
+        <div class="position-relative mb-4 ps-4">
+            <div class="position-absolute" style="left: -10px; top: 0; width: 17px; height: 17px; background-color: #0d6efd; border-radius: 50%; box-shadow: 0 0 0 4px #e9ecef;"></div>
+            <div class="card border-0 shadow-sm mb-2" style="border-radius: 10px;">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong class="text-primary">Mesa de Entrada</strong>
+                        <small class="text-muted">{{ expediente.fecha_ingreso|date:'d/m/Y' }}</small>
+                    </div>
+                    <p class="mb-0 text-muted small">Apertura e ingreso formal del expediente.</p>
+                </div>
+            </div>
+        </div>
+
+        {% for mov in movimientos %}
+        <div class="position-relative mb-4 ps-4">
+            <div class="position-absolute" style="left: -10px; top: 0; width: 17px; height: 17px; background-color: #6c757d; border-radius: 50%; box-shadow: 0 0 0 4px #e9ecef;"></div>
+            <div class="card border-0 shadow-sm mb-2" style="border-radius: 10px;">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong class="text-dark">
+                            Pase a: 
+                            {% if mov.destino_oficina %}{{ mov.destino_oficina.nombre }}
+                            {% elif mov.destino_departamento %}{{ mov.destino_departamento.nombre }}
+                            {% elif mov.destino_area %}{{ mov.destino_area.nombre }}
+                            {% else %}Desconocido{% endif %}
+                        </strong>
+                        <small class="text-muted">{{ mov.fecha_pase|date:'d/m/Y H:i' }}</small>
+                    </div>
+                    {% if mov.observacion %}
+                        <div class="bg-light p-2 rounded small text-secondary mt-2 border-start border-3 border-secondary">
+                            <i class="fa-solid fa-comment-dots me-1"></i> {{ mov.observacion }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="ms-4 text-muted fst-italic">
+            <p>El expediente aún se encuentra en la oficina de inicio.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
