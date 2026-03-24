@@ -168,8 +168,7 @@ JAZZMIN_SETTINGS = {
             "expedientes.MovimientoExpediente",
             "apicultura.Apicultor",
             "apicultura.Extraccion",
-        ]
-    },
+        ],
     "navigation_expanded": False,
     "show_ui_builder": False,
     "custom_css": "css/custom_admin.css?v=19",
