@@ -291,5 +291,32 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "default",
+    "theme": "flatly",
+    "dark_mode_theme": None,
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-success",
+    "accent": "accent-success",
+    "navbar": "navbar-success navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-success",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_hover_elevate": False,
+    "sidebar_activate_nav_attr": False,
+    "resource_panel": True,
+    "controls_sidebar": True,
+    "show_ui_builder": False,
+    "presets": [],
+    "styles": {
+        "success": "background-color: #14855e !important; border-color: #14855e !important;",
+    }
 }

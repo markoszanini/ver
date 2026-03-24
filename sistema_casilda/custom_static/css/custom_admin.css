@@ -1,244 +1,304 @@
-/* Custom Global Admin CSS (APEX Inspired) for Jazzmin */
+/* 
+   Casilda Conecta - Premium Admin Theme (Jazzmin)
+   Glassmorphism + Inter Typography + Modern UI
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
     --muni-green: #14855e;
+    --muni-green-dark: #0a5a3f;
     --muni-yellow: #fec107;
     --muni-blue: #00adef;
-    --apex-bg: #ececec;
-    --apex-card: #ffffff;
-    --apex-main: var(--muni-green);
-    --apex-secondary: #0a5a3f;
-    --apex-btn: var(--muni-green);
-    --apex-btn-hover: #0e6b4d;
-    --apex-text: #212529;
+    --muni-dark: #212529;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --admin-bg: #f4f7f6;
 }
 
-/* Base Body and Wrapper Content Background */
-body, .wrapper, .content-wrapper, .layout-navbar-fixed .wrapper .content-wrapper {
-    background-color: var(--apex-bg) !important;
+/* Typography Overhaul */
+body, .main-header, .main-sidebar, .content-wrapper, .card-title, .btn, .form-control {
+    font-family: 'Inter', sans-serif !important;
 }
 
-/* Main Navbar */
+/* Background & Global spacing */
+body, .wrapper, .content-wrapper {
+    background-color: var(--admin-bg) !important;
+}
+
+/* Glassmorphism Classes */
+.glass-effect {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+/* Navbar Modernization */
 .main-header.navbar {
-    background: linear-gradient(to right, var(--apex-main), var(--apex-secondary)) !important;
+    background: rgba(20, 133, 94, 0.8) !important;
+    backdrop-filter: blur(10px);
     border: none !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    border-bottom: 3px solid var(--muni-yellow) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
 }
 
-.main-header.navbar .nav-link,
-.main-header.navbar .navbar-brand,
-.brand-link .brand-text {
+.main-header.navbar .nav-link, 
+.main-header.navbar .navbar-brand {
     color: #ffffff !important;
+    font-weight: 500;
 }
 
-/* Sidebar and Branding */
-.main-sidebar, .sidebar {
-    background-color: var(--apex-main) !important;
+/* Sidebar Customization (Clean & Professional) */
+.main-sidebar {
+    background: var(--muni-green-dark) !important;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.05) !important;
 }
 
 .brand-link {
-    background-color: var(--apex-main) !important;
-    color: #ffffff !important;
-    border-bottom: 1px solid var(--apex-secondary) !important;
+    background: var(--muni-green-dark) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    padding: 1rem !important;
 }
 
-.brand-link .brand-image {
-    filter: brightness(0) invert(1);
+.brand-link .brand-text {
+    font-weight: 700 !important;
+    letter-spacing: -0.5px;
 }
 
 .sidebar .nav-link {
-    color: #e0e0e0 !important;
+    border-radius: 12px !important;
+    margin: 4px 10px !important;
+    padding: 10px 15px !important;
+    transition: all 0.3s ease !important;
 }
 
-.sidebar .nav-link p {
-    color: #e0e0e0 !important;
+.sidebar .nav-link:hover {
+    background: rgba(255,255,255,0.1) !important;
+    transform: translateX(5px);
 }
 
-.nav-sidebar .nav-item > .nav-link.active,
-.nav-sidebar .nav-item > .nav-link:hover {
-    background-color: var(--apex-secondary) !important;
-    color: #ffffff !important;
+.nav-sidebar .nav-item > .nav-link.active {
+    background: var(--muni-yellow) !important;
+    color: var(--muni-dark) !important;
+    box-shadow: 0 4px 12px rgba(254, 193, 7, 0.3) !important;
 }
 
-/* Cards (Panels) */
+.nav-sidebar .nav-item > .nav-link.active i {
+    color: var(--muni-dark) !important;
+}
+
+/* Cards & Info Boxes (Major Glow-up) */
 .card, .info-box {
-    background-color: var(--apex-card) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
-    color: var(--apex-text) !important;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--glass-shadow) !important;
+    overflow: hidden;
+    margin-bottom: 2rem !important;
 }
 
 .card-header {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid #e0e0e0 !important;
-    color: var(--apex-text) !important;
-    font-weight: bold !important;
-    border-top-left-radius: 8px !important;
-    border-top-right-radius: 8px !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    padding: 1.25rem !important;
 }
 
-.card-footer {
-    background-color: #ffffff !important;
-    border-top: 1px solid #e0e0e0 !important;
+.card-title {
+    font-weight: 700 !important;
+    color: var(--muni-green-dark) !important;
 }
 
-/* Inputs and Forms */
-.form-control {
-    background-color: #fcfcfc !important;
-    border: 1px solid #ccc !important;
-    border-radius: 4px !important;
-    color: var(--apex-text) !important;
+/* Form Controls */
+.form-control, .select2-container--default .select2-selection--single {
+    border-radius: 12px !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    padding: 0.6rem 1rem !important;
+    height: auto !important;
+    background: white !important;
 }
+
 .form-control:focus {
-    border-color: var(--apex-secondary) !important;
-    box-shadow: 0 0 0 0.2rem rgba(73, 113, 116, 0.25) !important;
+    border-color: var(--muni-green) !important;
+    box-shadow: 0 0 0 4px rgba(20, 133, 94, 0.1) !important;
 }
 
-/* Buttons */
-.btn-primary, .btn-info, .btn-success, .btn-default {
-    background-color: var(--apex-btn) !important;
-    border-color: var(--apex-btn) !important;
-    color: #ffffff !important;
-    font-weight: 500 !important;
+/* Labels */
+label {
+    font-weight: 600 !important;
+    color: #4b5563 !important;
 }
 
-.btn-primary:hover, .btn-info:hover, .btn-success:hover, .btn-default:hover {
-    background-color: var(--apex-btn-hover) !important;
-    border-color: var(--apex-btn-hover) !important;
+/* Buttons (Rounded Premium) */
+.btn {
+    border-radius: 50px !important;
+    padding: 0.6rem 2rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease !important;
+}
+
+.btn-primary, .btn-success, .btn-info {
+    background: var(--muni-green) !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(20, 133, 94, 0.2) !important;
+}
+
+.btn-primary:hover, .btn-success:hover {
+    background: var(--muni-green-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10, 90, 63, 0.3) !important;
 }
 
 .btn-danger {
-    background-color: #d9534f !important;
-    border-color: #d43f3a !important;
+    border-radius: 50px !important;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2) !important;
 }
 
-/* Tables */
-table.table, table.dataTable {
-    background-color: transparent !important;
-    color: var(--apex-text) !important;
+/* Tables (Zebra + Modern) */
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0,0,0,0.03) !important;
+.table thead th {
+    background: #f8fafc !important;
+    border: none !important;
+    color: #64748b !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    padding: 1rem !important;
 }
 
-.table-bordered th, .table-bordered td {
-    border-color: #e0e0e0 !important;
+.table tbody tr {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    transition: all 0.2s ease;
 }
 
-/* Content Headers (Titles) */
-.content-header h1 {
-    color: var(--apex-text) !important;
-    font-weight: bold !important;
-    text-shadow: 0px 1px 1px rgba(255,255,255,0.5) !important;
+.table tbody tr:hover {
+    transform: scale(1.005);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
 }
 
-.breadcrumb-item a {
-    color: var(--apex-main) !important;
-}
-
-.breadcrumb-item.active {
-    color: #555555 !important;
-}
-
-/* Popups / Modals */
-.modal-content {
-    background-color: var(--apex-card) !important;
-}
-.modal-header {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid #e0e0e0 !important;
-}
-
-/* Change Form Toolbars (Save row) */
-.submit-row {
-    background-color: #ffffff !important;
-    border-top: 1px solid #e0e0e0 !important;
-    padding: 15px !important;
-    border-radius: 0 0 8px 8px !important;
-}
-
-/* ------------------------------------------------------------------------- */
-/* FIX GLOBAL P/ QUE LOS FORMULARIOS TENGAN LAS ETIQUETAS A LA IZQUIERDA     */
-/* ------------------------------------------------------------------------- */
-.form-group {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 1rem;
-}
-
-.form-group > label {
-    margin-bottom: 0;
-    min-width: 180px; 
-    text-align: right;
-    font-weight: 600;
-    padding-right: 10px;
-}
-
-/* Todo lo que no sea la etiqueta, ocupa el resto del espacio */
-.form-group > div,
-.form-group > input,
-.form-group > select,
-.form-group > textarea,
-.form-group > .select2-container {
-    flex-grow: 1;
-    width: 100%; 
-}
-
-/* En mobile, volvemos al comportamiento apilado nativo para que no se rompa */
-@media (max-width: 768px) {
-    .form-group {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    .form-group > label {
-        text-align: left;
-        min-width: auto;
-    }
-}
-
-/* Support for multiple fields in one row (tuples in admin.py) */
-.form-row {
-    display: flex !important;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 10px 15px !important;
+.table td {
+    padding: 1rem !important;
     border: none !important;
 }
 
-.form-row .fieldBox {
-    display: flex !important;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    flex: 1 1 0;
-    min-width: 200px;
+.table td:first-child { border-radius: 12px 0 0 12px !important; }
+.table td:last-child { border-radius: 0 12px 12px 0 !important; }
+
+/* Dashboard Info Boxes Overlay */
+.info-box {
+    transition: all 0.3s ease;
 }
 
-.form-row .fieldBox label {
-    margin-bottom: 0 !important;
-    min-width: 120px;
-    text-align: right;
-    font-weight: 600;
+.info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1) !important;
 }
 
-.form-row .fieldBox input, 
-.form-row .fieldBox select, 
-.form-row .fieldBox .select2-container {
-    flex-grow: 1;
+.info-box .info-box-icon {
+    border-radius: 15px !important;
+    margin: 10px !important;
 }
 
-/* Login Page Adjustments */
-.login-page .login-logo img {
-    max-width: 260px !important;
-    height: auto !important;
+/* Sub-nav and Breadcrumbs */
+.content-header {
+    padding: 3rem 1.5rem !important;
+    background: linear-gradient(135deg, var(--muni-green) 0%, var(--muni-green-dark) 100%) !important;
+    color: white !important;
+    margin-bottom: 2rem !important;
+    border-bottom: 5px solid var(--muni-yellow);
+    position: relative;
+    overflow: hidden;
 }
 
-.login-page .login-card-body {
-    border-radius: 12px !important;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+.content-header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url("https://www.transparenttextures.com/patterns/cubes.png");
+    opacity: 0.1;
+}
+
+.content-header h1 {
+    color: white !important;
+    font-weight: 800 !important;
+    font-size: 2.2rem !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.content-header .breadcrumb {
+    background: rgba(255,255,255,0.1) !important;
+    backdrop-filter: blur(5px);
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem !important;
+    display: inline-flex;
+}
+
+.content-header .breadcrumb-item a {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.content-header .breadcrumb-item.active {
+    color: white !important;
+}
+
+/* Login Page Overhaul */
+.login-page {
+    background: linear-gradient(135deg, var(--muni-green) 0%, var(--muni-green-dark) 100%) !important;
+}
+
+.login-page::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url("https://www.transparenttextures.com/patterns/cubes.png");
+    opacity: 0.1;
+}
+
+.login-box {
+    width: 400px !important;
+}
+
+.login-card-body {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 25px !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
+    padding: 2.5rem !important;
+}
+
+.login-logo a {
+    color: white !important;
+    font-weight: 800 !important;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Form groups alignment fix for admin forms */
+.form-row {
+    padding: 1.5rem !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.form-row label {
+    margin-bottom: 10px !important;
+    display: block !important;
+}
+
+/* Submit bar at bottom */
+.submit-row {
+    background: rgba(255,255,255,0.8) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 0 0 20px 20px !important;
+    padding: 1.5rem !important;
+    margin: 0 !important;
 }
