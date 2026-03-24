@@ -1,35 +1,45 @@
 {% extends 'portal/base_portal.html' %}
-{% block title %}Mis Impuestos - Municipalidad de Casilda{% endblock %}
-{% block content %}
-<div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Mis Impuestos</h2>
-    </div>
+{% load static %}
 
+{% block title %}Mis Impuestos - Casilda Conecta{% endblock %}
+
+{% block content %}
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5 pb-5">
+    <div class="container animate-up text-center">
+        <div class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 mb-3">ECONOMÍA Y FINANZAS</div>
+        <h1 class="display-5 fw-bold mb-2">Mis Tasas e Impuestos</h1>
+        <p class="lead opacity-75">Consultá tu estado de deuda, vencimientos y gestioná tus pagos de forma digital.</p>
+    </div>
+</div>
+
+<div class="container mt-n5 position-relative z-2 pb-5">
     {% if impuestos %}
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="row row-cols-1 row-cols-md-2 g-4 animate-up">
             {% for impuesto in impuestos %}
                 <div class="col">
-                    <div class="glass-card p-4 h-100 position-relative border-start border-4 border-primary">
+                    <div class="glass-card p-4 h-100 position-relative border-start border-4 border-primary transition-hover">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
                                 <h5 class="fw-bold mb-1">{{ impuesto.get_tipo_display }}</h5>
                                 {% if impuesto.partida %}
-                                    <p class="text-muted mb-0"><i class="fa-solid fa-home me-1"></i> Partida: {{ impuesto.partida.nomenclatura }}</p>
-                                    <small class="text-muted d-block"><i class="fa-solid fa-map-marker-alt me-1"></i> {{ impuesto.partida.direccion }}</small>
+                                    <p class="text-muted mb-0 small"><i class="fa-solid fa-home me-1"></i> Partida: <span class="fw-bold text-dark">{{ impuesto.partida.nomenclatura }}</span></p>
+                                    <small class="text-muted d-block opacity-75"><i class="fa-solid fa-map-marker-alt me-1"></i> {{ impuesto.partida.direccion }}</small>
                                 {% else %}
-                                    <p class="text-muted mb-0"><i class="fa-solid fa-user me-1"></i> Cuenta General</p>
+                                    <p class="text-muted mb-0 small"><i class="fa-solid fa-user me-1"></i> Cuenta General Asociada</p>
                                 {% endif %}
                             </div>
-                            <span class="badge bg-light text-dark shadow-sm px-3 py-2 rounded-pill border">
-                                <i class="fa-solid fa-receipt me-1 text-primary"></i> 
-                                {{ impuesto.deudas.count }} periodos
-                            </span>
+                            <div class="text-end">
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 px-3 py-2 rounded-pill mb-2 d-block">
+                                    <i class="fa-solid fa-receipt me-1"></i> {{ impuesto.deudas.count }} Períodos
+                                </span>
+                            </div>
                         </div>
                         
-                        <div class="mt-4 pt-3 border-top text-end">
-                            <a href="{% url 'impuestos:estado_cuenta' impuesto.id %}" class="btn btn-outline-primary rounded-pill px-4">
-                                Ver Estado de Cuenta <i class="fa-solid fa-arrow-right ms-1"></i>
+                        <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+                            <span class="text-muted small"><i class="fa-solid fa-circle-info me-1"></i> Actualizado al día</span>
+                            <a href="{% url 'impuestos:estado_cuenta' impuesto.id %}" class="btn-muni btn-muni-primary px-4 shadow-sm py-2">
+                                Ver Estado <i class="fa-solid fa-arrow-right ms-1 fs-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -37,13 +47,24 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="text-center py-5 bg-white rounded-4 shadow-sm border">
-            <div class="mb-3">
-                <i class="fa-solid fa-folder-open text-muted" style="font-size: 3rem;"></i>
+        <div class="row justify-content-center animate-up">
+            <div class="col-lg-6">
+                <div class="glass-card p-5 text-center bg-white">
+                    <div class="mb-4">
+                        <i class="fa-solid fa-file-invoice-dollar text-muted opacity-25" style="font-size: 5rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Sin cuentas vinculadas</h4>
+                    <p class="text-muted mb-4">Actualmente no se registran cuentas tributarias o partidas inmobiliarias vinculadas a tu perfil de vecino.</p>
+                    <a href="{% url 'portal:dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">Volver al Panel</a>
+                </div>
             </div>
-            <h5 class="fw-bold text-dark">No tienes impuestos asociados</h5>
-            <p class="text-muted mb-4">Actualmente no se registran cuentas tributarias o partidas inmobiliarias vinculadas a tu perfil.</p>
         </div>
     {% endif %}
 </div>
+
+<style>
+    .mt-n5 { margin-top: -3.5rem !important; }
+    .transition-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .fs-xs { font-size: 0.75rem; }
+</style>
 {% endblock %}
