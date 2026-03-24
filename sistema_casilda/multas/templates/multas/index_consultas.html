@@ -5,6 +5,11 @@
 
 {% block extra_css %}
 <style>
+    /* Fix clipping of elements in hero section */
+    .glass-hero {
+        overflow: visible !important;
+    }
+    .mt-n5 { margin-top: -3.5rem !important; }
     .hub-icon {
         width: 70px;
         height: 70px;
@@ -24,29 +29,28 @@
         color: var(--muni-dark);
         transform: rotate(-5deg) scale(1.1);
     }
-    .hero-badge {
-        background: rgba(255,255,255,0.15);
-        padding: 5px 15px;
-        border-radius: 50px;
-        font-size: 0.9rem;
-        display: inline-block;
-        margin-bottom: 15px;
-        backdrop-filter: blur(5px);
-    }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<div class="glass-hero text-white text-center">
+<div class="glass-hero text-white mb-5 transition-fade">
     <div class="container animate-up">
-        <span class="hero-badge"><i class="fa-solid fa-shield-halved me-2"></i> Tránsito y Convivencia Ciudadana</span>
-        <h1 class="display-4 fw-bold mb-2">Consulta de Multas</h1>
-        <p class="lead opacity-75 mb-0">Gestione sus infracciones y solicite certificados de libre deuda de forma ágil y segura.</p>
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Consulta de Multas</h1>
+                <p class="lead opacity-75 mb-0">Gestione sus infracciones y solicite certificados de libre deuda de forma ágil.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
+                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container mt-n5 position-relative z-2 pb-5">
+<div class="container pb-5">
     <div class="row g-4 justify-content-center">
         <!-- DNI -->
         <div class="col-md-6 col-lg-3 animate-up" style="animation-delay: 0.1s;">
@@ -123,10 +127,4 @@
     </div>
 </div>
 
-<!-- Special CSS for mt-n5 -->
-<style>
-    .mt-n5 {
-        margin-top: -3rem !important;
-    }
-</style>
 {% endblock %}

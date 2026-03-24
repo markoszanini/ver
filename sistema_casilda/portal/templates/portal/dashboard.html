@@ -22,15 +22,6 @@
         color: white !important;
         box-shadow: 0 4px 12px rgba(20, 133, 94, 0.2);
     }
-    .indicator-badge {
-        width: 35px;
-        height: 35px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-    }
     .w-20 { width: 25px; text-align: center; }
 </style>
 {% endblock %}
@@ -45,8 +36,8 @@
                 <p class="lead opacity-75 mb-0">Bienvenido/a, <strong>{{ user.first_name|default:user.username }}</strong>. ¡Es un gusto tenerte de vuelta!</p>
             </div>
             <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
-                <span class="badge fs-6 py-2 px-4 rounded-pill bg-white bg-opacity-20 backdrop-blur">
-                    <i class="fa-solid fa-check-circle me-1 text-warning"></i> Ciudadano Verificado
+                <span class="badge fs-6 py-2 px-4 rounded-pill bg-white bg-opacity-25" style="backdrop-filter: blur(4px);">
+                    <i class="fa-solid fa-circle-check me-1 text-warning"></i> Cuenta Verificada
                 </span>
             </div>
         </div>
@@ -58,16 +49,18 @@
         <!-- Sidebar Navigation -->
         <div class="col-lg-3 animate-up" style="animation-delay: 0.1s;">
             <div class="glass-card p-4 sticky-top" style="top: 100px; z-index: 10;">
-                <h6 class="fw-bold text-muted small text-uppercase mb-4">Servicios Destacados</h6>
+                <div class="bg-light p-2 mb-4 rounded-3 text-center border-bottom border-success border-2">
+                    <h6 class="fw-bold text-success small text-uppercase mb-0">Servicios Destacados</h6>
+                </div>
                 <div class="d-flex flex-column gap-2">
-                    <a href="{% url 'portal:dashboard' %}" class="dash-sidebar-link active text-decoration-none d-flex align-items-center">
-                        <i class="fa-solid fa-house-chimney me-2 w-20"></i> Inicio Panel
-                    </a>
                     <a href="{% url 'expedientes:mis_expedientes' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-folder me-2 w-20"></i> Mis Expedientes
                     </a>
                     <a href="{% url 'reclamos:mis_reclamos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-bullhorn me-2 w-20"></i> Mis Reclamos
+                    </a>
+                    <a href="{% url 'turnos:mis_turnos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-calendar-check me-2 w-20"></i> Solicitud de Turnos
                     </a>
                     <a href="{% url 'impuestos:mis_impuestos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-file-invoice-dollar me-2 w-20"></i> Tasas e Impuestos
@@ -84,9 +77,6 @@
                     <a href="{% url 'portal:registro_feriante' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-store me-2 w-20"></i> Registro Feriante
                     </a>
-                    <hr class="my-3 opacity-10">
-                    <a href="{% url 'portal:logout' %}" class="dash-sidebar-link text-muted text-decoration-none d-flex align-items-center">
-                        <i class="fa-solid fa-right-from-bracket me-2 w-20"></i> Cerrar Sesión
                     </a>
                 </div>
             </div>
@@ -94,6 +84,23 @@
 
         <!-- Main Dashboard Content -->
         <div class="col-lg-9 animate-up" style="animation-delay: 0.2s;">
+            
+            {% if notificaciones %}
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="glass-card bg-warning bg-opacity-10 border-warning border-opacity-20 p-3 shadow-sm">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-bell text-warning me-3 fs-4"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-1">Tenés {{ notificaciones|length }} notificaciones pendientes</h6>
+                                <p class="mb-0 small text-muted">{{ notificaciones.0.titulo }}: {{ notificaciones.0.mensaje|truncatechars:80 }}</p>
+                            </div>
+                            <a href="{% url 'portal:mis_ferias' %}" class="btn btn-warning btn-sm fw-bold px-3 ms-3">Ver Todo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             
             <!-- Quick Stats/Actions -->
             <div class="row g-4 mb-4">

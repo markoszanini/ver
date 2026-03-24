@@ -99,6 +99,8 @@ EstudioFormSet = forms.inlineformset_factory(Postulante, Estudio, fields='__all_
 CursoFormSet = forms.inlineformset_factory(Postulante, Curso, fields='__all__', extra=3, can_delete=True, formset=BaseStyledFormSet)
 IdiomaFormSet = forms.inlineformset_factory(Postulante, Idioma, fields='__all__', extra=3, can_delete=True, formset=BaseStyledFormSet)
 
+from ferias.models import Feriante, SubrubroFeriante
+
 class FerianteForm(forms.ModelForm):
     class Meta:
         model = Feriante
@@ -106,6 +108,19 @@ class FerianteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        # dynamic subrubro filtering
+        if 'rubro' in self.data:
+            try:
+                rubro_id = int(self.data.get('rubro'))
+                self.fields['subrubro'].queryset = SubrubroFeriante.objects.filter(rubro_id=rubro_id).order_by('nombre')
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk and self.instance.rubro:
+            self.fields['subrubro'].queryset = self.instance.rubro.subrubros.order_by('nombre')
+        else:
+            self.fields['subrubro'].queryset = SubrubroFeriante.objects.none()
+
         for name, field in self.fields.items():
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({'class': 'form-check-input'})

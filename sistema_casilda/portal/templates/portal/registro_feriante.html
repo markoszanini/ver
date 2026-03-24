@@ -5,80 +5,149 @@
 
 {% block extra_css %}
 <style>
-    .form-section-title {
-        color: var(--muni-green);
+    /* Fix clipping of elements in hero section */
+    .glass-hero {
+        overflow: visible !important;
+    }
+    .cv-accordion .accordion-item {
+        border: none;
+        margin-bottom: 1.5rem;
+        background: transparent;
+    }
+    .cv-accordion .accordion-button {
+        border-radius: 15px !important;
+        padding: 1.25rem;
+        font-weight: 700;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.05);
+        color: var(--muni-dark);
+    }
+    .cv-accordion .accordion-button:not(.collapsed) {
+        background: var(--muni-green);
+        color: white;
+        box-shadow: 0 10px 20px rgba(20, 133, 94, 0.2);
+    }
+    .cv-accordion .accordion-button::after {
+        filter: grayscale(1) invert(1);
+    }
+    .cv-accordion .accordion-button.collapsed::after {
+        filter: none;
+    }
+    .cv-accordion .accordion-body {
+        background: rgba(255,255,255,0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 0 0 15px 15px;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-top: none;
+        padding: 2rem;
+    }
+    .form-label {
+        font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 1px;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-    }
-    .form-section-title::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: rgba(0,0,0,0.05);
-        margin-left: 15px;
+        color: #6c757d;
+        margin-bottom: 8px;
     }
     .form-control, .form-select {
         border-radius: 12px;
         padding: 0.75rem 1rem;
         border: 1px solid rgba(0,0,0,0.1);
-        background-color: #fcfcfc;
+        background: white;
     }
+    .form-control:focus {
+        border-color: var(--muni-green);
+        box-shadow: 0 0 0 0.25rem rgba(20, 133, 94, 0.1);
+    }
+    .mt-n5 { margin-top: -3.5rem !important; }
+    .x-small { font-size: 0.7rem; }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Header Hero -->
-<div class="glass-hero text-white mb-5 pb-5">
-    <div class="container animate-up text-center">
-        <div class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 mb-3">CONVOCATORIA ABIERTA</div>
-        <h1 class="display-5 fw-bold mb-2">Inscripción de Feriantes</h1>
-        <p class="lead opacity-75">Formá parte de las ferias y eventos culturales de nuestra ciudad.</p>
+<div class="glass-hero text-white mb-5 transition-fade">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Inscripción de Feriantes</h1>
+                <p class="lead opacity-75 mb-0">Formá parte de las ferias y eventos culturales de nuestra ciudad.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
+                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container mt-n5 position-relative z-2 pb-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 animate-up">
-            <div class="glass-card p-4 p-md-5 bg-white shadow-lg overflow-hidden position-relative">
-                
-                <!-- Decoration -->
-                <div class="position-absolute opacity-5" style="top: -20px; right: -20px; font-size: 10rem; transform: rotate(15deg);">
-                    <i class="fa-solid fa-tent"></i>
-                </div>
+{% if is_update %}
+    <div class="glass-card bg-success bg-opacity-10 border-success border-opacity-25 p-4 mb-4 shadow-sm animate-up">
+        <div class="d-flex align-items-center">
+            <div class="indicator-badge bg-success bg-opacity-10 text-success me-3">
+                <i class="fa-solid fa-tent"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h6 class="fw-bold mb-1 text-success">Ya sos parte del registro de feriantes</h6>
+                <p class="mb-0 small text-muted">Podés ver las ferias disponibles e inscribirte desde tu panel de ferias.</p>
+            </div>
+            <a href="{% url 'portal:mis_ferias' %}" class="btn btn-success btn-sm fw-bold px-4 rounded-pill shadow-sm ms-3">
+                IR A MIS FERIAS
+            </a>
+        </div>
+    </div>
+{% endif %}
 
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    
-                    <div class="form-section-title">
-                        <i class="fa-solid fa-id-card me-2"></i> Datos del Emprendimiento
-                    </div>
-                    
-                    <div class="row g-4 mb-4">
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 animate-up">
+{% if form.errors %}
+    <div class="glass-card bg-danger bg-opacity-10 border-danger border-opacity-25 p-4 mb-4 text-danger shadow-sm">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation me-2"></i> Errores en la carga</h5>
+        <p class="mb-0 small">Por favor, revise los campos marcados. Asegúrese de completar todos los datos obligatorios.</p>
+    </div>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="accordion cv-accordion" id="ferianteAccordion">
+        
+        <!-- 1. Datos del Emprendimiento -->
+        <div class="accordion-item animate-up" style="animation-delay: 0.1s;">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cDatosEmprendimiento">
+                    <i class="fa-solid fa-tent me-3 fs-5"></i> Datos del Emprendimiento y Feriante
+                </button>
+            </h2>
+            <div id="cDatosEmprendimiento" class="accordion-collapse collapse show" data-bs-parent="#ferianteAccordion">
+                <div class="accordion-body">
+                    <div class="row g-4">
                         {% for field in form %}
                             <div class="{% if field.name == 'observaciones' %}col-12{% else %}col-md-6{% endif %}">
-                                <label class="form-label fw-bold small text-muted text-uppercase">{{ field.label }}</label>
+                                <label class="form-label">{{ field.label }}</label>
                                 {{ field }}
-                                {% if field.help_text %}<div class="form-text small mt-1 x-small">{{ field.help_text }}</div>{% endif %}
+                                {% if field.help_text %}<div class="form-text mt-1 x-small opacity-75">{{ field.help_text }}</div>{% endif %}
                                 {% if field.errors %}<div class="text-danger x-small mt-1">{{ field.errors.0 }}</div>{% endif %}
                             </div>
                         {% endfor %}
                     </div>
-
-                    <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
-                        <a href="{% url 'portal:dashboard' %}" class="text-decoration-none text-muted fw-bold small">
-                            <i class="fa-solid fa-xmark me-1"></i> CANCELAR
-                        </a>
-                        <button type="submit" class="btn-muni btn-muni-primary px-5 shadow">
-                            <i class="fa-solid fa-check-circle me-2"></i> {% if is_update %}ACTUALIZAR DATOS{% else %}CONFIRMAR REGISTRO{% endif %}
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+        <a href="{% url 'portal:dashboard' %}" class="text-decoration-none text-muted fw-bold small">
+            <i class="fa-solid fa-xmark me-1"></i> CANCELAR
+        </a>
+        <button type="submit" class="btn-muni btn-muni-primary px-5 shadow">
+            <i class="fa-solid fa-check-circle me-2"></i> {% if is_update %}ACTUALIZAR DATOS{% else %}CONFIRMAR REGISTRO{% endif %}
+        </button>
+    </div>
+</form>
             
             <div class="mt-4 p-4 glass-card bg-info bg-opacity-10 border-0 text-dark small animate-up" style="animation-delay: 0.2s;">
                 <h6 class="fw-bold"><i class="fa-solid fa-circle-info me-2"></i> Información Importante</h6>
@@ -88,8 +157,37 @@
     </div>
 </div>
 
-<style>
-    .mt-n5 { margin-top: -3.5rem !important; }
-    .x-small { font-size: 0.7rem; }
-</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rubroSelect = document.getElementById('id_rubro');
+    const subrubroSelect = document.getElementById('id_subrubro');
+
+    if (rubroSelect && subrubroSelect) {
+        rubroSelect.addEventListener('change', function() {
+            const rubroId = this.value;
+            
+            // Clear current options
+            subrubroSelect.innerHTML = '<option value="">---------</option>';
+            
+            if (!rubroId) return;
+
+            // Fetch subrubros via AJAX
+            fetch(`{% url "ferias:ajax_subrubros" %}?rubro_id=${rubroId}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.nombre;
+                        subrubroSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching subrubros:', error));
+        });
+    }
+});
+</script>
 {% endblock %}

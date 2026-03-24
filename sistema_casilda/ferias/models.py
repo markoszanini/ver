@@ -78,3 +78,45 @@ class Feriante(models.Model):
     def __str__(self):
         return f"{self.apellido}, {self.nombre} ({self.dni})"
 
+class Feria(models.Model):
+    id_feria = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=150, verbose_name="Nombre de la Feria")
+    fecha = models.DateField(verbose_name="Día")
+    horario = models.CharField(max_length=100, verbose_name="Horario")
+    lugar = models.CharField(max_length=200, verbose_name="Lugar")
+    observaciones = models.TextField(blank=True, null=True, verbose_name="Observaciones")
+    ESTADO_CHOICES = [
+        ('PROGRAMADA', 'Programada'),
+        ('REALIZADA', 'Realizada'),
+        ('CANCELADA', 'Cancelada'),
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PROGRAMADA', verbose_name="Estado")
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Feria"
+        verbose_name_plural = "Ferias"
+        ordering = ['-fecha']
+
+    def __str__(self):
+        return f"{self.nombre} - {self.fecha}"
+
+class InscripcionFeria(models.Model):
+    feria = models.ForeignKey(Feria, on_delete=models.CASCADE, related_name='inscripciones', verbose_name="Feria")
+    feriante = models.ForeignKey(Feriante, on_delete=models.CASCADE, related_name='inscripciones_feria', verbose_name="Feriante")
+    fecha_inscripcion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Inscripción")
+    ESTADO_CHOICES = [
+        ('SOLICITADO', 'Solicitado'),
+        ('CONFIRMADO', 'Confirmado'),
+        ('RECHAZADO', 'Rechazado'),
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='SOLICITADO', verbose_name="Estado")
+
+    class Meta:
+        verbose_name = "Inscripción a Feria"
+        verbose_name_plural = "Inscripciones a Ferias"
+        unique_together = ('feria', 'feriante')
+
+    def __str__(self):
+        return f"{self.feriante} en {self.feria}"
+

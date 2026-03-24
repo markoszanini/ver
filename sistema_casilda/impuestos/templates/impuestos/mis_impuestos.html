@@ -3,17 +3,37 @@
 
 {% block title %}Mis Impuestos - Casilda Conecta{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Fix clipping of elements in hero section */
+    .glass-hero {
+        overflow: visible !important;
+    }
+    .transition-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .fs-xs { font-size: 0.75rem; }
+    .mt-n5 { margin-top: -3.5rem !important; }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Header Hero -->
-<div class="glass-hero text-white mb-5 pb-5">
-    <div class="container animate-up text-center">
-        <div class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 mb-3">ECONOMÍA Y FINANZAS</div>
-        <h1 class="display-5 fw-bold mb-2">Mis Tasas e Impuestos</h1>
-        <p class="lead opacity-75">Consultá tu estado de deuda, vencimientos y gestioná tus pagos de forma digital.</p>
+<div class="glass-hero text-white mb-5">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Mis Tasas e Impuestos</h1>
+                <p class="lead opacity-75 mb-0">Consultá tu estado de deuda, vencimientos y gestioná tus pagos digitalmente.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
+                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container mt-n5 position-relative z-2 pb-5">
+<div class="container pb-5">
     {% if impuestos %}
         <div class="row row-cols-1 row-cols-md-2 g-4 animate-up">
             {% for impuesto in impuestos %}
@@ -62,9 +82,4 @@
     {% endif %}
 </div>
 
-<style>
-    .mt-n5 { margin-top: -3.5rem !important; }
-    .transition-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-    .fs-xs { font-size: 0.75rem; }
-</style>
 {% endblock %}

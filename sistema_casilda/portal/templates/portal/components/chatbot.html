@@ -1,0 +1,38 @@
+{% load static %}
+<!-- Chatbot Candelaria -->
+<div class="chatbot-container">
+    <!-- Trigger Button -->
+    <div class="chatbot-trigger" id="bee-trigger">
+        <img src="{% static 'img/Candelaria.jpeg' %}" alt="Candelaria">
+        <div class="chat-badge" id="chat-badge" style="display: none;">1</div>
+    </div>
+
+    <!-- Window -->
+    <div class="chat-window" id="chat-window">
+        <div class="chat-header">
+            <img src="{% static 'img/Candelaria.jpeg' %}" alt="Candelaria">
+            <div>
+                <h6 class="mb-0">Candelaria</h6>
+                <small class="opacity-75">Asistente Virtual</small>
+            </div>
+            <button type="button" class="btn-close btn-close-white ms-auto" id="close-chat" style="font-size: 0.7rem;"></button>
+        </div>
+
+        <div class="chat-body" id="chat-body">
+            <div class="chat-msg msg-bot">
+                ¡Hola! Soy <strong>Candelaria</strong>, tu abeja asistente. 🐝 <br>
+                ¿En qué puedo ayudarte hoy?
+            </div>
+            <div class="chat-options" id="initial-options">
+                <div class="option-chip" data-action="telefonos">📞 Teléfonos útiles</div>
+                <div class="option-chip" data-action="direcciones">📍 Direcciones</div>
+                <div class="option-chip" data-action="vencimientos">📅 Vencimientos</div>
+                <div class="option-chip" data-action="tramites">💬 Trámites</div>
+            </div>
+        </div>
+
+        <div class="p-3 border-top bg-light typing" id="typing-indicator">
+            <small>Candelaria está escribiendo...</small>
+        </div>
+    </div>
+</div>

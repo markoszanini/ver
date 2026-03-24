@@ -11,4 +11,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('empleo/postular/', views.postular_empleo, name='postular_empleo'),
     path('ferias/registro/', views.registro_feriante, name='registro_feriante'),
+    path('ferias/mis-ferias/', views.mis_ferias, name='mis_ferias'),
+    path('ferias/inscribirse/<int:feria_id>/', views.inscribirse_feria, name='inscribirse_feria'),
 ]

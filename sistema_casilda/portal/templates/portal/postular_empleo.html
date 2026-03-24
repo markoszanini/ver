@@ -5,6 +5,10 @@
 
 {% block extra_css %}
 <style>
+    /* Fix clipping of elements in hero section */
+    .glass-hero {
+        overflow: visible !important;
+    }
     .cv-accordion .accordion-item {
         border: none;
         margin-bottom: 1.5rem;
@@ -63,20 +67,30 @@
         padding: 15px;
         border: none;
     }
+    .mt-n5 { margin-top: -3.5rem !important; }
+    .x-small { font-size: 0.7rem; }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Header Hero -->
-<div class="glass-hero text-white mb-5 pb-5">
-    <div class="container animate-up text-center">
-        <div class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 mb-3">BOLSA DE TRABAJO MUNICIPAL</div>
-        <h1 class="display-5 fw-bold mb-2">Mi Perfil Laboral y CV</h1>
-        <p class="lead opacity-75">Cargá tus datos una sola vez y postulate a múltiples vacantes.</p>
+<div class="glass-hero text-white mb-5 transition-fade">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Mi Perfil Laboral y CV</h1>
+                <p class="lead opacity-75 mb-0">Cargá tus datos una sola vez y postulate a múltiples vacantes del área de producción.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
+                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container mt-n5 position-relative z-2 pb-5">
+<div class="container pb-5">
     <div class="row justify-content-center">
         <div class="col-lg-10 animate-up">
             
@@ -228,8 +242,4 @@
     </div>
 </div>
 
-<style>
-    .mt-n5 { margin-top: -3.5rem !important; }
-    .x-small { font-size: 0.7rem; }
-</style>
 {% endblock %}

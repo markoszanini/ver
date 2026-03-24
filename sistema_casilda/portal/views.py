@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import (RegistroVecinoForm, PostulanteForm, FerianteForm, 
                     PostulacionFormSet, ExperienciaFormSet, EstudioFormSet, CursoFormSet, IdiomaFormSet)
 from empleo.models import Postulante
-from ferias.models import Feriante
+from ferias.models import Feriante, Feria, InscripcionFeria
 
 def home(request):
     if request.user.is_authenticated:
@@ -54,13 +54,20 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    try:
-        vecino = request.user.vecino_profile
+    vecino = getattr(request.user, 'vecino_profile', None)
+    expedientes = []
+    notificaciones = []
+    
+    if vecino:
         from expedientes.models import Expediente
-        expedientes = Expediente.objects.filter(vecino_titular=vecino)
-    except Exception:
-        expedientes = []
-    return render(request, 'portal/dashboard.html', {'expedientes': expedientes})
+        from .models import Notificacion
+        expedientes = Expediente.objects.filter(vecino_titular=vecino).order_by('-fecha_ingreso')
+        notificaciones = Notificacion.objects.filter(vecino=vecino, leida=False).order_by('-fecha')
+    
+    return render(request, 'portal/dashboard.html', {
+        'expedientes': expedientes,
+        'notificaciones': notificaciones,
+    })
 
 @login_required
 def postular_empleo(request):
@@ -139,3 +146,45 @@ def registro_feriante(request):
     else:
         form = FerianteForm(instance=feriante)
     return render(request, 'portal/registro_feriante.html', {'form': form, 'is_update': feriante is not None})
+
+@login_required
+def mis_ferias(request):
+    vecino = getattr(request.user, 'vecino_profile', None)
+    if not vecino:
+        messages.error(request, "Debe completar su perfil de vecino primero.")
+        return redirect('portal:dashboard')
+    
+    # Marcar notificaciones como leídas
+    from .models import Notificacion
+    Notificacion.objects.filter(vecino=vecino, leida=False).update(leida=True)
+    
+    feriante = Feriante.objects.filter(vecino_titular=vecino).first()
+    
+    # Ferias disponibles (programadas y a futuro)
+    ferias_disponibles = Feria.objects.filter(estado='PROGRAMADA').exclude(inscripciones__feriante=feriante)
+    
+    # Mis inscripciones
+    mis_inscripciones = InscripcionFeria.objects.filter(feriante=feriante).select_related('feria')
+    
+    return render(request, 'portal/mis_ferias.html', {
+        'ferias_disponibles': ferias_disponibles,
+        'mis_inscripciones': mis_inscripciones,
+        'es_feriante': feriante is not None
+    })
+
+@login_required
+def inscribirse_feria(request, feria_id):
+    if request.method == 'POST':
+        vecino = getattr(request.user, 'vecino_profile', None)
+        feriante = Feriante.objects.filter(vecino_titular=vecino).first()
+        
+        if not feriante:
+            messages.error(request, "Debe estar registrado como feriante para inscribirse.")
+            return redirect('portal:registro_feriante')
+            
+        feria = Feria.objects.get(id_feria=feria_id)
+        InscripcionFeria.objects.get_or_create(feria=feria, feriante=feriante)
+        
+        messages.success(request, f"Te has inscripto correctamente a {feria.nombre}. Sujeto a validación.")
+        
+    return redirect('portal:mis_ferias')

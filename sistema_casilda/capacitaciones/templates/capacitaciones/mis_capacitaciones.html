@@ -19,21 +19,45 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
+    /* Fix clipping of dropdown menus in hero section */
+    .glass-hero {
+        overflow: visible !important;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Header Hero -->
-<div class="glass-hero text-white mb-5">
-    <div class="container animate-up text-center text-md-start d-flex flex-column flex-md-row justify-content-between align-items-center">
-        <div>
-            <h1 class="display-5 fw-bold mb-2">Mis Capacitaciones</h1>
-            <p class="lead opacity-75 mb-0">Hacé el seguimiento de tus cursos y talleres activos.</p>
-        </div>
-        <div class="mt-4 mt-md-0">
-            <a href="{% url 'capacitaciones:explorar' %}" class="btn-muni btn-muni-primary shadow-lg">
-                <i class="fa-solid fa-plus me-2"></i> Ver Oferta Educativa
-            </a>
+<div class="glass-hero text-white mb-5 transition-fade">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-7 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Mis Capacitaciones</h1>
+                <p class="lead opacity-75 mb-0">Hace el seguimiento de tus cursos y talleres activos.</p>
+            </div>
+            <div class="col-md-5 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
+                <div class="d-flex flex-column flex-md-row justify-content-md-end gap-2 align-items-center">
+                    <a href="{% url 'capacitaciones:explorar' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                        <i class="fa-solid fa-plus me-2"></i> Ver Oferta Educativa
+                    </a>
+                    <div class="dropdown d-inline-block">
+                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0.8rem 1rem;">
+                            Volver al Panel
+                        </button>
+                        <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2" style="z-index: 1100;">
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'portal:dashboard' %}"><i class="fa-solid fa-house-chimney me-2 text-success"></i> Inicio Panel</a></li>
+                            <li><hr class="dropdown-divider opacity-10"></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'expedientes:mis_expedientes' %}"><i class="fa-solid fa-folder me-2 text-primary"></i> Mis Expedientes</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'reclamos:mis_reclamos' %}"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Mis Reclamos</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'turnos:mis_turnos' %}"><i class="fa-solid fa-calendar-check me-2 text-primary"></i> Solicitud de Turnos</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'impuestos:mis_impuestos' %}"><i class="fa-solid fa-file-invoice-dollar me-2 text-success"></i> Tasa e Impuestos</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'multas:index_consultas' %}"><i class="fa-solid fa-file-invoice me-2 text-warning"></i> Mis Multas</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'portal:postular_empleo' %}"><i class="fa-solid fa-briefcase me-2 text-info"></i> Bolsa de Empleo</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{% url 'portal:registro_feriante' %}"><i class="fa-solid fa-store me-2 text-accent" style="color: #e5ad06;"></i> Registro Feriante</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

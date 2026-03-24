@@ -1,13 +1,33 @@
 {% extends 'portal/base_portal.html' %}
 {% block title %}Mis Turnos - Municipalidad de Casilda{% endblock %}
+{% block extra_css %}
+<style>
+    /* Fix clipping of elements in hero section */
+    .glass-hero {
+        overflow: visible !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark"><i class="fa-solid fa-calendar-alt text-primary me-2"></i>Mis Turnos</h2>
-        <a href="{% url 'turnos:solicitar_turno' %}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <i class="fa-solid fa-plus me-1"></i> Solicitar Nuevo Turno
-        </a>
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5 transition-fade">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Mis Turnos</h1>
+                <p class="lead opacity-75 mb-0">Gestioná tus citas para trámites municipales de forma rápida.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
+                <a href="{% url 'turnos:solicitar_turno' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                    <i class="fa-solid fa-plus me-2"></i> Solicitar Nuevo Turno
+                </a>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="container pb-5">
 
     {% if turnos %}
         <div class="glass-card overflow-hidden">
@@ -53,11 +73,13 @@
             </div>
         </div>
     {% else %}
-        <div class="text-center py-5 bg-white rounded-4 shadow-sm border mt-4">
-            <i class="fa-solid fa-calendar-times text-muted opacity-50 mb-3" style="font-size: 3rem;"></i>
-            <h5 class="fw-bold text-dark">No has solicitado ningún turno</h5>
-            <p class="text-muted mb-4">Puedes agendar un turno para psicofísico o licencia de conducir en cualquier momento.</p>
-            <a href="{% url 'turnos:solicitar_turno' %}" class="btn btn-primary rounded-pill px-4">Comenzar</a>
+        <div class="glass-card text-center py-5 animate-up" style="animation-delay: 0.1s;">
+            <div class="opacity-25 mb-4">
+                <i class="fa-solid fa-calendar-xmark fa-4x text-muted"></i>
+            </div>
+            <h5 class="text-muted fw-bold">No tenés turnos registrados</h5>
+            <p class="text-muted px-5 mb-4">Podés agendar un turno para psicofísico o licencia de conducir en cualquier momento.</p>
+            <a href="{% url 'turnos:solicitar_turno' %}" class="btn-muni btn-muni-primary px-5 shadow">Agendar Mi Primer Turno</a>
         </div>
     {% endif %}
 </div>
