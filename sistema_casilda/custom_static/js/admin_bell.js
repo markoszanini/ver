@@ -1,8 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Admin Bell script loaded.");
     
-    // FORCE LIGHT MODE (CRM Style)
+    // FORCE LIGHT MODE (Nuclear Option v2 - BS5 Theme Neutralizer)
     const forceLight = () => {
+        // Target HTML element (Bootstrap 5 Global Theme)
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+        document.documentElement.style.colorScheme = 'light';
+        
         const body = document.body;
         
         // Remove all possible dark classes
@@ -14,32 +18,37 @@ document.addEventListener("DOMContentLoaded", function() {
         
         darkClasses.forEach(cls => {
             body.classList.remove(cls);
-            document.querySelectorAll('.' + cls).forEach(el => el.classList.remove(cls));
+            document.querySelectorAll('.' + cls).forEach(el => {
+                el.classList.remove(cls);
+                el.removeAttribute('data-bs-theme');
+            });
         });
 
-        // Force Sidebar Light
+        // Add light classes
         body.classList.add('sidebar-light-primary');
         const sidebar = document.querySelector('.main-sidebar');
         if (sidebar) {
+            sidebar.setAttribute('data-bs-theme', 'light');
             sidebar.classList.remove('sidebar-dark-primary');
             sidebar.classList.add('sidebar-light-primary');
             sidebar.style.backgroundColor = "#ffffff";
         }
 
-        // Force Navbar Light/Green
         const navbar = document.querySelector('.main-header.navbar');
         if (navbar) {
+            navbar.setAttribute('data-bs-theme', 'light');
             navbar.classList.remove('navbar-dark');
             navbar.classList.add('navbar-light');
             navbar.style.backgroundColor = "#1E7F5C";
         }
 
+        localStorage.setItem('jazzmin-theme-mode', 'light');
         localStorage.setItem('jazzmin-dark-mode', 'false');
     };
 
     forceLight();
-    setTimeout(forceLight, 500);
-    setTimeout(forceLight, 2000);
+    // Repeating to combat Jazzmin's internal state restoration
+    setInterval(forceLight, 1000); 
     
     // INJECT CRM LIGHT THEME CSS
     const style = document.createElement('style');

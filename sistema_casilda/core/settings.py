@@ -170,8 +170,8 @@ JAZZMIN_SETTINGS = {
             "apicultura.Extraccion",
             "apicultura.LiquidacionExtraccion"
         ],"show_ui_builder": False,
-    "custom_css": "css/custom_admin.css?v=15",
-    "custom_js": "js/admin_bell.js?v=15",
+    "custom_css": "css/custom_admin.css?v=18",
+    "custom_js": "js/admin_bell.js?v=18",
     "custom_links": {
         "impuestos": [
             {
