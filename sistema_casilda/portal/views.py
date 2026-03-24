@@ -57,22 +57,32 @@ def dashboard(request):
     vecino = getattr(request.user, 'vecino_profile', None)
     expedientes = []
     notificaciones = []
+    reclamos_recientes = []
+    reclamos_abiertos = 0
     turnos_proximos = 0
     
     if vecino:
         from expedientes.models import Expediente
         from turnos.models import Turno
+        from reclamos.models import Reclamo
         from django.utils import timezone
         from .models import Notificacion
         
         expedientes = Expediente.objects.filter(vecino_titular=vecino).order_by('-fecha_ingreso')
         notificaciones = Notificacion.objects.filter(vecino=vecino, leida=False).order_by('-fecha')
         turnos_proximos = Turno.objects.filter(vecino=vecino, fecha__gte=timezone.now().date()).count()
+        
+        # Reclamos
+        reclamos_all = Reclamo.objects.filter(vecino=vecino)
+        reclamos_recientes = reclamos_all.order_by('-fecha_creacion')[:5]
+        reclamos_abiertos = reclamos_all.exclude(estado__in=['Resuelto', 'Cerrado']).count()
     
     return render(request, 'portal/dashboard.html', {
         'expedientes': expedientes,
         'notificaciones': notificaciones,
         'turnos_proximos': turnos_proximos,
+        'reclamos_recientes': reclamos_recientes,
+        'reclamos_abiertos': reclamos_abiertos,
     })
 
 @login_required
