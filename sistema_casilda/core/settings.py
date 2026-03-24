@@ -168,10 +168,12 @@ JAZZMIN_SETTINGS = {
             "expedientes.MovimientoExpediente",
             "apicultura.Apicultor",
             "apicultura.Extraccion",
-            "apicultura.LiquidacionExtraccion"
-        ],"show_ui_builder": False,
-    "custom_css": "css/custom_admin.css?v=18",
-    "custom_js": "js/admin_bell.js?v=18",
+        ]
+    },
+    "navigation_expanded": False,
+    "show_ui_builder": False,
+    "custom_css": "css/custom_admin.css?v=19",
+    "custom_js": "js/admin_bell.js?v=19",
     "custom_links": {
         "impuestos": [
             {
@@ -307,7 +309,7 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
     "sidebar_nav_child_indent": True,
-    "sidebar_nav_compact_style": False,
+    "sidebar_nav_compact_style": True,
     "sidebar_nav_legacy_style": False,
     "sidebar_link_nav_small_text": False,
     "theme": "flatly",
