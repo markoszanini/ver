@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from portal.models import Localidad
 
 class Persona(models.Model):
     id_persona = models.AutoField(primary_key=True)
@@ -7,7 +8,7 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     fecha_nacimiento = models.DateField(null=True, blank=True)
-    localidad = models.CharField(max_length=100, null=True, blank=True)
+    localidad = models.ForeignKey(Localidad, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Localidad")
     calle = models.CharField(max_length=100, null=True, blank=True)
     numero = models.CharField(max_length=10, null=True, blank=True)
     codigo_postal = models.CharField(max_length=10, null=True, blank=True)

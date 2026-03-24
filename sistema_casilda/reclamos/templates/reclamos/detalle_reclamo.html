@@ -1,144 +1,277 @@
 {% extends 'portal/base_portal.html' %}
+{% load static %}
 
-{% block title %}Detalle de Reclamo - Portal del Vecino{% endblock %}
+{% block title %}Detalle de Reclamo #{{ reclamo.id }} - Casilda Conecta{% endblock %}
+
+{% block extra_css %}
+<style>
+    .info-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #6c757d;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+        display: block;
+    }
+    .info-value {
+        font-weight: 600;
+        color: var(--muni-dark);
+        font-size: 1.1rem;
+    }
+    .msg-bubble {
+        border-radius: 18px;
+        padding: 15px 20px;
+        position: relative;
+        max-width: 85%;
+    }
+    .msg-muni {
+        background: #f1f8f5;
+        border-left: 4px solid var(--muni-green);
+        border-bottom-left-radius: 4px;
+    }
+    .msg-vecino {
+        background: white;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-bottom-right-radius: 4px;
+        align-self: flex-end;
+    }
+    .timeline-item {
+        padding-left: 30px;
+        position: relative;
+        padding-bottom: 25px;
+    }
+    .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--muni-green);
+        z-index: 2;
+        border: 3px solid white;
+        box-shadow: 0 0 0 3px rgba(20, 133, 94, 0.1);
+    }
+    .timeline-item::after {
+        content: "";
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        bottom: 0px;
+        width: 2px;
+        background: rgba(0,0,0,0.05);
+        z-index: 1;
+    }
+    .timeline-item:last-child::after {
+        display: none;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="bg-white border-bottom py-4 mb-4 shadow-sm">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div>
-            <h1 class="h3 mb-1 fw-bold">Reclamo #{{ reclamo.id }}</h1>
-            <p class="text-muted mb-0">Registrado el {{ reclamo.fecha_creacion|date:"d/m/Y" }}</p>
-        </div>
-        <div>
-            <a href="{% url 'reclamos:mis_reclamos' %}" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Volver</a>
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5 pb-5">
+    <div class="container animate-up">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+            <div>
+                <div class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 mb-2">RECLAMO DIGITAL #{{ reclamo.id }}</div>
+                <h1 class="display-5 fw-bold mb-0">Seguimiento de Reporte</h1>
+                <p class="lead opacity-75">Iniciado el {{ reclamo.fecha_creacion|date:"d" }} de {{ reclamo.fecha_creacion|date:"F" }}, {{ reclamo.fecha_creacion|date:"Y" }}</p>
+            </div>
+            <div class="mt-4 mt-md-0">
+                <a href="{% url 'reclamos:mis_reclamos' %}" class="btn btn-outline-light btn-muni px-4 shadow-sm">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al listado
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="container pb-5">
-    <div class="row g-4 justify-content-center">
+<div class="container mt-n5 position-relative z-2 pb-5">
+    <div class="row g-4">
+        <!-- Reclamo Details -->
         <div class="col-lg-8">
-            <div class="glass-card mb-4">
-                <div class="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-primary">Información del Reclamo</h5>
-                    <span>
-                        {% if reclamo.estado == 'Resuelto' %}
-                            <span class="badge bg-success fs-6">{{ reclamo.estado }}</span>
-                        {% elif reclamo.estado == 'En Proceso' %}
-                            <span class="badge bg-primary fs-6">{{ reclamo.estado }}</span>
-                        {% elif reclamo.estado == 'Rechazado' %}
-                            <span class="badge bg-danger fs-6">{{ reclamo.estado }}</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark fs-6">{{ reclamo.estado }}</span>
-                        {% endif %}
-                    </span>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row mb-4">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                            <span class="text-muted small d-block mb-1">Área</span>
-                            <span class="fw-bold fs-5">{{ reclamo.area }}</span>
-                        </div>
-                        <div class="col-sm-6">
-                            <span class="text-muted small d-block mb-1">Tipo de Reclamo</span>
-                            <span class="fw-bold fs-5">{{ reclamo.tipo_reclamo }}</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <span class="text-muted small d-block mb-1">Ubicación del Incidente</span>
-                        <div class="bg-light p-3 rounded d-flex align-items-center">
-                            <i class="fa-solid fa-location-dot text-danger fa-fw me-3 fs-4"></i>
-                            <div>
-                                <strong>{{ reclamo.calle }} {{ reclamo.numero }}</strong><br>
-                                <span class="text-muted">Barrio: {{ reclamo.barrio }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <span class="text-muted small d-block mb-1">Observaciones / Detalles</span>
-                        <p class="mb-0">{{ reclamo.observacion|linebreaks }}</p>
-                    </div>
-
-                    {% if reclamo.foto %}
+            <div class="glass-card p-4 p-md-5 bg-white mb-4 animate-up">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                    <h4 class="fw-bold mb-0">Información del Reclamo</h4>
                     <div>
-                        <span class="text-muted small d-block mb-2">Fotografía Adjunta</span>
-                        <img src="{{ reclamo.foto.url }}" alt="Foto del reclamo" class="img-fluid rounded border shadow-sm" style="max-height: 400px; object-fit: cover;">
+                        {% if reclamo.estado == 'Resuelto' %}
+                            <span class="badge rounded-pill bg-success px-4 py-2 fs-6 shadow-sm"><i class="fa-solid fa-check-circle me-1"></i> RESUELTO</span>
+                        {% elif reclamo.estado == 'En Proceso' %}
+                            <span class="badge rounded-pill bg-primary px-4 py-2 fs-6 shadow-sm"><i class="fa-solid fa-gear fa-spin me-1"></i> EN GESTIÓN</span>
+                        {% elif reclamo.estado == 'Rechazado' %}
+                            <span class="badge rounded-pill bg-danger px-4 py-2 fs-6 shadow-sm"><i class="fa-solid fa-circle-xmark me-1"></i> RECHAZADO</span>
+                        {% else %}
+                            <span class="badge rounded-pill bg-warning text-dark px-4 py-2 fs-6 shadow-sm"><i class="fa-solid fa-clock me-1"></i> PENDIENTE</span>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                    
-                    <!-- Historial de Pases -->
-                    {% if pases %}
-                    <div class="mt-5 border-top pt-4">
-                        <h5 class="fw-bold mb-4"><i class="fa-solid fa-exchange-alt text-secondary me-2"></i>Historial de Movimientos</h5>
-                        <div class="timeline ps-3 border-start border-2 border-secondary">
-                            {% for pase in pases %}
-                            <div class="mb-4 position-relative">
-                                <span class="position-absolute translate-middle bg-secondary rounded-circle" style="width: 12px; height: 12px; left: -16px; top: 6px;"></span>
-                                <div class="ms-3">
-                                    <div class="fw-bold text-dark d-flex justify-content-between">
-                                        <span>
-                                            Enviado a: 
-                                            {% if pase.area_destino %}<span class="badge bg-secondary">{{ pase.area_destino.nombre }}</span>{% endif %}
-                                            {% if pase.oficina_destino %}<span class="badge bg-light text-dark border">{{ pase.oficina_destino.nombre }}</span>{% endif %}
-                                        </span>
-                                        <small class="text-muted">{{ pase.fecha_pase|date:"d/m/Y H:i" }}</small>
-                                    </div>
-                                    {% if pase.observacion %}
-                                    <p class="text-muted small mt-2 mb-0 border-start border-3 ps-2">"{{ pase.observacion }}"</p>
-                                    {% endif %}
-                                </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-4">
+                        <span class="info-label">Área Municipal Asignada</span>
+                        <div class="info-value"><i class="fa-solid fa-building-user text-success me-2 opacity-50"></i> {{ reclamo.area }}</div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <span class="info-label">Tipo de Inconveniente</span>
+                        <div class="info-value"><i class="fa-solid fa-tags text-primary me-2 opacity-50"></i> {{ reclamo.tipo_reclamo }}</div>
+                    </div>
+                    <div class="col-12">
+                        <span class="info-label">Ubicación Reportada</span>
+                        <div class="bg-light p-3 rounded-4 d-flex align-items-center border border-white">
+                            <i class="fa-solid fa-location-dot text-danger fa-2x me-3"></i>
+                            <div>
+                                <span class="fw-bold fs-5 text-dark">{{ reclamo.calle }} {{ reclamo.numero }}</span><br>
+                                <span class="text-muted small">BARRIO: {{ reclamo.barrio|upper }}</span>
                             </div>
-                            {% endfor %}
                         </div>
                     </div>
-                    {% endif %}
-                    
-                    <!-- Mensajes/Consultas -->
-                    <div class="mt-5 border-top pt-4">
-                        <h5 class="fw-bold mb-4"><i class="fa-solid fa-comments text-primary me-2"></i>Historial de Mensajes</h5>
-                        
-                        {% if mensajes %}
-                            <div class="d-flex flex-column gap-3 mb-4">
-                                {% for msg in mensajes %}
-                                    <div class="card {% if msg.es_empleado %}border-primary bg-light ms-0 me-5{% else %}border-secondary bg-white ms-5 me-0{% endif %}">
-                                        <div class="card-body py-2 px-3">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <small class="fw-bold {% if msg.es_empleado %}text-primary{% else %}text-secondary{% endif %}">
-                                                    {% if msg.es_empleado %}Municipalidad (Empleado){% else %}Usted{% endif %}
-                                                </small>
-                                                <small class="text-muted" style="font-size: 0.75rem;">{{ msg.fecha|date:"d/m/Y H:i" }}</small>
-                                            </div>
-                                            <p class="mb-0">{{ msg.mensaje|linebreaksbr }}</p>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="text-muted small">No hay mensajes ni consultas en este reclamo por el momento.</p>
-                        {% endif %}
+                </div>
 
-                        {% if puede_responder %}
-                            <form method="post" class="mt-4 bg-light p-4 rounded border">
-                                {% csrf_token %}
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Escribir una respuesta</label>
-                                    <textarea name="mensaje" class="form-control" rows="3" placeholder="Escriba su mensaje aquí..." required></textarea>
-                                </div>
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane me-2"></i>Enviar Respuesta</button>
-                                </div>
-                            </form>
-                        {% elif reclamo.estado != 'Resuelto' and reclamo.estado != 'Rechazado' %}
-                            <div class="alert alert-info mt-3 small">
-                                <i class="fa-solid fa-circle-info me-2"></i> La opción de enviar mensajes se habilitará si el municipio solicita información adicional.
+                <div class="mb-5">
+                    <span class="info-label">Descripción del Vecino</span>
+                    <div class="p-4 bg-light bg-opacity-50 rounded-4 border border-white fst-italic">
+                        "{{ reclamo.observacion }}"
+                    </div>
+                </div>
+
+                {% if reclamo.foto %}
+                <div class="mb-2">
+                    <span class="info-label mb-3">Evidencia Fotográfica</span>
+                    <div class="position-relative overflow-hidden rounded-4 shadow-sm border">
+                        <img src="{{ reclamo.foto.url }}" alt="Evidencia" class="img-fluid w-100" style="max-height: 500px; object-fit: cover;">
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3 text-white" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                            <small><i class="fa-solid fa-camera me-2"></i> Imagen adjuntada el {{ reclamo.fecha_creacion|date:"d/m/Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Timeline de Movimientos -->
+            {% if pases %}
+            <div class="glass-card p-4 p-md-5 bg-white mb-4 animate-up" style="animation-delay: 0.1s;">
+                <h5 class="fw-bold mb-4 d-flex align-items-center">
+                    <i class="fa-solid fa-route text-success me-3"></i> Historial de Gestión Interna
+                </h5>
+                <div class="ps-2">
+                    {% for pase in pases %}
+                    <div class="timeline-item">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <div class="fw-bold text-dark">
+                                Derivado a 
+                                {% if pase.area_destino %}<span class="text-success">{{ pase.area_destino.nombre }}</span>{% endif %}
+                                {% if pase.oficina_destino %}<span class="text-muted small ms-1">({{ pase.oficina_destino.nombre }})</span>{% endif %}
                             </div>
+                            <span class="text-muted small">{{ pase.fecha_pase|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        {% if pase.observacion %}
+                        <p class="text-muted small mb-0 bg-light p-2 rounded border border-white">
+                            <i class="fa-solid fa-comment-dots me-2 opacity-50"></i> {{ pase.observacion }}
+                        </p>
                         {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Chat / Mensajes -->
+            <div class="glass-card p-4 p-md-5 bg-white animate-up" style="animation-delay: 0.2s;">
+                <h5 class="fw-bold mb-4 d-flex align-items-center">
+                    <i class="fa-solid fa-comments text-primary me-3"></i> Comunicación con el Municipio
+                </h5>
+                
+                <div class="d-flex flex-column gap-4 mb-5">
+                    {% if mensajes %}
+                        {% for msg in mensajes %}
+                            <div class="msg-bubble {% if msg.es_empleado %}msg-muni{% else %}msg-vecino shadow-sm{% endif %} animate-up">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="small fw-bold {% if msg.es_empleado %}text-success{% else %}text-primary{% endif %}">
+                                        {% if msg.es_empleado %}<i class="fa-solid fa-building me-1"></i> Respuesta Municipal{% else %}<i class="fa-solid fa-user me-1"></i> Mensaje Enviado{% endif %}
+                                    </span>
+                                    <span class="text-muted" style="font-size: 0.7rem;">{{ msg.fecha|date:"d/m/Y H:i" }}</span>
+                                </div>
+                                <div class="text-dark">{{ msg.mensaje|linebreaksbr }}</div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4 border rounded-4 bg-light border-dashed">
+                            <p class="text-muted mb-0 small">No hay intercambios de mensajes en este reclamo todavía.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if puede_responder %}
+                    <div class="border-top pt-5">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-reply me-2 text-primary"></i> Enviar una respuesta o consulta</h6>
+                        <form method="post" class="animate-up">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <textarea name="mensaje" class="form-control" rows="4" placeholder="Escriba su mensaje aquí..." required style="border-radius: 15px; border: 2px solid #f0f0f0;"></textarea>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn-muni btn-muni-primary px-5 shadow-sm">
+                                    <i class="fa-solid fa-paper-plane me-2"></i> Enviar a Oficina
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                {% elif reclamo.estado != 'Resuelto' and reclamo.estado != 'Rechazado' %}
+                    <div class="alert bg-primary bg-opacity-10 border-0 rounded-4 p-4 d-flex align-items-center">
+                        <i class="fa-solid fa-circle-info fa-2x text-primary me-3"></i>
+                        <p class="mb-0 text-dark small">
+                            <strong>Nota:</strong> Podrá enviar mensajes directos a la oficina a cargo una vez que el personal municipal inicie el contacto con usted o solicite información adicional.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Side: Info Panel -->
+        <div class="col-lg-4 d-none d-lg-block">
+            <div class="sticky-top animate-up" style="top: 100px; animation-delay: 0.3s; z-index: 10;">
+                <div class="glass-card p-4 bg-white border border-white">
+                    <h6 class="fw-bold text-muted small text-uppercase mb-4">Preguntas Frecuentes</h6>
+                    <div class="accordion accordion-flush" id="faqReclamos">
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent py-3 ps-0 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+                                    ¿Cuál es el tiempo de respuesta?
+                                </button>
+                            </h2>
+                            <div id="q1" class="accordion-collapse collapse" data-bs-parent="#faqReclamos">
+                                <div class="accordion-body px-0 small text-muted">
+                                    Depende del área y la gravedad, pero el plazo promedio es de 72hs hábiles para una primera respuesta.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent py-3 ps-0 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+                                    ¿Cómo notifico una solución?
+                                </button>
+                            </h2>
+                            <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqReclamos">
+                                <div class="accordion-body px-0 small text-muted">
+                                    Si su problema fue resuelto, puede enviarnos un mensaje confirmando la solución.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-top">
+                        <p class="small text-muted mb-0">Para urgencias graves (cables caídos, peligro inminente), llame al <strong>103</strong> (Defensa Civil).</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .mt-n5 { margin-top: -3.5rem !important; }
+    .border-dashed { border-style: dashed !important; }
+</style>
 {% endblock %}

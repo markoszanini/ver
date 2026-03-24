@@ -1,64 +1,101 @@
 {% extends 'portal/base_portal.html' %}
-{% block title %}Mis Capacitaciones - Vecino{% endblock %}
+{% load static %}
+
+{% block title %}Mis Inscripciones - Casilda Conecta{% endblock %}
+
+{% block extra_css %}
+<style>
+    .enrolled-card {
+        border-right: 6px solid var(--muni-green);
+        transition: all 0.3s ease;
+    }
+    .enrolled-card:hover {
+        border-right-width: 10px;
+        background: white;
+    }
+    .status-badge {
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="mb-4">
-        <a href="{% url 'portal:dashboard' %}" class="text-decoration-none text-muted mb-2 d-inline-block">
-            <i class="fa-solid fa-arrow-left me-1"></i> Volver al panel
-        </a>
-        <h2 class="fw-bold text-dark"><i class="fa-solid fa-user-graduate text-primary me-2"></i>Mis Capacitaciones</h2>
-        <p class="text-muted">A continuación se listan los cursos o talleres en los que te encuentras anotado o has participado en el pasado.</p>
-        
-        <div class="d-flex gap-2 mt-3">
-            <a href="{% url 'capacitaciones:explorar' %}" class="btn btn-outline-primary rounded-pill px-4">
-                <i class="fa-solid fa-search me-1"></i> Buscar nuevos cursos
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5">
+    <div class="container animate-up text-center text-md-start d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5 fw-bold mb-2">Mis Capacitaciones</h1>
+            <p class="lead opacity-75 mb-0">Hacé el seguimiento de tus cursos y talleres activos.</p>
+        </div>
+        <div class="mt-4 mt-md-0">
+            <a href="{% url 'capacitaciones:explorar' %}" class="btn-muni btn-muni-primary shadow-lg">
+                <i class="fa-solid fa-plus me-2"></i> Ver Oferta Educativa
             </a>
         </div>
     </div>
+</div>
 
-    {% if inscripciones %}
-        <div class="glass-card overflow-hidden">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0 align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="py-3 ps-4">Curso / Taller</th>
-                            <th class="py-3">Área Responsable</th>
-                            <th class="py-3">Fecha Inicio</th>
-                            <th class="py-3 text-center pe-4">Estado de Mi Inscripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for ins in inscripciones %}
-                            <tr>
-                                <td class="ps-4 fw-bold text-dark">{{ ins.capacitacion.nombre }}</td>
-                                <td class="text-muted small">
-                                    <i class="fa-solid fa-building text-primary opacity-50 me-1"></i> 
-                                    {{ ins.capacitacion.get_area_responsable_display }}
-                                </td>
-                                <td><i class="fa-regular fa-calendar-alt text-muted me-1"></i> {{ ins.capacitacion.fecha_inicio|date:"d/m/Y" }}</td>
-                                <td class="text-center pe-4">
-                                    {% if ins.estado == 'INSCRIPTO' %}
-                                        <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3">Inscripto Activo</span>
-                                    {% elif ins.estado == 'CANCELADO' %}
-                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger rounded-pill px-3">Baja / Cancelado</span>
-                                    {% elif ins.estado == 'FINALIZADO' %}
-                                        <span class="badge bg-info bg-opacity-10 text-info border border-info rounded-pill px-3">Finalizado / Egresado</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<div class="container pb-5">
+     <div class="row justify-content-center">
+        <div class="col-lg-9">
+            {% if inscripciones %}
+                {% for insc in inscripciones %}
+                <div class="glass-card p-4 mb-4 enrolled-card animate-up" style="animation-delay: {{ forloop.counter0|add:1 }}00ms;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-3 me-3 status-badge">
+                                    {{ insc.get_estado_display }}
+                                </span>
+                                <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i> Inscripción: {{ insc.fecha_inscripcion|date:"d/m/Y" }}</span>
+                            </div>
+                            <h4 class="fw-bold text-dark mb-3">{{ insc.capacitacion.nombre }}</h4>
+                            <div class="row g-3">
+                                <div class="col-sm-6 text-muted small">
+                                    <i class="fa-solid fa-map-marker-alt text-success me-2"></i> <strong>Lugar:</strong> {{ insc.capacitacion.lugar|default:"A confirmar" }}
+                                </div>
+                                <div class="col-sm-6 text-muted small">
+                                    <i class="fa-solid fa-calendar text-primary me-2"></i> <strong>Días:</strong> {{ insc.capacitacion.dias_dictado|default:"A definir" }}
+                                </div>
+                                <div class="col-sm-6 text-muted small">
+                                    <i class="fa-solid fa-clock text-primary me-2"></i> <strong>Horario:</strong> {{ insc.capacitacion.horarios|default:"A definir" }}
+                                </div>
+                                <div class="col-sm-6 text-muted small">
+                                    <i class="fa-solid fa-building text-warning me-2"></i> <strong>Organiza:</strong> {{ insc.capacitacion.get_area_responsable_display }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-4 mt-md-0 d-flex flex-column gap-2 border-start ps-md-4">
+                            {% if insc.capacitacion.estado_inscripcion == 'ABIERTA' %}
+                                <div class="alert bg-success bg-opacity-10 border-0 p-2 text-center small text-success fw-bold mb-2">
+                                    Curso en marcha
+                                </div>
+                            {% else %}
+                                <div class="alert bg-secondary bg-opacity-10 border-0 p-2 text-center small text-secondary fw-bold mb-2">
+                                    Curso finalizado
+                                </div>
+                            {% endif %}
+                            <a href="#" class="btn btn-outline-dark btn-sm rounded-pill opacity-50 disabled">
+                                <i class="fa-solid fa-file-pdf me-2"></i> Ver Comprobante
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="glass-card p-5 text-center animate-up">
+                    <div class="opacity-25 mb-4">
+                        <i class="fa-solid fa-user-graduate fa-5x text-muted"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark mb-3">Aún no estás anotado en nada</h3>
+                    <p class="text-muted mb-5 mx-auto" style="max-width: 500px;">¡No te quedes afuera! El municipio ofrece decenas de talleres gratuitos para mejorar tus habilidades y emprender.</p>
+                    <a href="{% url 'capacitaciones:explorar' %}" class="btn-muni btn-muni-primary px-5 shadow">Explorar Capacitaciones</a>
+                </div>
+            {% endif %}
         </div>
-    {% else %}
-        <div class="text-center py-5 bg-white rounded-4 shadow-sm border mt-4">
-            <i class="fa-solid fa-clipboard-list text-muted opacity-50 mb-3" style="font-size: 3rem;"></i>
-            <h5 class="fw-bold text-dark">Aún no te has inscrito a nada</h5>
-            <p class="text-muted mb-4">Puedes anotarte a talleres culturales o de oficio usando la cartelera de ofertas.</p>
-            <a href="{% url 'capacitaciones:explorar' %}" class="btn btn-primary rounded-pill px-4">Explorar Cursos</a>
-        </div>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

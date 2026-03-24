@@ -1,5 +1,6 @@
 from django import forms
 from .models import Acta, Persona, Vehiculo, Inmueble, Animal
+from portal.models import Localidad
 
 class ActaAdminForm(forms.ModelForm):
     # Persona
@@ -7,7 +8,7 @@ class ActaAdminForm(forms.ModelForm):
     pers_nombre = forms.CharField(max_length=100, label="Nombre", required=True)
     pers_apellido = forms.CharField(max_length=100, label="Apellido", required=True)
     pers_fecha_nacimiento = forms.DateField(label="Fecha Nacimiento", required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-    pers_localidad = forms.CharField(max_length=100, label="Localidad", required=False)
+    pers_localidad = forms.ModelChoiceField(queryset=Localidad.objects.all(), label="Localidad", required=False)
     pers_calle = forms.CharField(max_length=100, label="Calle", required=False)
     pers_numero = forms.CharField(max_length=10, label="Número", required=False)
     pers_codigo_postal = forms.CharField(max_length=10, label="Cod. Postal", required=False)

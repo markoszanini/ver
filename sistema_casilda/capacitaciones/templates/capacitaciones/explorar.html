@@ -1,60 +1,121 @@
 {% extends 'portal/base_portal.html' %}
-{% block title %}Explorar Capacitaciones - Vecino{% endblock %}
+{% load static %}
+
+{% block title %}Explorar Capacitaciones - Casilda Conecta{% endblock %}
+
+{% block extra_css %}
+<style>
+    .course-card {
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .course-header {
+        height: 140px;
+        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://www.transparenttextures.com/patterns/graphy-dark.png');
+        background-color: var(--muni-green);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 20px;
+        color: white;
+    }
+    .course-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        backdrop-filter: blur(10px);
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        z-index: 10;
+    }
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+    .info-item i {
+        width: 30px;
+        height: 30px;
+        background: white;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="mb-4">
-        <a href="{% url 'portal:dashboard' %}" class="text-decoration-none text-muted mb-2 d-inline-block">
-            <i class="fa-solid fa-arrow-left me-1"></i> Volver al panel
-        </a>
-        <h2 class="fw-bold text-dark"><i class="fa-solid fa-chalkboard-teacher text-primary me-2"></i>Oferta de Capacitaciones</h2>
-        <p class="text-muted">Explora los talleres, cursos de oficios y capacitaciones de la Municipalidad de Casilda. ¡Anótate para reservar tu lugar!</p>
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5 pb-5">
+    <div class="container animate-up text-center">
+        <div class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 mb-3">FORMACIÓN Y CULTURA</div>
+        <h1 class="display-5 fw-bold mb-2">Oferta de Capacitaciones</h1>
+        <p class="lead opacity-75">Cursos, talleres y oficios gratuitos para todos los ciudadanos.</p>
         
-        <div class="d-flex gap-2 mt-3">
-            <a href="{% url 'capacitaciones:mis_capacitaciones' %}" class="btn btn-outline-primary rounded-pill px-4">
-                <i class="fa-solid fa-bookmark me-1"></i> Ver mis inscripciones
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{% url 'capacitaciones:mis_capacitaciones' %}" class="btn btn-outline-light btn-muni px-4">
+                <i class="fa-solid fa-bookmark me-2"></i> Mis Inscripciones
+            </a>
+            <a href="{% url 'portal:dashboard' %}" class="btn btn-link text-white text-decoration-none dropdown-toggle">
+                Volver al Panel
             </a>
         </div>
     </div>
+</div>
 
-    <div class="row g-4 mt-2">
+<div class="container mt-n5 position-relative z-2 pb-5">
+    <div class="row g-4 justify-content-center">
         {% if capacitaciones %}
             {% for cap in capacitaciones %}
-                <div class="col-md-6 col-lg-4">
-                    <div class="glass-card h-100 p-0 overflow-hidden d-flex flex-column border-0 shadow-sm position-relative">
-                        <!-- Header decorativo -->
-                        <div class="bg-primary bg-opacity-10 w-100 p-4 border-bottom border-primary border-opacity-25" style="min-height: 120px;">
-                            <div class="d-flex justify-content-between align-items-start">
+                <div class="col-md-6 col-lg-4 animate-up" style="animation-delay: {{ forloop.counter0|add:1 }}00ms;">
+                    <div class="glass-card h-100 course-card p-0 overflow-hidden d-flex flex-column bg-white">
+                        
+                        <div class="course-header position-relative">
+                            <div class="course-badge badge rounded-pill">
                                 {% if cap.area_responsable == 'ASAC' %}
-                                    <span class="badge bg-danger rounded-pill px-3 py-2"><i class="fa-solid fa-utensils me-1"></i> Seguridad Alimentaria</span>
+                                    Salud Alimentaria
                                 {% elif cap.area_responsable == 'PRODUCCION' %}
-                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2"><i class="fa-solid fa-hammer me-1"></i> Área de Producción, Ciencia y Tecnología</span>
+                                    Producción y Empleo
                                 {% else %}
-                                    <span class="badge bg-info text-dark rounded-pill px-3 py-2"><i class="fa-solid fa-palette me-1"></i> Cultura (Quinquela)</span>
+                                    Cultura y Oficios
                                 {% endif %}
                             </div>
+                            <h4 class="fw-bold mb-0" style="text-shadow: 0 2px 4px rgba(0,0,0,0.3);">{{ cap.nombre }}</h4>
                         </div>
                         
                         <div class="p-4 flex-grow-1 d-flex flex-column">
-                            <h5 class="fw-bold text-dark mb-2 mt-n5 pt-1" style="z-index: 2;">{{ cap.nombre }}</h5>
-                            <p class="text-muted small mb-4 flex-grow-1">{{ cap.descripcion|truncatewords:20 }}</p>
+                            <p class="text-muted small mb-4 flex-grow-1">{{ cap.descripcion|truncatewords:25 }}</p>
                             
-                            <ul class="list-unstyled mb-4 small bg-light p-3 rounded-3 border">
-                                <li class="mb-2"><i class="fa-regular fa-calendar-alt text-primary me-2"></i> <strong>Inicia:</strong> {{ cap.fecha_inicio|date:"d/m/Y" }}</li>
-                                <li>
-                                    <i class="fa-solid fa-users text-primary me-2"></i> <strong>Lugares disponibles:</strong> 
+                            <div class="info-grid border">
+                                <div class="info-item small">
+                                    <i class="fa-regular fa-calendar-alt text-success"></i> <strong>Inicia:</strong><br>{{ cap.fecha_inicio|date:"d/m/Y" }}
+                                </div>
+                                <div class="info-item small">
+                                    <i class="fa-solid fa-clock text-primary"></i> <strong>Horario:</strong><br>{{ cap.horarios|default:"A definir" }}
+                                </div>
+                                <div class="info-item small">
+                                    <i class="fa-solid fa-calendar-check text-warning"></i> <strong>Días:</strong><br>{{ cap.dias_dictado|default:"A definir" }}
+                                </div>
+                                <div class="info-item small">
+                                    <i class="fa-solid fa-users text-info"></i> <strong>Cupos:</strong><br>
                                     {% if cap.cupos_disponibles <= 5 %}
-                                        <span class="text-danger fw-bold">{{ cap.cupos_disponibles }} restantes</span>
+                                        <span class="text-danger fw-bold">{{ cap.cupos_disponibles }} disp.</span>
                                     {% else %}
-                                        <span class="text-success fw-bold">{{ cap.cupos_disponibles }}</span>
+                                        <span class="text-success fw-bold">{{ cap.cupos_disponibles }} disp.</span>
                                     {% endif %}
-                                    de {{ cap.cupo_maximo }}
-                                </li>
-                            </ul>
-                            
+                                </div>
+                            </div>
+
                             <form method="post" action="{% url 'capacitaciones:inscribirse_curso' cap.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm" onclick="return confirm('¿Confirmas tu inscripción a este curso?');">
-                                    <i class="fa-solid fa-check-circle me-1"></i> Inscribirme Ahora
+                                <button type="submit" class="btn-muni btn-muni-primary w-100 shadow-sm" onclick="return confirm('¿Confirmas tu inscripción a este curso?');">
+                                    <i class="fa-solid fa-user-plus me-2"></i> RESERVAR LUGAR
                                 </button>
                             </form>
                         </div>
@@ -62,12 +123,19 @@
                 </div>
             {% endfor %}
         {% else %}
-            <div class="col-12 py-5 text-center">
-                <i class="fa-solid fa-box-open text-muted opacity-25 mb-3" style="font-size: 4rem;"></i>
-                <h4 class="fw-bold text-dark">No hay capacitaciones abiertas por el momento</h4>
-                <p class="text-muted">No existen talleres o cursos con cupo disponible.<br>Vuelve a revisar la cartelera en unos días.</p>
+            <div class="col-12 py-5 text-center animate-up">
+                <div class="opacity-25 mb-4">
+                    <i class="fa-solid fa-graduation-cap fa-5x text-muted"></i>
+                </div>
+                <h3 class="fw-bold text-dark mb-3">No hay inscripciones abiertas hoy</h3>
+                <p class="text-muted mx-auto" style="max-width: 500px;">Estamos preparando los nuevos talleres para el próximo semestre. ¡Vuelve pronto a consultar la cartelera!</p>
+                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary mt-4 px-5">Regresar al Panel</a>
             </div>
         {% endif %}
     </div>
 </div>
+
+<style>
+    .mt-n5 { margin-top: -3.5rem !important; }
+</style>
 {% endblock %}

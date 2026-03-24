@@ -1,56 +1,72 @@
 {% extends 'portal/base_portal.html' %}
+{% load static %}
 
-{% block title %}Mis Reclamos - Portal del Vecino{% endblock %}
+{% block title %}Mis Reclamos - Casilda Conecta{% endblock %}
 
 {% block content %}
-<div class="bg-white border-bottom py-4 mb-4 shadow-sm">
-    <div class="container d-flex align-items-center justify-content-between">
-        <div>
-            <h1 class="h3 mb-1 fw-bold">Mis Reclamos</h1>
-            <p class="text-muted mb-0">Gestione y haga seguimiento de sus reportes.</p>
-        </div>
-        <div>
-            <a href="{% url 'reclamos:nuevo_reclamo' %}" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i> Nuevo Reclamo</a>
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Mis Reclamos</h1>
+                <p class="lead opacity-75 mb-0">Hacé el seguimiento de tus reportes y colaborá con la ciudad.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <a href="{% url 'reclamos:nuevo_reclamo' %}" class="btn-muni btn-muni-primary shadow-lg">
+                    <i class="fa-solid fa-plus me-2"></i> Nuevo Reclamo
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="container pb-5">
-    <div class="glass-card mb-4">
-        <div class="card-body p-4">
+    <div class="glass-card mb-4 animate-up" style="animation-delay: 0.1s;">
+        <div class="card-body p-0">
             {% if reclamos %}
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small text-uppercase">
                             <tr>
-                                <th>Fecha</th>
-                                <th>Área</th>
+                                <th class="ps-4">Fecha de Reporte</th>
+                                <th>Área Responsable</th>
                                 <th>Tipo de Reclamo</th>
                                 <th>Ubicación</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
+                                <th>Estado Actual</th>
+                                <th class="pe-4 text-end">Detalles</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for reclamo in reclamos %}
                             <tr>
-                                <td>{{ reclamo.fecha_creacion|date:'d/m/Y H:i' }}</td>
-                                <td>{{ reclamo.area }}</td>
-                                <td><strong>{{ reclamo.tipo_reclamo }}</strong></td>
-                                <td>{{ reclamo.calle }} {{ reclamo.numero }}, {{ reclamo.barrio }}</td>
+                                <td class="ps-4 small text-muted">{{ reclamo.fecha_creacion|date:'d/m/Y H:i' }}</td>
+                                <td><span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">{{ reclamo.area }}</span></td>
+                                <td><strong class="text-dark">{{ reclamo.tipo_reclamo }}</strong></td>
+                                <td class="small">{{ reclamo.calle }} {{ reclamo.numero }}, {{ reclamo.barrio }}</td>
                                 <td>
                                     {% if reclamo.estado == 'Resuelto' %}
-                                        <span class="badge bg-success">{{ reclamo.estado }}</span>
+                                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3">
+                                            <i class="fa-solid fa-check-circle me-1"></i> Resuelto
+                                        </span>
                                     {% elif reclamo.estado == 'En Proceso' %}
-                                        <span class="badge bg-primary">{{ reclamo.estado }}</span>
+                                        <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3">
+                                            <i class="fa-solid fa-gear me-1"></i> En Gestión
+                                        </span>
                                     {% elif reclamo.estado == 'Rechazado' %}
-                                        <span class="badge bg-danger">{{ reclamo.estado }}</span>
+                                        <span class="badge rounded-pill bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3">
+                                            <i class="fa-solid fa-circle-xmark me-1"></i> Rechazado
+                                        </span>
                                     {% else %}
-                                        <span class="badge bg-warning text-dark">{{ reclamo.estado }}</span>
+                                        <span class="badge rounded-pill bg-warning bg-opacity-10 text-dark border border-warning border-opacity-25 px-3">
+                                            <i class="fa-solid fa-clock me-1"></i> Pendiente
+                                        </span>
                                     {% endif %}
                                 </td>
-                                <td>
-                                    <a href="{% url 'reclamos:detalle_reclamo' reclamo.id %}" class="btn btn-sm btn-outline-secondary">Ver detalle</a>
+                                <td class="pe-4 text-end">
+                                    <a href="{% url 'reclamos:detalle_reclamo' reclamo.id %}" class="btn btn-sm btn-outline-dark rounded-pill px-3">
+                                        Explorar <i class="fa-solid fa-chevron-right ms-1 mt-1"></i>
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -59,10 +75,12 @@
                 </div>
             {% else %}
                 <div class="text-center py-5">
-                    <i class="fa-solid fa-bullhorn fa-3x text-muted mb-3 opacity-50"></i>
-                    <h5 class="text-muted">Aún no ha registrado ningún reclamo.</h5>
-                    <p class="text-muted small">Puede reportar irregularidades de inspección, mantenimiento o salud.</p>
-                    <a href="{% url 'reclamos:nuevo_reclamo' %}" class="btn btn-primary mt-3">Registrar Nuevo Reclamo</a>
+                    <div class="opacity-25 mb-4">
+                        <i class="fa-solid fa-bullhorn fa-4x text-muted"></i>
+                    </div>
+                    <h5 class="text-muted fw-bold">No tenés reclamos registrados</h5>
+                    <p class="text-muted px-5 mb-4">Si detectás alguna irregularidad en la vía pública o necesitás mantenimiento municipal, podés informarlo ahora mismo.</p>
+                    <a href="{% url 'reclamos:nuevo_reclamo' %}" class="btn-muni btn-muni-primary px-5 shadow">Registrar Mi Primer Reclamo</a>
                 </div>
             {% endif %}
         </div>

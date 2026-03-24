@@ -8,7 +8,7 @@
         <div class="col-lg-7 col-md-10">
             <div class="glass-card p-5">
                 <div class="text-center mb-4">
-                    <i class="fa-solid fa-id-card fa-3x text-primary mb-3"></i>
+                    <i class="fa-solid fa-id-card fa-3x mb-3" style="color: var(--muni-green);"></i>
                     <h2 class="fw-bold">Crear Cuenta</h2>
                     <p class="text-muted">Completá tus datos para acceder a los servicios municipales online</p>
                 </div>
@@ -47,11 +47,16 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Teléfono (Opcional)</label>
-                            <input type="text" name="telefono" class="form-control" placeholder="Ej: 3464-123456" value="{{ form.telefono.value|default:'' }}">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold">Localidad</label>
+                            <select name="localidad" class="form-select" required>
+                                <option value="" selected disabled>Seleccioná...</option>
+                                {% for loc in form.localidad.field.queryset %}
+                                    <option value="{{ loc.id }}" {% if form.localidad.value|stringformat:"s" == loc.id|stringformat:"s" %}selected{% endif %}>{{ loc.nombre }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-8 mb-3">
                             <label class="form-label fw-semibold">Domicilio (Opcional)</label>
                             <input type="text" name="domicilio" class="form-control" placeholder="Calle 123" value="{{ form.domicilio.value|default:'' }}">
                         </div>
@@ -71,12 +76,12 @@
                     </div>
 
                     <div class="d-grid mt-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Completar Registro</button>
+                        <button type="submit" class="btn btn-accent btn-lg">Completar Registro</button>
                     </div>
                 </form>
 
                 <div class="text-center mt-4">
-                    <p class="mb-0">¿Ya tenés una cuenta? <a href="{% url 'portal:login' %}" class="fw-bold text-decoration-none">Ingresá acá</a></p>
+                    <p class="mb-0">¿Ya tenés una cuenta? <a href="{% url 'portal:login' %}" class="fw-bold text-decoration-none" style="color: var(--muni-green);">Ingresá acá</a></p>
                 </div>
             </div>
         </div>

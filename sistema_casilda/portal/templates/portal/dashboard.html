@@ -1,74 +1,162 @@
 {% extends 'portal/base_portal.html' %}
+{% load static %}
 
-{% block title %}Mi Panel - Portal del Vecino{% endblock %}
+{% block title %}Mi Panel - Casilda Conecta{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dash-sidebar-link {
+        border-radius: 12px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+    .dash-sidebar-link:hover {
+        background: white;
+        transform: translateX(5px);
+        border-color: rgba(0,0,0,0.05);
+        color: var(--muni-green) !important;
+    }
+    .dash-sidebar-link.active {
+        background: var(--muni-green);
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(20, 133, 94, 0.2);
+    }
+    .indicator-badge {
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    .w-20 { width: 25px; text-align: center; }
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Dashboard Header -->
-<div class="bg-white border-bottom py-4 mb-4 shadow-sm">
-    <div class="container d-flex align-items-center justify-content-between">
-        <div>
-            <h1 class="h3 mb-1 fw-bold">Panel de Gestión</h1>
-            <p class="text-muted mb-0">Bienvenido/a, {{ user.first_name }} {{ user.last_name }}. DNI: {{ user.username }}</p>
-        </div>
-        <div class="text-end d-none d-md-block">
-            <span class="badge bg-primary fs-6 py-2 px-3 rounded-pill"><i class="fa-solid fa-check-circle me-1"></i> Cuenta Verificada</span>
+<!-- Modern Hero Dashboard -->
+<div class="glass-hero text-white mb-5">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Panel de Gestión</h1>
+                <p class="lead opacity-75 mb-0">Bienvenido/a, <strong>{{ user.first_name|default:user.username }}</strong>. ¡Es un gusto tenerte de vuelta!</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <span class="badge fs-6 py-2 px-4 rounded-pill bg-white bg-opacity-20 backdrop-blur">
+                    <i class="fa-solid fa-check-circle me-1 text-warning"></i> Ciudadano Verificado
+                </span>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="container pb-5">
     <div class="row g-4">
-        <!-- Sidebar Menu / Quick Links -->
-        <div class="col-lg-3">
-            <div class="glass-card p-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">Servicios Disponibles</h5>
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 animate-up" style="animation-delay: 0.1s;">
+            <div class="glass-card p-4 sticky-top" style="top: 100px; z-index: 10;">
+                <h6 class="fw-bold text-muted small text-uppercase mb-4">Servicios Destacados</h6>
                 <div class="d-flex flex-column gap-2">
-                    <a href="{% url 'expedientes:mis_expedientes' %}" class="btn btn-outline-primary text-start active"><i class="fa-solid fa-folder fa-fw me-2"></i> Mis Expedientes</a>
-                    <a href="{% url 'turnos:mis_turnos' %}" class="btn btn-outline-dark text-start"><i class="fa-solid fa-calendar-alt fa-fw me-2"></i> Mis Turnos</a>
-                    <a href="{% url 'capacitaciones:explorar' %}" class="btn btn-outline-secondary text-start"><i class="fa-solid fa-chalkboard-teacher fa-fw me-2"></i> Capacitaciones y Talleres</a>
-                    <a href="{% url 'impuestos:mis_impuestos' %}" class="btn btn-outline-success text-start"><i class="fa-solid fa-file-invoice-dollar fa-fw me-2"></i> Mis Impuestos</a>
-                    <a href="{% url 'multas:index_consultas' %}" class="btn btn-outline-info text-start"><i class="fa-solid fa-file-invoice fa-fw me-2"></i> Mis Multas</a>
-                    <a href="{% url 'portal:postular_empleo' %}" class="btn btn-outline-success text-start"><i class="fa-solid fa-briefcase fa-fw me-2"></i> Portal de Empleo</a>
-                    <a href="{% url 'portal:registro_feriante' %}" class="btn btn-outline-warning text-start"><i class="fa-solid fa-store fa-fw me-2"></i> Trámites Feriantes</a>
-                    <a href="{% url 'reclamos:mis_reclamos' %}" class="btn btn-outline-danger text-start"><i class="fa-solid fa-bullhorn fa-fw me-2"></i> Mis Reclamos</a>
+                    <a href="{% url 'portal:dashboard' %}" class="dash-sidebar-link active text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-house-chimney me-2 w-20"></i> Inicio Panel
+                    </a>
+                    <a href="{% url 'expedientes:mis_expedientes' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-folder me-2 w-20"></i> Mis Expedientes
+                    </a>
+                    <a href="{% url 'reclamos:mis_reclamos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-bullhorn me-2 w-20"></i> Mis Reclamos
+                    </a>
+                    <a href="{% url 'multas:index_consultas' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-file-invoice me-2 w-20"></i> Mis Multas
+                    </a>
+                    <a href="{% url 'capacitaciones:explorar' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-graduation-cap me-2 w-20"></i> Capacitaciones
+                    </a>
+                    <a href="{% url 'portal:postular_empleo' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-briefcase me-2 w-20"></i> Bolsa de Empleo
+                    </a>
+                    <a href="{% url 'portal:registro_feriante' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-store me-2 w-20"></i> Registro Feriante
+                    </a>
+                    <hr class="my-3 opacity-10">
+                    <a href="{% url 'portal:logout' %}" class="dash-sidebar-link text-muted text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-right-from-bracket me-2 w-20"></i> Cerrar Sesión
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="col-lg-9">
-            <!-- Expedientes Section -->
-            <div class="glass-card mb-4">
-                <div class="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0 fw-bold"><i class="fa-solid fa-folder text-primary me-2"></i> Mis Expedientes</h4>
+        <!-- Main Dashboard Content -->
+        <div class="col-lg-9 animate-up" style="animation-delay: 0.2s;">
+            
+            <!-- Quick Stats/Actions -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="glass-card p-4 d-flex align-items-center bg-white">
+                        <div class="indicator-badge bg-primary bg-opacity-10 text-primary">
+                            <i class="fa-solid fa-file-signature"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-0">{{ expedientes|length }}</h3>
+                            <p class="text-muted small mb-0">Expedientes activos</p>
+                        </div>
+                        <a href="{% url 'expedientes:mis_expedientes' %}" class="btn btn-light btn-sm ms-auto rounded-pill px-3">Ver todos</a>
+                    </div>
                 </div>
-                <div class="card-body p-4">
+                <div class="col-md-6">
+                    <div class="glass-card p-4 d-flex align-items-center bg-white">
+                        <div class="indicator-badge bg-danger bg-opacity-10 text-danger">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-0">0</h3>
+                            <p class="text-muted small mb-0">Turnos próximos</p>
+                        </div>
+                        <a href="{% url 'turnos:mis_turnos' %}" class="btn btn-light btn-sm ms-auto rounded-pill px-3">Gestionar</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity: Expedientes -->
+            <div class="glass-card mb-4">
+                <div class="px-4 py-3 border-bottom d-flex align-items-center justify-content-between">
+                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-folder-open me-2 text-success"></i> Trámites Recientes</h5>
+                    <a href="{% url 'expedientes:mis_expedientes' %}" class="text-decoration-none small fw-bold">Ver historial completo <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                </div>
+                <div class="card-body p-0">
                     {% if expedientes %}
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead>
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light text-muted small text-uppercase">
                                     <tr>
-                                        <th>Nro.</th>
-                                        <th>Asunto</th>
-                                        <th>Estado</th>
-                                        <th>Última Actualización</th>
+                                        <th class="ps-4">Código / Nro.</th>
+                                        <th>Asunto del Trámite</th>
+                                        <th>Estado Actual</th>
+                                        <th class="pe-4 text-end">Ingreso</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for exp in expedientes %}
+                                    {% for exp in expedientes|slice:":5" %}
                                     <tr>
-                                        <td><a href="{% url 'expedientes:seguimiento_expediente' exp.id_expediente %}" class="fw-bold text-decoration-none"><i class="fa-solid fa-search me-1 text-primary"></i> {{ exp.nro_expediente }}</a></td>
-                                        <td>{{ exp.asunto|truncatechars:40 }}</td>
+                                        <td class="ps-4">
+                                            <a href="{% url 'expedientes:seguimiento_expediente' exp.id_expediente %}" class="fw-bold text-success text-decoration-none">
+                                                {{ exp.nro_expediente }}
+                                            </a>
+                                        </td>
+                                        <td><span class="text-dark">{{ exp.asunto|truncatechars:50 }}</span></td>
                                         <td>
                                             {% if exp.estado == 'Terminado' %}
-                                                <span class="badge bg-success">{{ exp.estado }}</span>
-                                            {% elif exp.estado == 'En trámite' %}
-                                                <span class="badge bg-warning text-dark">{{ exp.estado }}</span>
+                                                <span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3">Finalizado</span>
+                                            {% elif exp.estado == 'En trámite' or exp.estado == 'Pendiente de Asignación' %}
+                                                <span class="badge rounded-pill bg-warning bg-opacity-10 text-dark border border-warning border-opacity-25 px-3">En Gestión</span>
                                             {% else %}
-                                                <span class="badge bg-secondary">{{ exp.estado }}</span>
+                                                <span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3">{{ exp.estado }}</span>
                                             {% endif %}
                                         </td>
-                                        <td>{{ exp.fecha_ingreso|date:'d/m/Y' }}</td>
+                                        <td class="pe-4 text-end text-muted">{{ exp.fecha_ingreso|date:'d/m/Y' }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -76,15 +164,26 @@
                         </div>
                     {% else %}
                         <div class="text-center py-5">
-                            <i class="fa-solid fa-folder-open fa-3x text-muted mb-3 opacity-50"></i>
-                            <h5 class="text-muted">Aún no tiene expedientes registrados a su DNI.</h5>
-                            <p class="text-muted small">Los expedientes vinculados a su cuenta aparecerán automáticamente aquí.</p>
+                            <i class="fa-solid fa-folder-tree fa-4x text-muted mb-3 opacity-25"></i>
+                            <h5 class="text-muted fw-bold">No hay expedientes todavía</h5>
+                            <p class="text-muted small px-5">Cuando inicies un trámite en la municipalidad o en línea, aparecerá aquí automáticamente para su seguimiento.</p>
                         </div>
                     {% endif %}
                 </div>
             </div>
 
-            <!-- More sections can go here -->
+            <!-- Additional Help / CTA -->
+            <div class="glass-card p-4 text-white" style="background: linear-gradient(90deg, #00adef 0%, #007bff 100%);">
+                <div class="row align-items-center">
+                    <div class="col-md-9">
+                        <h5 class="fw-bold mb-1">¿Necesitás ayuda con un trámite?</h5>
+                        <p class="mb-0 opacity-75 small">Nuestro equipo de atención ciudadana está disponible para guiarte en cada paso. También podés registrar un reclamo digital.</p>
+                    </div>
+                    <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                        <a href="{% url 'reclamos:nuevo_reclamo' %}" class="btn btn-white btn-sm px-4 rounded-pill fw-bold" style="background: white; color: #007bff;">Ir a Reclamos</a>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

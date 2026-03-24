@@ -4,10 +4,45 @@ from .models import Capacitacion, Inscripcion
 
 @admin.register(Capacitacion)
 class CapacitacionAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'area_responsable', 'fecha_inicio', 'cupo_maximo', 'estado_inscripcion')
+    list_display = ('nombre', 'area_responsable', 'fecha_inicio', 'cupo_maximo', 'get_inscriptos', 'cupos_disponibles', 'estado_inscripcion')
     list_filter = ('area_responsable', 'estado_inscripcion')
     search_fields = ('nombre',)
     exclude = ('area_responsable',)
+
+    def get_fieldsets(self, request, obj=None):
+        fields = ['nombre', 'descripcion', ('fecha_inicio', 'cupo_maximo')]
+        
+        # Agregar campos de dictado
+        fields.append(('dias_dictado', 'horarios'))
+        fields.append('lugar')
+        
+        # Solo mostrar estado_inscripcion al editar
+        if obj:
+            fields.append('estado_inscripcion')
+            
+        return (
+            ('Información de la Capacitación', {
+                'fields': fields
+            }),
+        )
+
+    def get_changeform_initial_data(self, request):
+        initial = super().get_changeform_initial_data(request)
+        funcionario = getattr(request.user, 'funcionario_link', None)
+        if funcionario:
+            nombre_area = funcionario.area.nombre.lower() if funcionario.area else ""
+            nombre_depto = funcionario.departamento.nombre.lower() if funcionario.departamento else ""
+            nombre_oficina = funcionario.oficina.nombre.lower() if funcionario.oficina else ""
+            nombre_dir = funcionario.direccion.nombre.lower() if funcionario.direccion else ""
+            
+            if 'seguridad alimentaria' in nombre_depto:
+                initial['area_responsable'] = 'ASAC'
+            elif 'producc' in nombre_area:
+                initial['area_responsable'] = 'PRODUCCION'
+            elif 'quinquela' in nombre_oficina or 'cultura' in nombre_dir:
+                initial['area_responsable'] = 'QUINQUELA'
+        return initial
+
     actions = ['abrir_inscripcion', 'cerrar_inscripcion']
 
     def save_model(self, request, obj, form, change):
@@ -59,6 +94,14 @@ class CapacitacionAdmin(admin.ModelAdmin):
     def cerrar_inscripcion(self, request, queryset):
         queryset.update(estado_inscripcion='CERRADA')
         self.message_user(request, "Inscripciones cerradas correctamente.")
+
+    def get_inscriptos(self, obj):
+        return obj.cupos_ocupados
+    get_inscriptos.short_description = 'Inscriptos'
+
+    def cupos_disponibles(self, obj):
+        return obj.cupos_disponibles
+    cupos_disponibles.short_description = 'Disponibles'
 
 @admin.register(Inscripcion)
 class InscripcionAdmin(admin.ModelAdmin):

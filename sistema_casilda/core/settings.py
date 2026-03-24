@@ -141,10 +141,12 @@ STATICFILES_DIRS = [
 ]
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Sistema Producción",
+    "site_title": "Casilda Gestión",
     "site_header": "Municipalidad de Casilda",
-    "site_brand": "Gestión de Módulos",
-    "welcome_sign": "Bienvenido al Sistema Central",
+    "site_brand": "Casilda Conecta",
+    "site_logo": "img/logo_icon.png",
+    "login_logo": "img/logo_muni.png",
+    "welcome_sign": "Bienvenido al Sistema de Gestión Municipal",
         "hide_models": [
             "multas.Persona",
             "multas.Vehiculo",
@@ -163,10 +165,12 @@ JAZZMIN_SETTINGS = {
             "organigrama.Oficina",
             "capacitaciones.Capacitacion",
             "capacitaciones.Inscripcion",
-            "expedientes.Expediente",
-            "expedientes.MovimientoExpediente"
+            "expedientes.MovimientoExpediente",
+            "apicultura.Apicultor",
+            "apicultura.Extraccion",
+            "apicultura.LiquidacionExtraccion"
         ],"show_ui_builder": False,
-    "custom_css": "css/custom_admin.css",
+    "custom_css": "css/custom_admin.css?v=3",
     "custom_js": "js/admin_bell.js",
     "custom_links": {
         "impuestos": [
@@ -276,11 +280,13 @@ JAZZMIN_SETTINGS = {
             "url": "admin:ferias_feriante_add", 
             "icon": "fas fa-user-plus",
         }],
-        "apicultura": [{
-            "name": "Nuevo apicultor", 
-            "url": "admin:apicultura_apicultor_add", 
-            "icon": "fas fa-user-plus",
-        }]
+        "apicultura": [
+            {"name": "Nuevo apicultor", "url": "admin:apicultura_apicultor_add", "icon": "fas fa-user-plus"},
+            {"name": "Listado de apicultores", "url": "admin:apicultura_apicultor_changelist", "icon": "fas fa-users"},
+            {"name": "Nueva extracción", "url": "admin:apicultura_extraccion_add", "icon": "fas fa-plus-circle"},
+            {"name": "Listado de extracciones", "url": "admin:apicultura_extraccion_changelist", "icon": "fas fa-clipboard-list"},
+            {"name": "Generar informe", "url": "/admin/apicultura/generar-informe/", "icon": "fas fa-file-pdf"},
+        ]
     },
 }
 

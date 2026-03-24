@@ -1,13 +1,16 @@
 /* Custom Global Admin CSS (APEX Inspired) for Jazzmin */
 
 :root {
-    --apex-bg: #aaadb3;
-    --apex-card: #f7f6f2;
-    --apex-main: #2b3a42;
-    --apex-secondary: #497174;
-    --apex-btn: #1e4a55;
-    --apex-btn-hover: #2b6a78;
-    --apex-text: #333333;
+    --muni-green: #14855e;
+    --muni-yellow: #fec107;
+    --muni-blue: #00adef;
+    --apex-bg: #ececec;
+    --apex-card: #ffffff;
+    --apex-main: var(--muni-green);
+    --apex-secondary: #0a5a3f;
+    --apex-btn: var(--muni-green);
+    --apex-btn-hover: #0e6b4d;
+    --apex-text: #212529;
 }
 
 /* Base Body and Wrapper Content Background */
@@ -196,4 +199,46 @@ table.table, table.dataTable {
         text-align: left;
         min-width: auto;
     }
+}
+
+/* Support for multiple fields in one row (tuples in admin.py) */
+.form-row {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 10px 15px !important;
+    border: none !important;
+}
+
+.form-row .fieldBox {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 0;
+    min-width: 200px;
+}
+
+.form-row .fieldBox label {
+    margin-bottom: 0 !important;
+    min-width: 120px;
+    text-align: right;
+    font-weight: 600;
+}
+
+.form-row .fieldBox input, 
+.form-row .fieldBox select, 
+.form-row .fieldBox .select2-container {
+    flex-grow: 1;
+}
+
+/* Login Page Adjustments */
+.login-page .login-logo img {
+    max-width: 260px !important;
+    height: auto !important;
+}
+
+.login-page .login-card-body {
+    border-radius: 12px !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
 }

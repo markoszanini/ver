@@ -21,10 +21,12 @@
         <input type="date" name="hasta" required style="width:100%; padding:10px; border-radius:4px; border:1px solid #aaa;">
     </div>
     <div>
-        <label style="color:#333;"><b>Tipo de Pago:</b></label><br>
-        <select name="tipo_pago" required style="width:100%; padding:10px; border-radius:4px; border:1px solid #aaa; background: #fff;">
-            <option value="DINERO">Dinero</option>
-            <option value="ESPECIE">Especie</option>
+        <label style="color:#333;"><b>Apicultor (Opcional):</b></label><br>
+        <select name="apicultor" style="width:100%; padding:10px; border-radius:4px; border:1px solid #aaa; background: #fff;">
+            <option value="">-- Todos los apicultores --</option>
+            {% for a in apicultores %}
+                <option value="{{ a.id_apicultor }}">{{ a.nombre }}</option>
+            {% endfor %}
         </select>
     </div>
     

@@ -1,62 +1,185 @@
 {% extends 'portal/base_portal.html' %}
+{% load static %}
 
-{% block title %}Portal del Vecino - Inicio{% endblock %}
+{% block title %}Casilda Conecta - Portal del Vecino{% endblock %}
+
+{% block extra_css %}
+<style>
+    .home-hero {
+        padding: 6rem 0;
+        background: linear-gradient(135deg, var(--muni-green-dark) 0%, var(--muni-green) 100%);
+    }
+    .hero-img-container {
+        position: relative;
+        z-index: 1;
+    }
+    .hero-img-container::after {
+        content: "";
+        position: absolute;
+        width: 120%;
+        height: 120%;
+        top: -10%;
+        left: -10%;
+        background: radial-gradient(circle, rgba(254, 193, 7, 0.2) 0%, transparent 70%);
+        z-index: -1;
+        filter: blur(40px);
+    }
+    .feature-icon-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        background: white;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    .feature-card:hover .feature-icon-box {
+        background: var(--muni-yellow);
+        color: var(--muni-dark);
+        transform: rotate(-10deg) scale(1.1);
+    }
+    .step-number {
+        font-size: 3rem;
+        font-weight: 800;
+        color: rgba(0,0,0,0.05);
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="py-5 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #0b3d91 0%, #001e4c 100%); color: white;">
-    <div class="container py-5 z-1 position-relative">
-        <h1 class="display-4 fw-bold mb-3">Portal del Vecino</h1>
-        <p class="lead mb-4 fw-light opacity-75">Realice sus trámites, consulte expedientes y aplique a ofertas de empleo desde casa.</p>
-        <div class="d-flex justify-content-center gap-3 mt-4">
-            <a href="{% url 'portal:registro' %}" class="btn btn-accent btn-lg px-5 rounded-pill shadow-lg">Crear Cuenta</a>
-            <a href="{% url 'portal:login' %}" class="btn btn-outline-light btn-lg px-5 rounded-pill">Ingresar</a>
+<section class="glass-hero home-hero text-white overflow-hidden">
+    <div class="container position-relative z-1">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7 text-center text-lg-start animate-up">
+                <div class="badge rounded-pill bg-white bg-opacity-10 px-3 py-2 mb-3 border border-white border-opacity-10">
+                    <i class="fa-solid fa-star text-warning me-2"></i> Municipalidad de Casilda
+                </div>
+                <h1 class="display-3 fw-bold mb-4">Casilda Conecta</h1>
+                <p class="lead mb-5 opacity-75">Tu municipio, ahora más cerca que nunca. Gestioná tus trámites, consultá tus expedientes y participá de la comunidad desde un solo lugar.</p>
+                <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3">
+                    <a href="{% url 'portal:registro' %}" class="btn-muni btn-muni-primary px-5 shadow-lg d-flex align-items-center">
+                        Comenzar Ahora <i class="fa-solid fa-chevron-right ms-2 fs-6"></i>
+                    </a>
+                    <a href="{% url 'portal:login' %}" class="btn btn-outline-light btn-muni px-5">
+                        Iniciar Sesión
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block animate-up" style="animation-delay: 0.2s;">
+                <div class="hero-img-container">
+                    <img src="{% static 'img/logo_muni.png' %}" alt="Casilda" class="img-fluid drop-shadow filter-white opacity-25" style="max-height: 400px; -webkit-filter: drop-shadow(0 0 50px rgba(0,0,0,0.2));">
+                </div>
+            </div>
         </div>
     </div>
-    <!-- Decorative background elements -->
-    <div class="position-absolute rounded-circle" style="width: 300px; height: 300px; background: rgba(255,255,255,0.05); top: -50px; left: -50px;"></div>
-    <div class="position-absolute rounded-circle" style="width: 200px; height: 200px; background: rgba(255, 202, 40, 0.1); bottom: -50px; right: -50px;"></div>
+    
+    <!-- Abstract shapes -->
+    <div class="position-absolute top-0 end-0 mt-n5 me-n5 opacity-25" style="width: 400px; height: 400px; background: radial-gradient(circle, var(--muni-blue) 0%, transparent 70%); filter: blur(60px);"></div>
+    <div class="position-absolute bottom-0 start-0 mb-n5 ms-n5 opacity-25" style="width: 300px; height: 300px; background: radial-gradient(circle, var(--muni-yellow) 0%, transparent 70%); filter: blur(50px);"></div>
 </section>
 
-<!-- Features Section -->
-<section class="py-5" style="margin-top: -50px;">
+<!-- Features Hub -->
+<section class="py-5" style="margin-top: -60px; position: relative; z-index: 10;">
     <div class="container">
-        <div class="row g-4 justify-content-center">
-            
-            <!-- Expedientes -->
-            <div class="col-md-4">
-                <div class="glass-card p-4 h-100 text-center">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary mb-4" style="width: 80px; height: 80px;">
-                        <i class="fa-solid fa-folder-open fa-2x"></i>
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-4 animate-up" style="animation-delay: 0.3s;">
+                <div class="glass-card p-4 h-100 feature-card position-relative">
+                    <span class="step-number">01</span>
+                    <div class="feature-icon-box text-success">
+                        <i class="fa-solid fa-folder-open"></i>
                     </div>
-                    <h3 class="h5 fw-bold">Mis Expedientes</h3>
-                    <p class="text-muted small">Cree una cuenta para asociar y hacer un seguimiento en tiempo real de todos sus expedientes municipales.</p>
+                    <h4 class="fw-bold mb-3">Mis Expedientes</h4>
+                    <p class="text-muted small mb-0">Seguí el estado de tus trámites en tiempo real. Recibí notificaciones automáticas ante cada movimiento oficial.</p>
                 </div>
             </div>
 
-            <!-- Empleo -->
-            <div class="col-md-4">
-                <div class="glass-card p-4 h-100 text-center">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10 text-success mb-4" style="width: 80px; height: 80px;">
-                        <i class="fa-solid fa-briefcase fa-2x"></i>
+            <!-- Feature 2 -->
+            <div class="col-md-4 animate-up" style="animation-delay: 0.4s;">
+                <div class="glass-card p-4 h-100 feature-card position-relative">
+                    <span class="step-number">02</span>
+                    <div class="feature-icon-box text-primary">
+                        <i class="fa-solid fa-bullhorn"></i>
                     </div>
-                    <h3 class="h5 fw-bold">Portal de Empleo</h3>
-                    <p class="text-muted small">Cargue su Curriculum Vitae y postúlese rápidamente a diferentes oportunidades laborales o ferias de la ciudad.</p>
+                    <h4 class="fw-bold mb-3">Reclamos y Avisos</h4>
+                    <p class="text-muted small mb-0">Contanos qué pasa en tu barrio. Reportá baches, luminarias o mantenimiento y hacé el seguimiento de la solución.</p>
                 </div>
             </div>
 
-            <!-- Feriantes -->
-            <div class="col-md-4">
-                <div class="glass-card p-4 h-100 text-center">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-warning bg-opacity-10 text-warning mb-4" style="width: 80px; height: 80px;">
-                        <i class="fa-solid fa-store fa-2x"></i>
+            <!-- Feature 3 -->
+            <div class="col-md-4 animate-up" style="animation-delay: 0.5s;">
+                <div class="glass-card p-4 h-100 feature-card position-relative">
+                    <span class="step-number">03</span>
+                    <div class="feature-icon-box text-danger">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
                     </div>
-                    <h3 class="h5 fw-bold">Feriantes y Apicultura</h3>
-                    <p class="text-muted small">Regístrese como feriante o productor apícola y gestione sus puestos o cuotas de manera sencilla.</p>
+                    <h4 class="fw-bold mb-3">Multas y Tasas</h4>
+                    <p class="text-muted small mb-0">Consultá tus infracciones de tránsito, obtené certificados de libre deuda y gestioná tus pagos de forma ágil.</p>
                 </div>
             </div>
 
+            <!-- Feature 4 -->
+            <div class="col-md-4 animate-up" style="animation-delay: 0.6s;">
+                <div class="glass-card p-4 h-100 feature-card position-relative">
+                    <span class="step-number">04</span>
+                    <div class="feature-icon-box text-warning">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Educación y Cursos</h4>
+                    <p class="text-muted small mb-0">Anotate en capacitaciones municipales gratuitas y talleres de oficios para potenciar tu crecimiento profesional.</p>
+                </div>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="col-md-4 animate-up" style="animation-delay: 0.7s;">
+                <div class="glass-card p-4 h-100 feature-card position-relative">
+                    <span class="step-number">05</span>
+                    <div class="feature-icon-box text-info">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Bolsa de Empleo</h4>
+                    <p class="text-muted small mb-0">Cargá tu CV digital para que empresas de la ciudad puedan contactarte y postulá a las vacantes disponibles.</p>
+                </div>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="col-md-4 animate-up" style="animation-delay: 0.8s;">
+                <div class="glass-card p-4 h-100 feature-card position-relative">
+                    <span class="step-number">06</span>
+                    <div class="feature-icon-box text-accent" style="color: #e5ad06;">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Feriantes y Emprendedores</h4>
+                    <p class="text-muted small mb-0">Inscribite para participar de las ferias locales y eventos culturales organizados por el municipio.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- Call to action -->
+<section class="py-5">
+    <div class="container">
+        <div class="glass-card p-5 text-center bg-white">
+            <h2 class="fw-bold mb-3">¿Todavía no tenés tu cuenta?</h2>
+            <p class="text-muted mb-4 mx-auto" style="max-width: 600px;">Sumate a los miles de vecinos que ya gestionan su relación con el municipio de forma digital, ahorrando tiempo y papel.</p>
+            <a href="{% url 'portal:registro' %}" class="btn-muni btn-muni-primary px-5">Registrarme Gratis</a>
+            <div class="mt-4 text-muted small">
+                <i class="fa-solid fa-lock me-2"></i> Tus datos están protegidos por el sistema de seguridad municipal.
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .mt-n5 { margin-top: -3rem !important; }
+</style>
 {% endblock %}

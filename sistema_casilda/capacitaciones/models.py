@@ -8,10 +8,15 @@ class Capacitacion(models.Model):
         ('QUINQUELA', 'Cultura (Quinquela Martín)'),
     ]
     nombre = models.CharField(max_length=200)
-    descripcion = models.TextField(help_text="Detalles del curso, horarios, lugar, etc.")
+    descripcion = models.TextField(blank=True, null=True)
     area_responsable = models.CharField(max_length=20, choices=TIPO_AREA_CHOICES)
+    
     fecha_inicio = models.DateField()
-    cupo_maximo = models.IntegerField(help_text="Cantidad máxima de inscriptos permitidos. Cuando se alcanza, la inscripción se cierra automáticamente.")
+    dias_dictado = models.CharField(max_length=100, verbose_name="Días de dictado", help_text="Ej: Lunes y Miércoles", blank=True, null=True)
+    horarios = models.CharField(max_length=100, verbose_name="Horarios", help_text="Ej: 18:00 a 20:00 hs", blank=True, null=True)
+    lugar = models.CharField(max_length=200, verbose_name="Lugar/Aula", blank=True, null=True)
+    
+    cupo_maximo = models.IntegerField(help_text="Cantidad máxima de inscriptos permitidos.")
     estado_inscripcion = models.CharField(max_length=20, choices=[('ABIERTA', 'Abierta'), ('CERRADA', 'Cerrada')], default='ABIERTA')
     
     class Meta:
@@ -46,6 +51,12 @@ class Inscripcion(models.Model):
     vecino = models.ForeignKey(Vecino, on_delete=models.CASCADE, related_name='capacitaciones')
     fecha_inscripcion = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='INSCRIPTO')
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new:
+            self.capacitacion.verificar_y_cerrar_cupo()
 
     class Meta:
         verbose_name = "Inscripción"

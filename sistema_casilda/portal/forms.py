@@ -12,9 +12,17 @@ class RegistroVecinoForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label='Contraseña')
     password_confirm = forms.CharField(widget=forms.PasswordInput, label='Confirme la contraseña')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if isinstance(field.widget, (forms.Select, forms.SelectMultiple)):
+                field.widget.attrs.update({'class': 'form-select'})
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
+
     class Meta:
         model = Vecino
-        fields = ['telefono', 'domicilio']
+        fields = ['telefono', 'domicilio', 'localidad']
 
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')

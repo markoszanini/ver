@@ -3,27 +3,49 @@ from .models import Expediente, MovimientoExpediente
 
 @admin.register(Expediente)
 class ExpedienteAdmin(admin.ModelAdmin):
-    list_display = ('nro_expediente', 'asunto', 'fecha_ingreso', 'estado', 'actual_departamento', 'actual_oficina')
-    search_fields = ('nro_expediente', 'asunto')
+    list_display = ('nro_expediente', 'get_origen', 'asunto', 'fecha_ingreso', 'estado', 'get_ubicacion')
+    search_fields = ('nro_expediente', 'asunto', 'dni_titular_manual', 'nombre_titular_manual', 'apellido_titular_manual')
     list_filter = ('estado', 'fecha_ingreso')
+    readonly_fields = ('nro_expediente', 'registrado_por', 'get_origen', 'get_ubicacion')
     
     class Media:
         js = ('js/expedientes_admin.js',)
 
-    def get_exclude(self, request, obj=None):
-        excludes = ['registrado_por', 'origen_area', 'origen_direccion', 'origen_departamento', 'origen_oficina', 
-                   'actual_area', 'actual_direccion', 'actual_departamento', 'actual_oficina', 'fecha_salida']
-        
-        funcionario = getattr(request.user, 'funcionario_link', None)
-        is_mesa_entrada = funcionario and funcionario.departamento and 'mesa de entrada' in funcionario.departamento.nombre.lower()
-        
-        if not is_mesa_entrada:
-            excludes.extend(['nro_expediente', 'estado', 'vecino_titular'])
-        return excludes
+    def get_fieldsets(self, request, obj=None):
+        return (
+            (None, {
+                'fields': ('nro_expediente', 'get_origen', 'asunto', 'get_ubicacion', 'estado')
+            }),
+            ('Titular del Trámite', {
+                'fields': ('vecino_titular',),
+                'description': 'Seleccione si el vecino ya está registrado en el portal.'
+            }),
+            ('Titular No Registrado (Carga Manual)', {
+                'fields': ('dni_titular_manual', 'nombre_titular_manual', 'apellido_titular_manual'),
+                'description': 'Use estos campos solo si el vecino aún no tiene cuenta. El sistema lo vinculará automáticamente cuando se registre.',
+                'classes': ('collapse',)
+            }),
+            ('Detalles adicionales', {
+                'fields': ('foto', 'observaciones'),
+            }),
+        )
+
+    @admin.display(description='Origen')
+    def get_origen(self, obj):
+        return obj.origen_display
+
+    @admin.display(description='Ubicación Actual')
+    def get_ubicacion(self, obj):
+        return obj.ubicacion_display
 
     def save_model(self, request, obj, form, change):
         funcionario = getattr(request.user, 'funcionario_link', None)
-        is_mesa_entrada = funcionario and funcionario.departamento and 'mesa de entrada' in funcionario.departamento.nombre.lower()
+        
+        # Detección segura de mesa de entrada
+        is_mesa_entrada = False
+        if funcionario and funcionario.departamento:
+            if 'mesa de entrada' in funcionario.departamento.nombre.lower():
+                is_mesa_entrada = True
         
         if not obj.pk: # Nuevo Expediente creado
             if funcionario:
@@ -40,11 +62,11 @@ class ExpedienteAdmin(admin.ModelAdmin):
                     obj.actual_departamento = mesa
                     obj.actual_area = mesa.direccion.area if mesa.direccion else None
                 obj.estado = 'Pendiente de Asignación'
-                
             else:
-                # Si lo crea mesa de entrada directamente, lo atajan ellos
-                obj.actual_departamento = funcionario.departamento
-                obj.actual_area = funcionario.area
+                # Si lo crea mesa de entrada directamente
+                if funcionario:
+                    obj.actual_departamento = funcionario.departamento
+                    obj.actual_area = funcionario.area
                 obj.estado = 'En trámite'
                 obj.registrado_por = request.user.username
                 
@@ -84,17 +106,22 @@ class ExpedienteAdmin(admin.ModelAdmin):
         return qs.filter(q_origen | q_actual).distinct()
 
     def has_add_permission(self, request):
-        # Todos pueden crear notas internas (expedientes sin nro) que van a mesa de entrada
         return True
 
 @admin.register(MovimientoExpediente)
 class MovimientoExpedienteAdmin(admin.ModelAdmin):
-    list_display = ('expediente', 'fecha_pase', 'destino_departamento', 'destino_oficina', 'estado', 'usuario_emisor')
+    list_display = ('expediente', 'fecha_pase', 'get_destino', 'estado', 'usuario_emisor')
     search_fields = ('expediente__nro_expediente',)
     list_filter = ('estado', 'fecha_pase')
 
     class Media:
         js = ('js/expedientes_admin.js',)
+
+    @admin.display(description='Destino')
+    def get_destino(self, obj):
+        if obj.destino_oficina: return f"Ofi: {obj.destino_oficina.nombre}"
+        if obj.destino_departamento: return f"Depto: {obj.destino_departamento.nombre}"
+        return str(obj.destino_area) if obj.destino_area else "-"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "expediente":
@@ -107,7 +134,6 @@ class MovimientoExpedienteAdmin(admin.ModelAdmin):
                     if funcionario.departamento: q_actual |= Q(actual_departamento=funcionario.departamento)
                     if funcionario.oficina: q_actual |= Q(actual_oficina=funcionario.oficina)
                     
-                    # Mesa de entrada puede hacer pases de cualquier cosa que tenga ahí, u originado por ellos.
                     if funcionario.departamento and 'mesa de entrada' in funcionario.departamento.nombre.lower():
                         kwargs["queryset"] = Expediente.objects.all()
                     else:
@@ -115,14 +141,25 @@ class MovimientoExpedienteAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
-        if not obj.pk: # Creando un nuevo pase
+        if not obj.pk:
             obj.usuario_emisor = request.user.username
-            # Automáticamente derivar el Expediente a su nueva ubicación actual
             exp = obj.expediente
             exp.actual_area = obj.destino_area
-            exp.actual_departamento = obj.destino_departamento
             exp.actual_direccion = obj.destino_direccion
+            exp.actual_departamento = obj.destino_departamento
             exp.actual_oficina = obj.destino_oficina
+            
+            # Cascada inteligente
+            if exp.actual_oficina:
+                if not exp.actual_area: exp.actual_area = exp.actual_oficina.area
+                if not exp.actual_direccion: exp.actual_direccion = exp.actual_oficina.direccion
+                if not exp.actual_departamento and exp.actual_oficina.division:
+                    exp.actual_departamento = exp.actual_oficina.division.departamento
+            
+            if exp.actual_departamento:
+                if not exp.actual_area: exp.actual_area = exp.actual_departamento.area
+                if not exp.actual_direccion: exp.actual_direccion = exp.actual_departamento.direccion
+
             if obj.estado:
                 exp.estado = obj.estado
             exp.save()

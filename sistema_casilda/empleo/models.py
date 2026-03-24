@@ -1,5 +1,5 @@
-
 from django.db import models
+from portal.models import Localidad
 
 class RubroEmpleo(models.Model):
     id_rubro = models.AutoField(primary_key=True)
@@ -46,38 +46,14 @@ class Postulante(models.Model):
         ('4', 'Monotributista'),
         ('21', 'Empleado'),
     ]
-    LOCALIDAD_CHOICES = [
-        ('1', 'Casilda'),
-        ('2', 'Arteaga'),
-        ('3', 'Arequito'),
-        ('4', 'Berabevú'),
-        ('5', 'Chañar Ladeado'),
-        ('6', 'Gödeken'),
-        ('7', 'Sanford'),
-        ('21', 'Bigand'),
-        ('22', 'Chabás'),
-        ('23', 'Los Molinos'),
-        ('24', 'Villada'),
-        ('25', 'Fuentes'),
-        ('100', 'Rosario'),
-        ('101', 'Venado Tuerto'),
-        ('102', 'San Lorenzo'),
-        ('103', 'Villa Constitución'),
-        ('104', 'Firmat'),
-        ('105', 'Roldán'),
-        ('106', 'Funes'),
-        ('107', 'Pujato'),
-        ('108', 'Zavalla'),
-        ('109', 'Pérez'),
-        ('8', 'Otro'),
-    ]
+
     id_postulante = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150)
     apellido = models.CharField(max_length=150)
     fecha_nac = models.DateField(blank=True, null=True)
     sexo = models.CharField(max_length=30, blank=True, null=True)
     domicilio = models.CharField(max_length=200, blank=True, null=True)
-    localidad = models.CharField(max_length=100, blank=True, null=True, choices=LOCALIDAD_CHOICES)
+    localidad = models.ForeignKey(Localidad, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Localidad")
     localidad_detalle = models.CharField(max_length=200, blank=True, null=True)
     cp = models.CharField(max_length=20, blank=True, null=True)
     telefono = models.CharField(max_length=50, blank=True, null=True)

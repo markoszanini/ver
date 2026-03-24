@@ -1,60 +1,95 @@
 {% extends 'portal/base_portal.html' %}
 {% load static %}
 
-{% block title %}Registro de Feriantes - Portal del Vecino{% endblock %}
+{% block title %}Registro de Feriantes - Casilda Conecta{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section-title {
+        color: var(--muni-green);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+    .form-section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: rgba(0,0,0,0.05);
+        margin-left: 15px;
+    }
+    .form-control, .form-select {
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        border: 1px solid rgba(0,0,0,0.1);
+        background-color: #fcfcfc;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5 pb-5">
+    <div class="container animate-up text-center">
+        <div class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 mb-3">CONVOCATORIA ABIERTA</div>
+        <h1 class="display-5 fw-bold mb-2">Inscripción de Feriantes</h1>
+        <p class="lead opacity-75">Formá parte de las ferias y eventos culturales de nuestra ciudad.</p>
+    </div>
+</div>
+
+<div class="container mt-n5 position-relative z-2 pb-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 glass-card">
-                <div class="card-body p-5">
-                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
-                        <i class="fa-solid fa-store fa-3x text-warning me-3"></i>
-                        <div>
-                            <h2 class="h3 mb-0 fw-bold">Registro de Feriantes</h2>
-                            <p class="text-muted mb-0">{% if is_update %}Actualizar mis datos de feriante{% else %}Inscripción para nuevas ferias{% endif %}</p>
-                        </div>
+        <div class="col-lg-8 animate-up">
+            <div class="glass-card p-4 p-md-5 bg-white shadow-lg overflow-hidden position-relative">
+                
+                <!-- Decoration -->
+                <div class="position-absolute opacity-5" style="top: -20px; right: -20px; font-size: 10rem; transform: rotate(15deg);">
+                    <i class="fa-solid fa-tent"></i>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-section-title">
+                        <i class="fa-solid fa-id-card me-2"></i> Datos del Emprendimiento
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        {% for field in form %}
+                            <div class="{% if field.name == 'observaciones' %}col-12{% else %}col-md-6{% endif %}">
+                                <label class="form-label fw-bold small text-muted text-uppercase">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}<div class="form-text small mt-1 x-small">{{ field.help_text }}</div>{% endif %}
+                                {% if field.errors %}<div class="text-danger x-small mt-1">{{ field.errors.0 }}</div>{% endif %}
+                            </div>
+                        {% endfor %}
                     </div>
 
-                    {% if form.errors %}
-                        <div class="alert alert-danger">
-                            Por favor revisá los errores en el formulario.
-                        </div>
-                    {% endif %}
-
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        
-                        <div class="row g-4">
-                            {% for field in form %}
-                                {% if field.name == 'observaciones' %}
-                                    <div class="col-12">
-                                {% else %}
-                                    <div class="col-md-6 mt-3">
-                                {% endif %}
-                                    <label class="form-label fw-semibold text-capitalize">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% if field.help_text %}
-                                        <div class="form-text">{{ field.help_text }}</div>
-                                    {% endif %}
-                                    {% if field.errors %}
-                                        <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <div class="d-flex justify-content-end gap-3 mt-4 pt-4 border-top">
-                            <a href="{% url 'portal:dashboard' %}" class="btn btn-outline-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-warning px-4 fw-bold">
-                                <i class="fa-solid fa-save me-2"></i>{% if is_update %}Actualizar Datos{% else %}Confirmar Registro{% endif %}
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+                        <a href="{% url 'portal:dashboard' %}" class="text-decoration-none text-muted fw-bold small">
+                            <i class="fa-solid fa-xmark me-1"></i> CANCELAR
+                        </a>
+                        <button type="submit" class="btn-muni btn-muni-primary px-5 shadow">
+                            <i class="fa-solid fa-check-circle me-2"></i> {% if is_update %}ACTUALIZAR DATOS{% else %}CONFIRMAR REGISTRO{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="mt-4 p-4 glass-card bg-info bg-opacity-10 border-0 text-dark small animate-up" style="animation-delay: 0.2s;">
+                <h6 class="fw-bold"><i class="fa-solid fa-circle-info me-2"></i> Información Importante</h6>
+                <p class="mb-0 opacity-75">Una vez registrado, el área de Producción revisará tu perfil y te contactará para coordinar tu participación en los próximos eventos. Asegúrate de tener tus datos de contacto actualizados.</p>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .mt-n5 { margin-top: -3.5rem !important; }
+    .x-small { font-size: 0.7rem; }
+</style>
 {% endblock %}

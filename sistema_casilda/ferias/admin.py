@@ -24,7 +24,7 @@ class CapacitacionFerianteAdmin(admin.ModelAdmin):
 class FerianteAdmin(admin.ModelAdmin):
     list_display = ('apellido', 'nombre', 'dni', 'rubro', 'subrubro', 'estado', 'fecha_alta')
     search_fields = ('apellido', 'nombre', 'dni', 'nombre_emprendimiento')
-    list_filter = ('estado', 'ciudad', 'rubro')
+    list_filter = ('estado', 'localidad', 'rubro')
     filter_horizontal = ('capacitaciones',)
     
     fieldsets = (
@@ -33,7 +33,7 @@ class FerianteAdmin(admin.ModelAdmin):
                 ('nombre', 'apellido'),
                 ('dni', 'sexo'),
                 ('mail', 'telefono'),
-                ('ciudad', 'direccion'),
+                ('localidad', 'direccion'),
                 'red_social',
             )
         }),
@@ -41,15 +41,18 @@ class FerianteAdmin(admin.ModelAdmin):
             'fields': (
                 'nombre_emprendimiento',
                 ('rubro', 'subrubro'),
-                'tipo_elaboracion',
-                'foto',
+                ('tipo_elaboracion', 'foto'),
             )
         }),
-        ('Capacitaciones', {
-            'fields': ('capacitaciones',)
+        ('Capacitaciones y Otros', {
+            'fields': (
+                'capacitaciones',
+                'observaciones',
+            )
         }),
-        ('Otros', {
-            'fields': ('observaciones',)
+        ('Estado de Registro', {
+            'fields': (('estado', 'fecha_alta'),),
+            'classes': ('collapse',),
         }),
     )
 

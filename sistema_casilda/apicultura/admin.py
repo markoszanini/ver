@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.shortcuts import render
 from django.contrib import messages
+from django.db import models
 from .models import (Apicultor, Extraccion, LiquidacionExtraccion, 
                      ApicultorInstitucional, ApicultorProductivo, ApicultorCapacitacion)
 
@@ -20,7 +21,27 @@ class ApicultorAdmin(admin.ModelAdmin):
     search_fields = ('nombre', 'cuit_cuil', 'dni')
     list_filter = ('estado', 'localidad')
     exclude = ('estado',)
+
+    fieldsets = (
+        ('Información Personal', {
+            'fields': (
+                ('dni', 'cuit_cuil'),
+                'nombre',
+                ('telefono', 'email'),
+                'domicilio',
+                'localidad',
+                'observaciones',
+            )
+        }),
+    )
+
     inlines = [ApicultorInstitucionalInline, ApicultorProductivoInline, ApicultorCapacitacionInline]
+
+    class Media:
+        js = ('js/apicultor_admin.js?v=15',)
+        css = {
+            'all': ('css/apicultura_admin.css?v=15',)
+        }
 
 @admin.action(description='Imprimir Acta de Balance (Seleccionadas)')
 def imprimir_acta_balance(modeladmin, request, queryset):
@@ -56,10 +77,10 @@ def imprimir_acta_balance(modeladmin, request, queryset):
         if tipo_pago == 'DINERO':
             dic['precio_por_kg'] = float(e.precio_por_kg or 0)
             dic['total_bruto'] = dic['total_kg'] * dic['precio_por_kg']
-            dic['pago_10'] = float(liq_total.importe_9_porciento if liq_total and liq_total.importe_9_porciento else 0)
-            dic['servicio_ext'] = float(liq_ext.importe_9_porciento if liq_ext and liq_ext.importe_9_porciento else 0)
-            dic['servicio_mant'] = float(liq_mant.importe_9_porciento if liq_mant and liq_mant.importe_9_porciento else 0)
-            dic['municipalidad'] = float(liq_muni.importe_9_porciento if liq_muni and liq_muni.importe_9_porciento else 0)
+            dic['pago_10'] = float(liq_total.importe_retencion if liq_total and liq_total.importe_retencion else 0)
+            dic['servicio_ext'] = float(liq_ext.importe_retencion if liq_ext and liq_ext.importe_retencion else 0)
+            dic['servicio_mant'] = float(liq_mant.importe_retencion if liq_mant and liq_mant.importe_retencion else 0)
+            dic['municipalidad'] = float(liq_muni.importe_retencion if liq_muni and liq_muni.importe_retencion else 0)
 
             totales['sum_bruto'] += dic['total_bruto']
             totales['sum_10'] += dic['pago_10']
@@ -67,9 +88,10 @@ def imprimir_acta_balance(modeladmin, request, queryset):
             totales['sum_serv_mant'] += dic['servicio_mant']
             totales['sum_muni'] += dic['municipalidad']
         else:
-            dic['servicio_ext'] = float(liq_ext.kg_9_porciento if liq_ext and liq_ext.kg_9_porciento else 0)
-            dic['servicio_mant'] = float(liq_mant.kg_9_porciento if liq_mant and liq_mant.kg_9_porciento else 0)
-            dic['municipalidad'] = float(liq_muni.kg_9_porciento if liq_muni and liq_muni.kg_9_porciento else 0)
+            dic['pago_10'] = float(liq_total.kg_retencion if liq_total and liq_total.kg_retencion else 0)
+            dic['servicio_ext'] = float(liq_ext.kg_retencion if liq_ext and liq_ext.kg_retencion else 0)
+            dic['servicio_mant'] = float(liq_mant.kg_retencion if liq_mant and liq_mant.kg_retencion else 0)
+            dic['municipalidad'] = float(liq_muni.kg_retencion if liq_muni and liq_muni.kg_retencion else 0)
 
             totales['sum_serv_ext'] += dic['servicio_ext']
             totales['sum_serv_mant'] += dic['servicio_mant']
@@ -94,7 +116,7 @@ class LiquidacionExtraccionInline(admin.TabularInline):
     model = LiquidacionExtraccion
     extra = 0
     # Hacemos que sea solo lectura ya que se autocalcula en el save() de Extraccion
-    readonly_fields = ('porcentaje_total', 'kg_9_porciento', 'importe_9_porciento', 'forma_pago', 'tipo_concepto', 'sub_porcentaje')
+    readonly_fields = ('porcentaje_total', 'kg_retencion', 'importe_retencion', 'forma_pago', 'tipo_concepto', 'sub_porcentaje')
     can_delete = False
 
     def has_add_permission(self, request, obj=None):
@@ -108,13 +130,44 @@ class ExtraccionAdmin(admin.ModelAdmin):
     inlines = [LiquidacionExtraccionInline]
     actions = [imprimir_acta_balance]
 
-    readonly_fields = ('fecha_carga',)
-    fields = ('fecha_carga', 'apicultor', 'fecha_extraccion', 'forma_pago', 'total_kg', 'precio_por_kg', 'observaciones')
+    fieldsets = (
+        (None, {
+            'fields': ('apicultor', 'fecha_extraccion', 'forma_pago', 'total_kg', 'precio_por_kg', 'observaciones')
+        }),
+        ('Información de Auditoría', {
+            'classes': ('collapse',),
+            'fields': ('nro_consecutivo', 'fecha_carga', 'id_operador'),
+        }),
+    )
+    readonly_fields = ('fecha_carga', 'id_operador', 'nro_consecutivo')
+
+    from django.forms import Textarea
+    formfield_overrides = {
+        models.CharField: {'widget': Textarea(attrs={'rows': 4, 'cols': 40})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 40})},
+    }
 
     class Media:
-        js = ('js/extraccion_toggle.js?v=1',)
+        js = ('js/apicultor_admin.js?v=11',)
+        css = {
+            'all': ('css/apicultura_admin.css?v=11',)
+        }
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
             obj.id_operador = request.user.username
+            # Generar nro_consecutivo (ej: EXT-2024-001)
+            from django.utils import timezone
+            year = timezone.now().year
+            last_ext = Extraccion.objects.filter(nro_consecutivo__contains=f"EXT-{year}").order_by('-id_extraccion').first()
+            if last_ext and last_ext.nro_consecutivo:
+                try:
+                    last_num = int(last_ext.nro_consecutivo.split('-')[-1])
+                    new_num = last_num + 1
+                except:
+                    new_num = 1
+            else:
+                new_num = 1
+            obj.nro_consecutivo = f"EXT-{year}-{new_num:03d}"
+            
         super().save_model(request, obj, form, change)

@@ -31,6 +31,7 @@ urlpatterns = [
     path('turnos/', include('turnos.urls')),
     path('capacitaciones/', include('capacitaciones.urls')),
     path('expedientes/', include('expedientes.urls')),
+    path('admin/apicultura/', include('apicultura.urls')),
 ]
 
 if settings.DEBUG:

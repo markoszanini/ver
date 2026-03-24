@@ -1,4 +1,5 @@
 from django.db import models
+from portal.models import Localidad
 
 class Apicultor(models.Model):
     id_apicultor = models.AutoField(primary_key=True)
@@ -6,7 +7,7 @@ class Apicultor(models.Model):
     dni = models.CharField(max_length=20, blank=True, null=True, verbose_name="DNI")
     telefono = models.CharField(max_length=30, blank=True, null=True, verbose_name="Teléfono")
     email = models.EmailField(max_length=200, blank=True, null=True, verbose_name="Email")
-    localidad = models.CharField(max_length=100, blank=True, null=True, verbose_name="Localidad")
+    localidad = models.ForeignKey(Localidad, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Localidad")
     domicilio = models.CharField(max_length=200, blank=True, null=True, verbose_name="Domicilio")
     cuit_cuil = models.CharField(max_length=20, blank=True, null=True, verbose_name="CUIT/CUIL")
     estado = models.CharField(max_length=15, default='Activo', verbose_name="Estado")
@@ -37,6 +38,7 @@ class Extraccion(models.Model):
     observaciones = models.CharField(max_length=500, blank=True, null=True, verbose_name="Observaciones")
     fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Carga")
     id_operador = models.CharField(max_length=50, blank=True, null=True, verbose_name="Operador")
+    nro_consecutivo = models.CharField(max_length=30, blank=True, null=True, verbose_name="Nro. de Extracción")
 
     class Meta:
         verbose_name = "Extracción"
@@ -65,32 +67,32 @@ class Extraccion(models.Model):
         # TOTAL (10%)
         LiquidacionExtraccion.objects.create(
             extraccion=self, tipo_concepto='TOTAL', porcentaje_total=v_porc_total,
-            kg_9_porciento=v_kg_10 if v_forma_pago == 'ESPECIE' else None,
-            importe_9_porciento=v_pago_10_dinero if v_forma_pago == 'DINERO' else None,
+            kg_retencion=v_kg_10 if v_forma_pago == 'ESPECIE' else None,
+            importe_retencion=v_pago_10_dinero if v_forma_pago == 'DINERO' else None,
             forma_pago=v_forma_pago
         )
         
         # SERV_EXT (2%)
         LiquidacionExtraccion.objects.create(
             extraccion=self, tipo_concepto='SERV_EXT', porcentaje_total=v_porc_total, sub_porcentaje=2,
-            kg_9_porciento=v_kg_10 * v_prop_serv_ext if v_forma_pago == 'ESPECIE' else None,
-            importe_9_porciento=v_pago_10_dinero * v_prop_serv_ext if v_forma_pago == 'DINERO' else None,
+            kg_retencion=v_kg_10 * v_prop_serv_ext if v_forma_pago == 'ESPECIE' else None,
+            importe_retencion=v_pago_10_dinero * v_prop_serv_ext if v_forma_pago == 'DINERO' else None,
             forma_pago=v_forma_pago
         )
         
         # SERV_MANT (5%)
         LiquidacionExtraccion.objects.create(
             extraccion=self, tipo_concepto='SERV_MANT', porcentaje_total=v_porc_total, sub_porcentaje=5,
-            kg_9_porciento=v_kg_10 * v_prop_serv_mant if v_forma_pago == 'ESPECIE' else None,
-            importe_9_porciento=v_pago_10_dinero * v_prop_serv_mant if v_forma_pago == 'DINERO' else None,
+            kg_retencion=v_kg_10 * v_prop_serv_mant if v_forma_pago == 'ESPECIE' else None,
+            importe_retencion=v_pago_10_dinero * v_prop_serv_mant if v_forma_pago == 'DINERO' else None,
             forma_pago=v_forma_pago
         )
         
         # MUNICIPALIDAD (3%)
         LiquidacionExtraccion.objects.create(
             extraccion=self, tipo_concepto='MUNICIPALIDAD', porcentaje_total=v_porc_total, sub_porcentaje=3,
-            kg_9_porciento=v_kg_10 * v_prop_muni if v_forma_pago == 'ESPECIE' else None,
-            importe_9_porciento=v_pago_10_dinero * v_prop_muni if v_forma_pago == 'DINERO' else None,
+            kg_retencion=v_kg_10 * v_prop_muni if v_forma_pago == 'ESPECIE' else None,
+            importe_retencion=v_pago_10_dinero * v_prop_muni if v_forma_pago == 'DINERO' else None,
             forma_pago=v_forma_pago
         )
 
@@ -101,8 +103,8 @@ class LiquidacionExtraccion(models.Model):
     id_liquidacion = models.AutoField(primary_key=True)
     extraccion = models.ForeignKey(Extraccion, on_delete=models.CASCADE, related_name='liquidaciones')
     porcentaje_total = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Porcentaje Total")
-    kg_9_porciento = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Kg Retenidos (9%)")
-    importe_9_porciento = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True, verbose_name="Importe Retenido (9%)")
+    kg_retencion = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Kg Retenidos (10%)")
+    importe_retencion = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True, verbose_name="Importe Retenido (10%)")
     forma_pago = models.CharField(max_length=10, choices=Extraccion.FORMA_PAGO_CHOICES, verbose_name="Forma de Pago")
     tipo_concepto = models.CharField(max_length=20, blank=True, null=True, verbose_name="Tipo de Concepto")
     sub_porcentaje = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Sub Porcentaje")
@@ -117,9 +119,13 @@ class LiquidacionExtraccion(models.Model):
 class ApicultorInstitucional(models.Model):
     id_institucional = models.AutoField(primary_key=True)
     apicultor = models.OneToOneField(Apicultor, on_delete=models.CASCADE, related_name='datos_institucionales')
-    pertenece_asociacion = models.CharField(max_length=1, default='N', choices=[('S', 'Sí'), ('N', 'No')])
-    usa_sala_extraccion = models.CharField(max_length=1, default='S', choices=[('S', 'Sí'), ('N', 'No')])
+    pertenece_asociacion = models.CharField(max_length=1, blank=True, null=True, choices=[('S', 'Sí'), ('N', 'No')], verbose_name="Pertenece asociación")
+    usa_sala_extraccion = models.CharField(max_length=1, blank=True, null=True, choices=[('S', 'Sí'), ('N', 'No')], verbose_name="Usa sala extracción")
     extraccion_alter = models.CharField(max_length=500, blank=True, null=True, verbose_name="Extracción Alternativa")
+
+    class Meta:
+        verbose_name = "Datos Institucionales"
+        verbose_name_plural = "Datos Institucionales"
 
 class ApicultorProductivo(models.Model):
     id_productivo = models.AutoField(primary_key=True)
@@ -129,6 +135,10 @@ class ApicultorProductivo(models.Model):
     nro_renapa = models.CharField(max_length=50, blank=True, null=True, verbose_name="Nro RENAPA")
     nro_rupp = models.CharField(max_length=50, blank=True, null=True, verbose_name="Nro RUPP")
 
+    class Meta:
+        verbose_name = "Datos de producción"
+        verbose_name_plural = "Datos de producción"
+
 class ApicultorCapacitacion(models.Model):
     id_capacitacion = models.AutoField(primary_key=True)
     apicultor = models.ForeignKey(Apicultor, on_delete=models.CASCADE, related_name='capacitaciones')
@@ -136,3 +146,7 @@ class ApicultorCapacitacion(models.Model):
     anio_cursado = models.PositiveIntegerField(blank=True, null=True, verbose_name="Año de Cursado")
     titulo_imagen = models.ImageField(upload_to='apicultura/capacitaciones/', blank=True, null=True, verbose_name="Imagen del Título")
     fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Carga")
+
+    class Meta:
+        verbose_name = "Capacitación"
+        verbose_name_plural = "Capacitaciones"

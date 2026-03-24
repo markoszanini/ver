@@ -29,13 +29,78 @@ class Expediente(models.Model):
     
     # Opcional: Si el origen fue un vecino
     vecino_titular = models.ForeignKey(Vecino, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes', verbose_name="Vecino Titular")
+    
+    # Carga manual para vecinos no registrados
+    nombre_titular_manual = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nombre Titular (Manual)")
+    apellido_titular_manual = models.CharField(max_length=100, blank=True, null=True, verbose_name="Apellido Titular (Manual)")
+    dni_titular_manual = models.CharField(max_length=20, blank=True, null=True, verbose_name="DNI Titular (Manual)")
+
     class Meta:
         verbose_name = "Expediente"
         verbose_name_plural = "Expedientes"
         ordering = ['-fecha_ingreso', '-id_expediente']
 
     def __str__(self):
-        return f"{self.nro_expediente} - {self.asunto}"
+        return f"{self.nro_expediente or 'S/N'} - {self.asunto[:30] if self.asunto else 'Sin asunto'}..."
+
+    @property
+    def origen_display(self):
+        if self.vecino_titular:
+            return f"Vecino: {self.vecino_titular.user.get_full_name()} (DNI: {self.vecino_titular.dni})"
+        if self.dni_titular_manual:
+            nombre = f"{self.nombre_titular_manual or ''} {self.apellido_titular_manual or ''}".strip()
+            return f"Manual: {nombre} (DNI: {self.dni_titular_manual})"
+        if self.origen_oficina:
+            return f"Oficina: {self.origen_oficina.nombre}"
+        if self.origen_departamento:
+            return f"Depto: {self.origen_departamento.nombre}"
+        if self.origen_area:
+            return f"Área: {self.origen_area.nombre}"
+        return "Mesa de Entradas"
+
+    @property
+    def ubicacion_display(self):
+        if self.actual_oficina:
+            return f"Ofi: {self.actual_oficina.nombre}"
+        if self.actual_departamento:
+            return f"Depto: {self.actual_departamento.nombre}"
+        if self.actual_direccion:
+            return f"Dir: {self.actual_direccion.nombre}"
+        if self.actual_area:
+            return f"Área: {self.actual_area.nombre}"
+        return "Pendiente de Asignación"
+
+    def save(self, *args, **kwargs):
+        if not self.nro_expediente:
+            import datetime
+            anio_actual = datetime.date.today().year
+            
+            # Buscamos todos los expedientes del año actual para encontrar el máximo
+            # Filtramos por los que terminan en /YYYY
+            expedientes_anio = Expediente.objects.filter(nro_expediente__endswith=f"/{anio_actual}")
+            
+            numeros = []
+            for exp in expedientes_anio:
+                try:
+                    # El formato es NNNN/YYYY o NNNNN/YYYY
+                    parte_num = exp.nro_expediente.split('/')[0]
+                    numeros.append(int(parte_num))
+                except (ValueError, IndexError):
+                    continue
+            
+            proximo_numero = max(numeros) + 1 if numeros else 1
+            
+            # Formatear con ceros a la izquierda (mínimo 4)
+            self.nro_expediente = f"{proximo_numero:04d}/{anio_actual}"
+            
+        # Intentar vinculación automática por DNI si se cargó manual y no hay vínculo
+        if not self.vecino_titular and self.dni_titular_manual:
+            from portal.models import Vecino
+            vecino = Vecino.objects.filter(dni=self.dni_titular_manual).first()
+            if vecino:
+                self.vecino_titular = vecino
+            
+        super().save(*args, **kwargs)
 
 class MovimientoExpediente(models.Model):
     id_movimiento = models.AutoField(primary_key=True)

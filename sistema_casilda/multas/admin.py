@@ -5,6 +5,22 @@ from .models import Persona, Vehiculo, Inmueble, Animal, Inspector, Motivo, Acta
 class PersonaAdmin(admin.ModelAdmin):
     list_display = ('dni', 'apellido', 'nombre', 'localidad')
     search_fields = ('dni', 'apellido', 'nombre')
+    
+    fieldsets = (
+        ('Información Personal', {
+            'fields': (
+                ('nombre', 'apellido'),
+                ('dni', 'fecha_nacimiento'),
+                ('telefono', 'correo'),
+            )
+        }),
+        ('Ubicación', {
+            'fields': (
+                ('calle', 'numero'),
+                ('localidad', 'codigo_postal'),
+            )
+        }),
+    )
 
 @admin.register(Vehiculo)
 class VehiculoAdmin(admin.ModelAdmin):

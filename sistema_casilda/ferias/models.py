@@ -1,4 +1,5 @@
 from django.db import models
+from portal.models import Localidad
 
 class RubroFeriante(models.Model):
     id_rubro = models.AutoField(primary_key=True)
@@ -48,7 +49,7 @@ class Feriante(models.Model):
     sexo = models.CharField(max_length=10, blank=True, null=True, verbose_name="Sexo")
     mail = models.EmailField(max_length=150, blank=True, null=True, verbose_name="Correo Electrónico")
     telefono = models.CharField(max_length=30, blank=True, null=True, verbose_name="Teléfono")
-    ciudad = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ciudad")
+    localidad = models.ForeignKey(Localidad, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Localidad")
     direccion = models.CharField(max_length=150, blank=True, null=True, verbose_name="Dirección")
     red_social = models.CharField(max_length=150, blank=True, null=True, verbose_name="Red Social")
     nombre_emprendimiento = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nombre Emprendimiento")

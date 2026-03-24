@@ -1,9 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Portal del Vecino - Casilda{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'img/logo_icon.png' %}">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -11,18 +14,28 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        :root {
+            --muni-green: #14855e;
+            --muni-green-dark: #0a5a3f;
+            --muni-yellow: #fec107;
+            --muni-blue: #00adef;
+            --muni-dark: #212529;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            color: #2b2b2b;
+            background-color: #f4f7f6;
+            color: var(--muni-dark);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
         .navbar-custom {
-            background-color: #0b3d91; /* Institutional blue */
+            background-color: var(--muni-green);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 1rem 0;
+            padding: 0.8rem 0;
         }
         .navbar-brand {
             font-weight: 700;
@@ -34,41 +47,87 @@
             transition: all 0.3s ease;
         }
         .nav-link:hover {
-            color: #ffca28 !important; /* Accent gold */
+            color: var(--muni-yellow) !important;
         }
         .btn-accent {
-            background-color: #ffca28;
-            color: #0b3d91;
+            background-color: var(--muni-yellow);
+            color: var(--muni-dark);
             font-weight: 600;
             border: none;
             transition: all 0.3s ease;
         }
         .btn-accent:hover {
-            background-color: #ffb300;
-            color: #0b3d91;
+            background-color: #e5ad06;
+            color: var(--muni-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(255, 202, 40, 0.4);
+            box-shadow: 0 4px 8px rgba(254, 193, 7, 0.4);
         }
         .content-wrap {
             flex: 1;
         }
         .footer {
-            background-color: #0b3d91;
+            background-color: var(--muni-green);
             color: #ffffff;
-            padding: 2rem 0;
+            padding: 2.5rem 0;
             margin-top: auto;
+            border-top: 4px solid var(--muni-yellow);
         }
-        /* Card Styles */
+        /* Glassmorphism Styles */
         .glass-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .glass-hero {
+            background: linear-gradient(135deg, var(--muni-green) 0%, var(--muni-green-dark) 100%);
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--muni-yellow);
+        }
+        .glass-hero::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("https://www.transparenttextures.com/patterns/cubes.png");
+            opacity: 0.1;
+        }
+
+        .btn-muni {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .btn-muni-primary {
+            background-color: var(--muni-yellow);
+            color: var(--muni-dark);
+        }
+        .btn-muni-primary:hover {
+            background-color: #f7b731;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(254, 193, 7, 0.3);
+        }
+
+        .animate-up {
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         /* Alert toasts */
         .messages {
@@ -86,7 +145,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand text-white d-flex align-items-center" href="{% url 'portal:home' %}">
-                <i class="fa-solid fa-building-columns me-2"></i> Municipalidad de Casilda
+                <img src="{% static 'img/logo_icon.png' %}" alt="Logo" height="40" class="me-2 filter-white"> 
+                <span class="d-none d-sm-inline">Municipalidad de Casilda</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
