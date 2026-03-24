@@ -119,7 +119,9 @@ input[type="email"],
 input[type="password"], 
 input[type="date"], 
 textarea, 
-select {
+select,
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
     border-radius: 12px !important;
     border: 1px solid rgba(0,0,0,0.1) !important;
     padding: 0.6rem 1rem !important;
@@ -128,30 +130,76 @@ select {
     color: #212529 !important;
 }
 
-.form-control:focus, 
-input:focus, 
-textarea:focus, 
-select:focus {
-    border-color: var(--muni-green) !important;
+/* Inlines and Form Rows - ELIMINATE DARK STRIPES */
+.form-row, .inline-related, .tabular, .module {
     background-color: #ffffff !important;
     color: #212529 !important;
-    box-shadow: 0 0 0 4px rgba(20, 133, 94, 0.1) !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.inline-group .tabular td.original {
+    background-color: #f8fafc !important;
+}
+
+.add-row, .add-item {
+    background-color: #f1f5f9 !important;
+    padding: 1rem !important;
+    border-radius: 0 0 15px 15px !important;
+}
+
+/* Tabs Modernization (Portal Style) */
+.nav-tabs {
+    border-bottom: 3px solid #f1f5f9 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.nav-tabs .nav-link {
+    border: none !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    padding: 1rem 2rem !important;
+    border-radius: 0 !important;
+    transition: all 0.3s ease !important;
+}
+
+.nav-tabs .nav-link.active {
+    background: transparent !important;
+    color: var(--muni-green) !important;
+    border-bottom: 3px solid var(--muni-green) !important;
 }
 
 /* Labels */
-label, .col-form-label {
+label, .col-form-label, .help {
     font-weight: 600 !important;
     color: #374151 !important;
     margin-bottom: 0.5rem !important;
 }
 
-/* Fix for dark mode if it's being forced */
+/* Fix for dark mode - AGGRESSIVE LIGHT OVERRIDE */
+.dark-mode, 
 .dark-mode .content-wrapper,
 .dark-mode .card,
 .dark-mode .card-header,
-.dark-mode .form-control {
+.dark-mode .card-body,
+.dark-mode .card-footer,
+.dark-mode .form-control,
+.dark-mode .main-footer,
+.dark-mode .nav-tabs .nav-link,
+.dark-mode .form-row,
+.dark-mode .inline-related,
+.dark-mode .submit-row {
     background-color: #ffffff !important;
     color: #212529 !important;
+    border-color: #f1f5f9 !important;
+}
+
+.dark-mode label, 
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3, 
+.dark-mode h4, 
+.dark-mode .card-title {
+    color: #1a202c !important;
 }
 
 /* Buttons (Rounded Premium) */
@@ -162,6 +210,7 @@ label, .col-form-label {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.3s ease !important;
+    color: white !important; /* Ensure white text on buttons */
 }
 
 .btn-primary, .btn-success, .btn-info {
