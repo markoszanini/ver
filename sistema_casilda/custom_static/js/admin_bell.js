@@ -1,51 +1,103 @@
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Admin Bell script loaded.");
     
-    // FORCE LIGHT MODE (Runtime)
-    document.body.classList.remove('dark-mode');
-    document.querySelectorAll('.dark-mode').forEach(el => el.classList.remove('dark-mode'));
-    localStorage.setItem('jazzmin-dark-mode', 'false');
+    // FORCE LIGHT MODE (Nuclear Option)
+    const forceLight = () => {
+        const body = document.body;
+        
+        // Remove all possible dark classes
+        const darkClasses = [
+            'dark-mode', 'sidebar-dark-primary', 'sidebar-dark-warning', 
+            'sidebar-dark-success', 'sidebar-dark-danger', 'sidebar-dark-info',
+            'navbar-dark', 'navbar-black', 'navbar-navy'
+        ];
+        
+        darkClasses.forEach(cls => {
+            body.classList.remove(cls);
+            document.querySelectorAll('.' + cls).forEach(el => el.classList.remove(cls));
+        });
+
+        // Add light classes
+        body.classList.add('sidebar-light-primary');
+        const navbar = document.querySelector('.main-header.navbar');
+        if (navbar) {
+            navbar.classList.remove('navbar-dark');
+            navbar.classList.add('navbar-light', 'navbar-white');
+        }
+        
+        const sidebar = document.querySelector('.main-sidebar');
+        if (sidebar) {
+            sidebar.classList.remove('sidebar-dark-primary');
+            sidebar.classList.add('sidebar-light-primary');
+        }
+
+        localStorage.setItem('jazzmin-dark-mode', 'false');
+    };
+
+    forceLight();
+    // Run again after a short delay in case Jazzmin JS reapplies them
+    setTimeout(forceLight, 500);
+    setTimeout(forceLight, 2000);
     
     // INJECT ABSOLUTE LIGHT THEME CSS
     const style = document.createElement('style');
     style.textContent = `
-        /* Override Jazzmin Dark Themes */
+        /* Override Jazzmin Dark Themes with extreme specificity */
         html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .content, .info-box, .modal-content, .form-row, .inline-related, .tabular, .module, .submit-row, .content-header {
             background-color: #ffffff !important;
             background: #ffffff !important;
             color: #212529 !important;
         }
 
-        /* Navbar & Sidebar Clean Portal Style */
+        /* Sidebar ABSOULTE LIGHT FORCE */
+        .main-sidebar, .main-sidebar *, .sidebar, .sidebar * {
+            background-color: #ffffff !important;
+            color: #475569 !important;
+        }
+        
+        .main-sidebar .nav-link.active {
+            background-color: #14855e !important;
+            color: #ffffff !important;
+        }
+
+        /* Navbar & Brand */
         .main-header.navbar {
             background: #ffffff !important;
             border-bottom: 3px solid #14855e !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
         }
-        .main-sidebar {
-            background: #ffffff !important;
-            border-right: 1px solid #e2e8f0 !important;
-        }
-        .nav-sidebar .nav-item > .nav-link.active {
-            background: #14855e !important;
-            color: #ffffff !important;
-        }
-        .brand-link {
+        .brand-link, .brand-link * {
             background: #ffffff !important;
             color: #14855e !important;
             border-bottom: 2px solid #fec107 !important;
         }
 
         /* Forms & Inputs - High Contrast */
-        .form-control, input, select, textarea {
+        .form-control, input, select, textarea, .select2-selection {
             background-color: #ffffff !important;
             color: #1a202c !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 8px !important;
         }
+        
+        /* Buttons - FORCING PORTAL COLORS */
+        .btn-primary, .btn-success, .btn-info, .btn-warning {
+            background-color: #14855e !important;
+            border-color: #14855e !important;
+            color: #ffffff !important;
+            border-radius: 50px !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+        }
+        
+        .btn-info:hover, .btn-primary:hover {
+            background-color: #0a5a3f !important;
+            transform: translateY(-2px);
+        }
+
         label, .card-title, h1, h2, h3 {
             color: #14855e !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
 
         /* Tables & Inlines */
