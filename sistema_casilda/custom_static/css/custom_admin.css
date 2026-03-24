@@ -1,6 +1,6 @@
 /* 
-   Casilda Conecta - Premium Admin Theme (Jazzmin)
-   Glassmorphism + Inter Typography + Modern UI
+   Casilda Conecta - ABSOLUTE LIGHT Admin Theme
+   No more dark areas. 100% Readable.
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -11,10 +11,14 @@
     --muni-yellow: #fec107;
     --muni-blue: #00adef;
     --muni-dark: #212529;
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-    --admin-bg: #f4f7f6;
+    --admin-bg: #f8fafc; /* Solid light background */
+}
+
+/* GLOBAL RESET FOR DARK MODE - NO DARK ALLOWED */
+html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .content, .info-box, .modal-content, .form-row, .inline-related, .tabular, .module, .submit-row {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #212529 !important;
 }
 
 /* Typography Overhaul */
@@ -22,354 +26,118 @@ body, .main-header, .main-sidebar, .content-wrapper, .card-title, .btn, .form-co
     font-family: 'Inter', sans-serif !important;
 }
 
-/* Background & Global spacing */
-body, .wrapper, .content-wrapper {
-    background-color: var(--admin-bg) !important;
-}
-
-/* Glassmorphism Classes */
-.glass-effect {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid var(--glass-border) !important;
-    box-shadow: var(--glass-shadow) !important;
-}
-
-/* Navbar Modernization */
+/* Navbar (Light & Clean) */
 .main-header.navbar {
-    background: rgba(20, 133, 94, 0.8) !important;
-    backdrop-filter: blur(10px);
-    border: none !important;
-    border-bottom: 3px solid var(--muni-yellow) !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-}
-
-.main-header.navbar .nav-link, 
-.main-header.navbar .navbar-brand {
-    color: #ffffff !important;
-    font-weight: 500;
-}
-
-/* Sidebar Customization (Clean & Professional) */
-.main-sidebar {
-    background: var(--muni-green-dark) !important;
-    box-shadow: 4px 0 15px rgba(0,0,0,0.05) !important;
-}
-
-.brand-link {
-    background: var(--muni-green-dark) !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
-    padding: 1rem !important;
-}
-
-.brand-link .brand-text {
-    font-weight: 700 !important;
-    letter-spacing: -0.5px;
-}
-
-.sidebar .nav-link {
-    border-radius: 12px !important;
-    margin: 4px 10px !important;
-    padding: 10px 15px !important;
-    transition: all 0.3s ease !important;
-}
-
-.sidebar .nav-link:hover {
-    background: rgba(255,255,255,0.1) !important;
-    transform: translateX(5px);
-}
-
-.nav-sidebar .nav-item > .nav-link.active {
-    background: var(--muni-yellow) !important;
-    color: var(--muni-dark) !important;
-    box-shadow: 0 4px 12px rgba(254, 193, 7, 0.3) !important;
-}
-
-.nav-sidebar .nav-item > .nav-link.active i {
-    color: var(--muni-dark) !important;
-}
-
-/* Cards & Info Boxes (Major Glow-up) */
-.card, .info-box {
-    background: #ffffff !important; /* Force solid white for better readability */
-    border-radius: 20px !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important;
-    overflow: hidden;
-    margin-bottom: 2rem !important;
-    color: var(--muni-dark) !important;
-}
-
-.card-header {
-    background: #f8fafc !important;
-    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
-    padding: 1.25rem !important;
-}
-
-.card-title {
-    font-weight: 700 !important;
-    color: var(--muni-green-dark) !important;
-}
-
-/* Form Controls - FORCING VISIBILITY */
-.form-control, 
-input[type="text"], 
-input[type="number"], 
-input[type="email"], 
-input[type="password"], 
-input[type="date"], 
-textarea, 
-select,
-.select2-container--default .select2-selection--single,
-.select2-container--default .select2-selection--multiple {
-    border-radius: 12px !important;
-    border: 1px solid rgba(0,0,0,0.1) !important;
-    padding: 0.6rem 1rem !important;
-    height: auto !important;
-    background-color: #ffffff !important;
-    color: #212529 !important;
-}
-
-/* Inlines and Form Rows - ELIMINATE DARK STRIPES */
-.form-row, .inline-related, .tabular, .module {
-    background-color: #ffffff !important;
-    color: #212529 !important;
-    border-bottom: 1px solid #f1f5f9 !important;
-}
-
-.inline-group .tabular td.original {
-    background-color: #f8fafc !important;
-}
-
-.add-row, .add-item {
-    background-color: #f1f5f9 !important;
-    padding: 1rem !important;
-    border-radius: 0 0 15px 15px !important;
-}
-
-/* Tabs Modernization (Portal Style) */
-.nav-tabs {
-    border-bottom: 3px solid #f1f5f9 !important;
-    margin-bottom: 1.5rem !important;
-}
-
-.nav-tabs .nav-link {
-    border: none !important;
-    color: #64748b !important;
-    font-weight: 600 !important;
-    padding: 1rem 2rem !important;
-    border-radius: 0 !important;
-    transition: all 0.3s ease !important;
-}
-
-.nav-tabs .nav-link.active {
-    background: transparent !important;
-    color: var(--muni-green) !important;
+    background: #ffffff !important;
     border-bottom: 3px solid var(--muni-green) !important;
-}
-
-/* Labels */
-label, .col-form-label, .help {
-    font-weight: 600 !important;
-    color: #374151 !important;
-    margin-bottom: 0.5rem !important;
-}
-
-/* Fix for dark mode - AGGRESSIVE LIGHT OVERRIDE */
-.dark-mode, 
-.dark-mode .content-wrapper,
-.dark-mode .card,
-.dark-mode .card-header,
-.dark-mode .card-body,
-.dark-mode .card-footer,
-.dark-mode .form-control,
-.dark-mode .main-footer,
-.dark-mode .nav-tabs .nav-link,
-.dark-mode .form-row,
-.dark-mode .inline-related,
-.dark-mode .submit-row {
-    background-color: #ffffff !important;
-    color: #212529 !important;
-    border-color: #f1f5f9 !important;
-}
-
-.dark-mode label, 
-.dark-mode h1, 
-.dark-mode h2, 
-.dark-mode h3, 
-.dark-mode h4, 
-.dark-mode .card-title {
-    color: #1a202c !important;
-}
-
-/* Buttons (Rounded Premium) */
-.btn {
-    border-radius: 50px !important;
-    padding: 0.6rem 2rem !important;
-    font-weight: 600 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease !important;
-    color: white !important; /* Ensure white text on buttons */
-}
-
-.btn-primary, .btn-success, .btn-info {
-    background: var(--muni-green) !important;
-    border: none !important;
-    box-shadow: 0 4px 12px rgba(20, 133, 94, 0.2) !important;
-}
-
-.btn-primary:hover, .btn-success:hover {
-    background: var(--muni-green-dark) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(10, 90, 63, 0.3) !important;
-}
-
-.btn-danger {
-    border-radius: 50px !important;
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2) !important;
-}
-
-/* Tables (Zebra + Modern) */
-.table {
-    border-collapse: separate !important;
-    border-spacing: 0 8px !important;
-}
-
-.table thead th {
-    background: #f8fafc !important;
-    border: none !important;
-    color: #64748b !important;
-    font-size: 0.75rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    padding: 1rem !important;
-}
-
-.table tbody tr {
-    background: white !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
-    transition: all 0.2s ease;
-}
-
-.table tbody tr:hover {
-    transform: scale(1.005);
     box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
 }
 
-.table td {
-    padding: 1rem !important;
-    border: none !important;
+/* Sidebar (Light Style like Portal) */
+.main-sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid #e2e8f0 !important;
 }
 
-.table td:first-child { border-radius: 12px 0 0 12px !important; }
-.table td:last-child { border-radius: 0 12px 12px 0 !important; }
-
-/* Dashboard Info Boxes Overlay */
-.info-box {
-    transition: all 0.3s ease;
+.brand-link {
+    background: #ffffff !important;
+    color: var(--muni-green) !important;
+    border-bottom: 2px solid var(--muni-yellow) !important;
 }
 
-.info-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.1) !important;
+.sidebar .nav-link {
+    color: #475569 !important;
+    font-weight: 500 !important;
 }
 
-.info-box .info-box-icon {
+.nav-sidebar .nav-item > .nav-link.active {
+    background: var(--muni-green) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(20, 133, 94, 0.2) !important;
+}
+
+/* Cards & Sections */
+.card, .info-box, .module {
     border-radius: 15px !important;
-    margin: 10px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03) !important;
+    margin-bottom: 1.5rem !important;
 }
 
-/* Sub-nav and Breadcrumbs */
-.content-header {
-    padding: 3rem 1.5rem !important;
-    background: linear-gradient(135deg, var(--muni-green) 0%, var(--muni-green-dark) 100%) !important;
+.card-header, .module h2 {
+    background: #f8fafc !important;
+    color: var(--muni-green-dark) !important;
+    font-weight: 800 !important;
+}
+
+/* FORM CONTROLS - HIGH CONTRAST */
+.form-control, input, select, textarea, .select2-selection {
+    background-color: #ffffff !important;
+    color: #1a202c !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+}
+
+.form-control:focus, input:focus {
+    border-color: var(--muni-green) !important;
+    box-shadow: 0 0 0 3px rgba(20, 133, 94, 0.1) !important;
+}
+
+/* INLINES & TABLES */
+.inline-related, .tabular, .tabular td, .tabular th {
+    background-color: #ffffff !important;
+    color: #1a202c !important;
+}
+
+.tabular th {
+    background-color: #f1f5f9 !important;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+}
+
+/* Tabs */
+.nav-tabs .nav-link.active {
+    color: var(--muni-green) !important;
+    border-bottom: 3px solid var(--muni-green) !important;
+    background-color: transparent !important;
+}
+
+/* BUTTONS (Rounded Muni Style) */
+.btn {
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    padding: 0.5rem 1.5rem !important;
+}
+
+.btn-primary, .btn-success {
+    background-color: var(--muni-green) !important;
+    border: none !important;
     color: white !important;
-    margin-bottom: 2rem !important;
-    border-bottom: 5px solid var(--muni-yellow);
-    position: relative;
-    overflow: hidden;
 }
 
-.content-header::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: url("https://www.transparenttextures.com/patterns/cubes.png");
-    opacity: 0.1;
+/* Content Header (The "Hero" part) */
+.content-header {
+    background-color: #f8fafc !important;
+    padding: 2rem 1rem !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    margin-bottom: 2rem !important;
 }
 
 .content-header h1 {
-    color: white !important;
+    color: var(--muni-dark) !important;
     font-weight: 800 !important;
-    font-size: 2.2rem !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: -1px;
 }
 
-.content-header .breadcrumb {
-    background: rgba(255,255,255,0.1) !important;
-    backdrop-filter: blur(5px);
-    border-radius: 50px;
-    padding: 0.5rem 1.5rem !important;
-    display: inline-flex;
+/* ABSOLUTE DARK MODE OVERRIDE - FORCE EVERYTHING TO LIGHT */
+[class*="dark-mode"], .dark-mode, .dark-mode * {
+    background-color: #ffffff !important;
+    color: #1a202c !important;
+    border-color: #e2e8f0 !important;
 }
 
-.content-header .breadcrumb-item a {
-    color: rgba(255,255,255,0.8) !important;
-}
-
-.content-header .breadcrumb-item.active {
+.dark-mode .nav-link.active, .dark-mode .btn-primary, .dark-mode .btn-success {
+    background-color: var(--muni-green) !important;
     color: white !important;
-}
-
-/* Login Page Overhaul */
-.login-page {
-    background: linear-gradient(135deg, var(--muni-green) 0%, var(--muni-green-dark) 100%) !important;
-}
-
-.login-page::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: url("https://www.transparenttextures.com/patterns/cubes.png");
-    opacity: 0.1;
-}
-
-.login-box {
-    width: 400px !important;
-}
-
-.login-card-body {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(20px) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 25px !important;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
-    padding: 2.5rem !important;
-}
-
-.login-logo a {
-    color: white !important;
-    font-weight: 800 !important;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-/* Form groups alignment fix for admin forms */
-.form-row {
-    padding: 1.5rem !important;
-    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
-}
-
-.form-row label {
-    margin-bottom: 10px !important;
-    display: block !important;
-}
-
-/* Submit bar at bottom */
-.submit-row {
-    background: #ffffff !important;
-    border-top: 1px solid rgba(0,0,0,0.05) !important;
-    border-radius: 0 0 20px 20px !important;
-    padding: 1.5rem !important;
-    margin: 0 !important;
 }

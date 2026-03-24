@@ -170,7 +170,7 @@ JAZZMIN_SETTINGS = {
             "apicultura.Extraccion",
             "apicultura.LiquidacionExtraccion"
         ],"show_ui_builder": False,
-    "custom_css": "css/custom_admin.css?v=3",
+    "custom_css": "css/custom_admin.css?v=10",
     "custom_js": "js/admin_bell.js",
     "custom_links": {
         "impuestos": [
@@ -291,21 +291,21 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "flatly",
+    "theme": "cosmo",
     "dark_mode_theme": None,
     "navbar_small_text": False,
     "footer_small_text": False,
     "body_small_text": False,
     "brand_small_text": False,
-    "brand_colour": "navbar-success",
+    "brand_colour": "navbar-light",
     "accent": "accent-success",
-    "navbar": "navbar-success navbar-dark",
+    "navbar": "navbar-white navbar-light",
     "no_navbar_border": True,
     "navbar_fixed": True,
     "layout_boxed": False,
     "footer_fixed": False,
     "sidebar_fixed": True,
-    "sidebar": "sidebar-dark-success",
+    "sidebar": "sidebar-light-success",
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
     "sidebar_nav_child_indent": False,

@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Admin Bell script loaded.");
     
+    // FORCE LIGHT MODE
+    document.body.classList.remove('dark-mode');
+    document.querySelectorAll('.dark-mode').forEach(el => el.classList.remove('dark-mode'));
+    localStorage.setItem('jazzmin-dark-mode', 'false');
+    
     // Add custom animation styles to the head
     const style = document.createElement('style');
     style.textContent = `
