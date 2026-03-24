@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Admin Bell script loaded.");
     
-    // FORCE LIGHT MODE (Nuclear Option)
+    // FORCE LIGHT MODE (CRM Style)
     const forceLight = () => {
         const body = document.body;
         
@@ -17,119 +17,93 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll('.' + cls).forEach(el => el.classList.remove(cls));
         });
 
-        // Add light classes
+        // Force Sidebar Light
         body.classList.add('sidebar-light-primary');
-        const navbar = document.querySelector('.main-header.navbar');
-        if (navbar) {
-            navbar.classList.remove('navbar-dark');
-            navbar.classList.add('navbar-light', 'navbar-white');
-        }
-        
         const sidebar = document.querySelector('.main-sidebar');
         if (sidebar) {
             sidebar.classList.remove('sidebar-dark-primary');
             sidebar.classList.add('sidebar-light-primary');
+            sidebar.style.backgroundColor = "#ffffff";
+        }
+
+        // Force Navbar Light/Green
+        const navbar = document.querySelector('.main-header.navbar');
+        if (navbar) {
+            navbar.classList.remove('navbar-dark');
+            navbar.classList.add('navbar-light');
+            navbar.style.backgroundColor = "#1E7F5C";
         }
 
         localStorage.setItem('jazzmin-dark-mode', 'false');
     };
 
     forceLight();
-    // Run again after a short delay in case Jazzmin JS reapplies them
     setTimeout(forceLight, 500);
     setTimeout(forceLight, 2000);
     
-    // INJECT ABSOLUTE LIGHT THEME CSS
+    // INJECT CRM LIGHT THEME CSS
     const style = document.createElement('style');
     style.textContent = `
-        /* Override Jazzmin Dark Themes with extreme specificity */
-        html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .content, .info-box, .modal-content, .form-row, .inline-related, .tabular, .module, .submit-row, .content-header {
-            background-color: #ffffff !important;
-            background: #ffffff !important;
-            color: #212529 !important;
+        /* Overrides para Admin Casilda CRM */
+        html, body, .wrapper, .content-wrapper, .main-sidebar, .card, .content, .info-box, .modal-content, .form-row, .inline-related, .tabular, .module, .submit-row {
+            background-color: #F5F7FA !important;
+            color: #1F2937 !important;
         }
 
-        /* Sidebar ABSOULTE LIGHT FORCE */
-        .main-sidebar, .main-sidebar *, .sidebar, .sidebar * {
-            background-color: #ffffff !important;
-            color: #475569 !important;
-        }
-        
-        .main-sidebar .nav-link.active {
-            background-color: #14855e !important;
-            color: #ffffff !important;
-        }
-
-        /* Navbar & Brand */
         .main-header.navbar {
-            background: #ffffff !important;
-            border-bottom: 3px solid #14855e !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-        }
-        .brand-link, .brand-link * {
-            background: #ffffff !important;
-            color: #14855e !important;
-            border-bottom: 2px solid #fec107 !important;
+            background-color: #1E7F5C !important;
         }
 
-        /* Forms & Inputs - High Contrast */
-        .form-control, input, select, textarea, .select2-selection {
+        .main-sidebar {
+            background-color: #ffffff !important;
+            border-right: 1px solid #E5E7EB !important;
+        }
+
+        .brand-link {
+            background-color: #ffffff !important;
+            color: #1E7F5C !important;
+            border-bottom: 2px solid #F2B705 !important;
+        }
+
+        /* Buttons CRM */
+        .btn-primary, .btn-success, .btn-info {
+            background-color: #1E7F5C !important;
+            border-color: #1E7F5C !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+        }
+
+        .btn-warning, .add-row a {
+            background-color: #F2B705 !important;
+            border-color: #F2B705 !important;
+            color: #1F2937 !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+        }
+
+        /* Inputs Contrast */
+        .form-control, input, select, textarea {
             background-color: #ffffff !important;
             color: #1a202c !important;
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 8px !important;
-        }
-        
-        /* Buttons - FORCING PORTAL COLORS */
-        .btn-primary, .btn-success, .btn-info, .btn-warning {
-            background-color: #14855e !important;
-            border-color: #14855e !important;
-            color: #ffffff !important;
-            border-radius: 50px !important;
-            font-weight: 600 !important;
-            text-transform: uppercase !important;
-        }
-        
-        .btn-info:hover, .btn-primary:hover {
-            background-color: #0a5a3f !important;
-            transform: translateY(-2px);
-        }
-
-        label, .card-title, h1, h2, h3 {
-            color: #14855e !important;
-            font-weight: 800 !important;
-        }
-
-        /* Tables & Inlines */
-        .table, .tabular, .inline-related {
-            background-color: #ffffff !important;
-        }
-        .table thead th, .tabular th {
-            background-color: #f8fafc !important;
-            color: #64748b !important;
-        }
-        .table tbody tr, .tabular tr {
-            background-color: #ffffff !important;
-            color: #212529 !important;
+            border: 1px solid #E5E7EB !important;
         }
 
         /* Animations */
         @keyframes pulse-bell {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
         .bell-pulse {
             animation: pulse-bell 2s infinite;
-            color: #fec107 !important;
+            color: #F2B705 !important;
         }
         .navbar-badge-premium {
-            font-size: 0.6rem;
+            background-color: #F2B705 !important;
+            color: #1F2937 !important;
             font-weight: 800;
-            padding: 2px 5px;
             border-radius: 50px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            border: 1px solid white;
         }
     `;
     document.head.appendChild(style);
@@ -142,12 +116,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 let badgeHTML = "";
                 let pulseClass = "";
                 if (data.unread_count > 0) {
-                    badgeHTML = `<span class="badge badge-danger navbar-badge navbar-badge-premium">${data.unread_count}</span>`;
+                    badgeHTML = `<span class="badge badge-warning navbar-badge navbar-badge-premium">${data.unread_count}</span>`;
                     pulseClass = "bell-pulse";
                 }
                 const bellHTML = `
                 <li class="nav-item position-relative me-3">
-                    <a class="nav-link" href="/admin/reclamos/mensajereclamo/?leido__exact=0&es_empleado__exact=0" title="Mensajes de Reclamos">
+                    <a class="nav-link" href="/admin/reclamos/mensajereclamo/?leido__exact=0&es_empleado__exact=0" title="Mensajes de Reclamos" style="color:white !important;">
                         <i class="fas fa-bell ${pulseClass}"></i>
                         ${badgeHTML}
                     </a>

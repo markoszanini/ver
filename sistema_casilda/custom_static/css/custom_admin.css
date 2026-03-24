@@ -1,143 +1,172 @@
 /* 
-   Casilda Conecta - ABSOLUTE LIGHT Admin Theme
-   No more dark areas. 100% Readable.
+   Casilda Conecta - CRM/ERP Light Theme
+   Strict Palette: Primary #1E7F5C, Action #F2B705, Background #F5F7FA
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --muni-green: #14855e;
-    --muni-green-dark: #0a5a3f;
-    --muni-yellow: #fec107;
-    --muni-blue: #00adef;
-    --muni-dark: #212529;
-    --admin-bg: #f8fafc; /* Solid light background */
+    --muni-green: #1E7F5C;
+    --muni-green-dark: #166A4C;
+    --muni-green-light: #E6F4EE;
+    --muni-yellow: #F2B705;
+    --muni-yellow-hover: #D89F04;
+    --muni-dark: #1F2937;
+    --muni-text-muted: #6B7280;
+    --muni-bg: #F5F7FA;
+    --card-bg: #FFFFFF;
+    --border-color: #E5E7EB;
 }
 
-/* GLOBAL RESET FOR DARK MODE - NO DARK ALLOWED */
+/* Force Light Mode Global */
 html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .content, .info-box, .modal-content, .form-row, .inline-related, .tabular, .module, .submit-row {
-    background-color: #ffffff !important;
-    background: #ffffff !important;
-    color: #212529 !important;
-}
-
-/* Typography Overhaul */
-body, .main-header, .main-sidebar, .content-wrapper, .card-title, .btn, .form-control {
+    background-color: var(--muni-bg) !important;
+    color: var(--muni-dark) !important;
     font-family: 'Inter', sans-serif !important;
 }
 
-/* Navbar (Light & Clean) */
-.main-header.navbar {
-    background: #ffffff !important;
-    border-bottom: 3px solid var(--muni-green) !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+.content-wrapper {
+    background-color: var(--muni-bg) !important;
 }
 
-/* Sidebar (Light Style like Portal) */
+/* Navbar (Professional Green) */
+.main-header.navbar {
+    background-color: var(--muni-green) !important;
+    border-bottom: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.main-header.navbar .nav-link, .main-header.navbar .navbar-brand {
+    color: #ffffff !important;
+}
+
+/* Sidebar (Clean White) */
 .main-sidebar {
-    background: #ffffff !important;
-    border-right: 1px solid #e2e8f0 !important;
+    background-color: #ffffff !important;
+    border-right: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
 }
 
 .brand-link {
-    background: #ffffff !important;
+    background-color: #ffffff !important;
     color: var(--muni-green) !important;
     border-bottom: 2px solid var(--muni-yellow) !important;
+    text-align: center;
 }
 
 .sidebar .nav-link {
-    color: #475569 !important;
+    color: var(--muni-text-muted) !important;
+    margin: 4px 10px !important;
+    border-radius: 8px !important;
     font-weight: 500 !important;
 }
 
-.nav-sidebar .nav-item > .nav-link.active {
-    background: var(--muni-green) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 10px rgba(20, 133, 94, 0.2) !important;
+.sidebar .nav-link:hover {
+    background-color: var(--muni-green-light) !important;
+    color: var(--muni-green) !important;
 }
 
-/* Cards & Sections */
+.nav-sidebar .nav-item > .nav-link.active {
+    background-color: var(--muni-green) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 8px rgba(30, 127, 92, 0.2) !important;
+}
+
+/* CARDS CRM STYLE */
 .card, .info-box, .module {
-    border-radius: 15px !important;
-    border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.03) !important;
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
     margin-bottom: 1.5rem !important;
 }
 
 .card-header, .module h2 {
-    background: #f8fafc !important;
-    color: var(--muni-green-dark) !important;
-    font-weight: 800 !important;
+    background-color: #fcfcfc !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--muni-green) !important;
+    font-weight: 700 !important;
+    padding: 1rem 1.25rem !important;
 }
 
-/* FORM CONTROLS - HIGH CONTRAST */
+/* FORM CONTROLS CRM */
 .form-control, input, select, textarea, .select2-selection {
     background-color: #ffffff !important;
-    color: #1a202c !important;
-    border: 1px solid #cbd5e1 !important;
+    color: var(--muni-dark) !important;
+    border: 1px solid var(--border-color) !important;
     border-radius: 8px !important;
+    padding: 0.6rem 0.75rem !important;
 }
 
 .form-control:focus, input:focus {
     border-color: var(--muni-green) !important;
-    box-shadow: 0 0 0 3px rgba(20, 133, 94, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(30, 127, 92, 0.1) !important;
 }
 
-/* INLINES & TABLES */
-.inline-related, .tabular, .tabular td, .tabular th {
-    background-color: #ffffff !important;
-    color: #1a202c !important;
-}
-
-.tabular th {
-    background-color: #f1f5f9 !important;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.5px;
-}
-
-/* Tabs */
-.nav-tabs .nav-link.active {
-    color: var(--muni-green) !important;
-    border-bottom: 3px solid var(--muni-green) !important;
-    background-color: transparent !important;
-}
-
-/* BUTTONS (Rounded Muni Style) */
+/* BUTTONS REDESIGN */
 .btn {
-    border-radius: 50px !important;
-    font-weight: 700 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
     padding: 0.5rem 1.5rem !important;
+    transition: all 0.2s ease !important;
 }
 
-.btn-primary, .btn-success {
+.btn-primary, .btn-success, .btn-info {
     background-color: var(--muni-green) !important;
-    border: none !important;
-    color: white !important;
+    border-color: var(--muni-green) !important;
+    color: #ffffff !important;
 }
 
-/* Content Header (The "Hero" part) */
-.content-header {
+.btn-primary:hover, .btn-success:hover, .btn-info:hover {
+    background-color: var(--muni-green-dark) !important;
+    border-color: var(--muni-green-dark) !important;
+}
+
+.btn-warning, .add-row a {
+    background-color: var(--muni-yellow) !important;
+    border-color: var(--muni-yellow) !important;
+    color: var(--muni-dark) !important;
+}
+
+.btn-warning:hover, .add-row a:hover {
+    background-color: var(--muni-yellow-hover) !important;
+}
+
+/* Tables Professional Style */
+.table, .tabular {
+    background-color: #ffffff !important;
+}
+
+.table thead th, .tabular th {
     background-color: #f8fafc !important;
-    padding: 2rem 1rem !important;
-    border-bottom: 1px solid #e2e8f0 !important;
-    margin-bottom: 2rem !important;
+    color: var(--muni-text-muted) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 0.75rem !important;
+    border-bottom: 2px solid var(--border-color) !important;
+}
+
+.table tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+/* Breadcrumbs & Header */
+.content-header {
+    background-color: transparent !important;
+    padding: 2rem 0.5rem !important;
 }
 
 .content-header h1 {
     color: var(--muni-dark) !important;
     font-weight: 800 !important;
-    letter-spacing: -1px;
+    font-size: 1.8rem !important;
 }
 
-/* ABSOLUTE DARK MODE OVERRIDE - FORCE EVERYTHING TO LIGHT */
+/* Absolute Light Overrides */
 [class*="dark-mode"], .dark-mode, .dark-mode * {
     background-color: #ffffff !important;
-    color: #1a202c !important;
-    border-color: #e2e8f0 !important;
-}
-
-.dark-mode .nav-link.active, .dark-mode .btn-primary, .dark-mode .btn-success {
-    background-color: var(--muni-green) !important;
-    color: white !important;
+    background: #ffffff !important;
+    color: var(--muni-dark) !important;
+    border-color: var(--border-color) !important;
 }

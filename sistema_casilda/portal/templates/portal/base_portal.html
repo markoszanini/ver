@@ -15,18 +15,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            --muni-green: #14855e;
-            --muni-green-dark: #0a5a3f;
-            --muni-yellow: #fec107;
+            --muni-green: #1E7F5C;
+            --muni-green-dark: #166A4C;
+            --muni-green-light: #E6F4EE;
+            --muni-yellow: #F2B705;
+            --muni-yellow-hover: #D89F04;
             --muni-blue: #00adef;
-            --muni-dark: #212529;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --muni-dark: #1F2937;
+            --muni-text-muted: #6B7280;
+            --muni-bg: #F5F7FA;
+            --card-bg: #FFFFFF;
+            --border-color: #E5E7EB;
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f7f6;
+            background-color: var(--muni-bg);
             color: var(--muni-dark);
             display: flex;
             flex-direction: column;
@@ -52,15 +55,15 @@
         .btn-accent {
             background-color: var(--muni-yellow);
             color: var(--muni-dark);
-            font-weight: 600;
+            font-weight: 700;
             border: none;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            transition: all 0.2s ease;
         }
         .btn-accent:hover {
-            background-color: #e5ad06;
-            color: var(--muni-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(254, 193, 7, 0.4);
+            background-color: var(--muni-yellow-hover);
+            transform: translateY(-1px);
         }
         .content-wrap {
             flex: 1;
@@ -72,20 +75,18 @@
             margin-top: auto;
             border-top: 4px solid var(--muni-yellow);
         }
-        /* Glassmorphism Styles */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* CRM Card Style */
+        .glass-card, .card {
+            background: var(--card-bg) !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+            transition: all 0.2s ease !important;
+            backdrop-filter: none !important;
         }
-        .glass-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
-            background: rgba(255, 255, 255, 0.8);
+        .glass-card:hover, .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
         }
         
         .glass-hero {

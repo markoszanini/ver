@@ -170,8 +170,8 @@ JAZZMIN_SETTINGS = {
             "apicultura.Extraccion",
             "apicultura.LiquidacionExtraccion"
         ],"show_ui_builder": False,
-    "custom_css": "css/custom_admin.css?v=12",
-    "custom_js": "js/admin_bell.js?v=12",
+    "custom_css": "css/custom_admin.css?v=15",
+    "custom_js": "js/admin_bell.js?v=15",
     "custom_links": {
         "impuestos": [
             {
@@ -291,32 +291,35 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "cosmo",
-    "dark_mode_theme": None,
     "navbar_small_text": False,
     "footer_small_text": False,
     "body_small_text": False,
     "brand_small_text": False,
     "brand_colour": "navbar-light",
     "accent": "accent-success",
-    "navbar": "navbar-white navbar-light",
-    "no_navbar_border": True,
+    "navbar": "navbar-dark",  # Forced to green in custom CSS
+    "no_navbar_border": False,
     "navbar_fixed": True,
     "layout_boxed": False,
     "footer_fixed": False,
     "sidebar_fixed": True,
-    "sidebar": "sidebar-light-success",
+    "sidebar": "sidebar-light-primary",
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
-    "sidebar_nav_child_indent": False,
+    "sidebar_nav_child_indent": True,
     "sidebar_nav_compact_style": False,
-    "sidebar_hover_elevate": False,
-    "sidebar_activate_nav_attr": False,
-    "resource_panel": True,
-    "controls_sidebar": True,
-    "show_ui_builder": False,
-    "presets": [],
-    "styles": {
-        "success": "background-color: #14855e !important; border-color: #14855e !important;",
+    "sidebar_nav_legacy_style": False,
+    "sidebar_link_nav_small_text": False,
+    "theme": "flatly",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
+}
     }
 }
