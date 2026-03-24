@@ -16,29 +16,29 @@
                 <form method="post" id="form-turno">
                     {% csrf_token %}
                     
-                    <h5 class="fw-bold border-bottom pb-2 mb-4 text-primary">1. Motivo del Turno</h5>
+                    <h5 class="fw-bold border-bottom pb-2 mb-4 color-muni-green"><i class="fa-solid fa-list-check me-2"></i>1. Motivo del Turno</h5>
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <input type="radio" class="btn-check" name="tipo_turno" id="tipo_psicofisico" value="PSICOFISICO" autocomplete="off" required>
-                            <label class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2" for="tipo_psicofisico">
+                            <label class="btn btn-outline-muni w-100 py-3 d-flex flex-column align-items-center gap-2" for="tipo_psicofisico">
                                 <i class="fa-solid fa-stethoscope fs-3"></i>
-                                <span>Psicofísico</span>
+                                <span class="fw-bold">Psicofísico</span>
                             </label>
                         </div>
                         <div class="col-md-6">
                             <input type="radio" class="btn-check" name="tipo_turno" id="tipo_licencia" value="LICENCIA" autocomplete="off" required>
-                            <label class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2" for="tipo_licencia">
+                            <label class="btn btn-outline-muni w-100 py-3 d-flex flex-column align-items-center gap-2" for="tipo_licencia">
                                 <i class="fa-solid fa-id-card fs-3"></i>
-                                <span>Licencia de Conducir</span>
+                                <span class="fw-bold">Licencia de Conducir</span>
                             </label>
                         </div>
                     </div>
 
                     <div id="campos-licencia" class="mb-4 p-4 bg-light rounded-3 border d-none">
-                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-car me-2"></i>Datos de Licencia</h6>
+                        <h6 class="fw-bold mb-3 color-muni-green"><i class="fa-solid fa-car me-2"></i>Datos de Licencia</h6>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Clase Solicitada</label>
+                                <label class="form-label fw-bold small text-uppercase">Clase Solicitada</label>
                                 <select name="tipo_licencia" id="tipo_licencia_input" class="form-select">
                                     <option value="">Seleccione...</option>
                                     <option value="A">Clase A (Motos)</option>
@@ -52,22 +52,22 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Vencimiento Licencia Actual</label>
+                                <label class="form-label fw-bold small text-uppercase">Vencimiento Licencia Actual</label>
                                 <input type="date" name="vencimiento_licencia" id="vencimiento_licencia_input" class="form-control">
-                                <div class="form-text">Si es la primera vez, ingrese la fecha de hoy.</div>
+                                <div class="form-text x-small">Si es la primera vez, ingrese la fecha de hoy.</div>
                             </div>
                         </div>
                     </div>
 
-                    <h5 class="fw-bold border-bottom pb-2 mb-4 text-primary">2. Fecha y Horario</h5>
+                    <h5 class="fw-bold border-bottom pb-2 mb-4 color-muni-green"><i class="fa-solid fa-calendar-day me-2"></i>2. Fecha y Horario</h5>
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Fecha Deseada</label>
+                            <label class="form-label fw-bold small text-uppercase">Fecha Deseada</label>
                             <input type="date" name="fecha" id="fecha" class="form-control" required disabled>
-                            <div class="form-text text-muted" id="fecha-help">Seleccione primero el motivo del turno.</div>
+                            <div class="form-text text-muted x-small" id="fecha-help">Seleccione primero el motivo del turno.</div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Horario Disponible</label>
+                            <label class="form-label fw-bold small text-uppercase">Horario Disponible</label>
                             <select name="hora" id="hora" class="form-select" required disabled>
                                 <option value="">Seleccione una fecha primero...</option>
                             </select>
@@ -75,12 +75,12 @@
                     </div>
                     
                     <div id="loader-horarios" class="text-center d-none mb-3">
-                        <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                        <div class="spinner-border text-success spinner-border-sm" role="status"></div>
                         <span class="ms-2 text-muted small">Buscando franjas disponibles...</span>
                     </div>
 
                     <div class="text-end pt-3 border-top mt-4">
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 shadow-sm" id="btn-submit" disabled>
+                        <button type="submit" class="btn btn-muni-primary rounded-pill px-5 py-2 shadow-sm fw-bold" id="btn-submit" disabled>
                             Confirmar Reserva <i class="fa-solid fa-check ms-2"></i>
                         </button>
                     </div>
@@ -89,22 +89,29 @@
         </div>
         
         <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="glass-card p-4 bg-primary text-white border-0 shadow">
-                <h5 class="fw-bold mb-3 border-bottom border-light pb-2"><i class="fa-solid fa-circle-info me-2"></i>Importante</h5>
+            <div class="glass-card p-4 border-0 shadow">
+                <h5 class="fw-bold mb-3 border-bottom border-light pb-2 color-muni-green">
+                    <i class="fa-solid fa-circle-info me-2 text-warning"></i>Importante
+                </h5>
                 <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
                     <li class="d-flex align-items-start gap-2">
                         <i class="fa-solid fa-clock mt-1 text-warning"></i>
-                        <span>Los turnos caducan automáticamente a los 5 minutos de demora. Asista con 10 minutos de anticipación.</span>
+                        <span class="text-dark small">Los turnos caducan automáticamente a los <strong>5 minutos</strong> de demora. Asista con 10 minutos de anticipación.</span>
                     </li>
                     <li class="d-flex align-items-start gap-2">
                         <i class="fa-solid fa-id-card mt-1 text-warning"></i>
-                        <span>Presentarse con DNI físico titular, constancia de CUIL y documentación correspondiente al trámite.</span>
+                        <span class="text-dark small">Presentarse con <strong>DNI físico titular</strong>, constancia de CUIL y documentación correspondiente al trámite.</span>
                     </li>
                     <li class="d-flex align-items-start gap-2">
                         <i class="fa-solid fa-ban mt-1 text-warning"></i>
-                        <span>En caso de inasistencia sin cancelación previa de 24hs, el sistema penalizará futuras reservas.</span>
+                        <span class="text-dark small">En caso de inasistencia sin cancelación previa de 24hs, el sistema <strong>penalizará</strong> futuras reservas.</span>
                     </li>
                 </ul>
+                <div class="mt-4 p-3 bg-light rounded-3 border">
+                    <p class="mb-0 x-small text-muted">
+                        <i class="fa-solid fa-shield-halved me-1"></i> Trámite personal y presencial en dependencias municipales.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
