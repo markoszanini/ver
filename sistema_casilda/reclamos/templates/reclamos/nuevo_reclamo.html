@@ -22,26 +22,6 @@
         color: rgba(255,255,255,0.9);
         font-weight: 400;
     }
-    .btn-back {
-        background-color: var(--muni-yellow);
-        color: var(--muni-dark);
-        font-weight: 700;
-        border-radius: 50px;
-        padding: 0.6rem 1.5rem;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-    }
-    .btn-back:hover {
-        background-color: var(--muni-yellow-hover);
-        transform: translateY(-2px);
-        color: var(--muni-dark);
-    }
 
     /* Accordion Styling matching Empleo */
     .cv-accordion .accordion-item {
@@ -122,8 +102,8 @@
                 <p class="hero-subtitle mb-0">Tu reporte nos ayuda a cuidar la ciudad en la que todos vivimos.</p>
             </div>
             <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
-                <a href="{% url 'portal:dashboard' %}" class="btn-back">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center rounded-pill">
+                    <i class="fa-solid fa-arrow-left me-2"></i> VOLVER AL PANEL
                 </a>
             </div>
         </div>
