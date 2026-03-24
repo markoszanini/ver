@@ -57,16 +57,22 @@ def dashboard(request):
     vecino = getattr(request.user, 'vecino_profile', None)
     expedientes = []
     notificaciones = []
+    turnos_proximos = 0
     
     if vecino:
         from expedientes.models import Expediente
+        from turnos.models import Turno
+        from django.utils import timezone
         from .models import Notificacion
+        
         expedientes = Expediente.objects.filter(vecino_titular=vecino).order_by('-fecha_ingreso')
         notificaciones = Notificacion.objects.filter(vecino=vecino, leida=False).order_by('-fecha')
+        turnos_proximos = Turno.objects.filter(vecino=vecino, fecha__gte=timezone.now().date()).count()
     
     return render(request, 'portal/dashboard.html', {
         'expedientes': expedientes,
         'notificaciones': notificaciones,
+        'turnos_proximos': turnos_proximos,
     })
 
 @login_required
