@@ -92,17 +92,16 @@ body, .wrapper, .content-wrapper {
 
 /* Cards & Info Boxes (Major Glow-up) */
 .card, .info-box {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(12px) !important;
-    border: 1px solid var(--glass-border) !important;
+    background: #ffffff !important; /* Force solid white for better readability */
     border-radius: 20px !important;
-    box-shadow: var(--glass-shadow) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important;
     overflow: hidden;
     margin-bottom: 2rem !important;
+    color: var(--muni-dark) !important;
 }
 
 .card-header {
-    background: transparent !important;
+    background: #f8fafc !important;
     border-bottom: 1px solid rgba(0,0,0,0.05) !important;
     padding: 1.25rem !important;
 }
@@ -112,24 +111,47 @@ body, .wrapper, .content-wrapper {
     color: var(--muni-green-dark) !important;
 }
 
-/* Form Controls */
-.form-control, .select2-container--default .select2-selection--single {
+/* Form Controls - FORCING VISIBILITY */
+.form-control, 
+input[type="text"], 
+input[type="number"], 
+input[type="email"], 
+input[type="password"], 
+input[type="date"], 
+textarea, 
+select {
     border-radius: 12px !important;
     border: 1px solid rgba(0,0,0,0.1) !important;
     padding: 0.6rem 1rem !important;
     height: auto !important;
-    background: white !important;
+    background-color: #ffffff !important;
+    color: #212529 !important;
 }
 
-.form-control:focus {
+.form-control:focus, 
+input:focus, 
+textarea:focus, 
+select:focus {
     border-color: var(--muni-green) !important;
+    background-color: #ffffff !important;
+    color: #212529 !important;
     box-shadow: 0 0 0 4px rgba(20, 133, 94, 0.1) !important;
 }
 
 /* Labels */
-label {
+label, .col-form-label {
     font-weight: 600 !important;
-    color: #4b5563 !important;
+    color: #374151 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Fix for dark mode if it's being forced */
+.dark-mode .content-wrapper,
+.dark-mode .card,
+.dark-mode .card-header,
+.dark-mode .form-control {
+    background-color: #ffffff !important;
+    color: #212529 !important;
 }
 
 /* Buttons (Rounded Premium) */
@@ -296,8 +318,8 @@ label {
 
 /* Submit bar at bottom */
 .submit-row {
-    background: rgba(255,255,255,0.8) !important;
-    backdrop-filter: blur(10px);
+    background: #ffffff !important;
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
     border-radius: 0 0 20px 20px !important;
     padding: 1.5rem !important;
     margin: 0 !important;
