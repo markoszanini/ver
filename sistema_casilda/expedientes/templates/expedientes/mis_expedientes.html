@@ -2,10 +2,19 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="d-flex justify-bottom align-items-center mb-4 border-bottom pb-3">
-        <h2 class="text-primary mb-0"><i class="fa-solid fa-folder-open me-2"></i> Mis Expedientes</h2>
+<!-- Header Hero -->
+<div class="glass-hero text-white mb-5">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-12 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Mis Expedientes</h1>
+                <p class="lead opacity-75 mb-0">Seguimiento en tiempo real de tus trámites municipales.</p>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="container pb-5">
 
     {% if expedientes %}
         <div class="row g-4">
