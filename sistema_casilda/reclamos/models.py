@@ -34,20 +34,33 @@ class Reclamo(models.Model):
         ('Plagas y vectores en propiedad privada', 'Plagas y vectores en propiedad privada'),
     ]
 
-    ESTADO_CHOICES = [
+    ESTADO_CHOICES = (
         ('Pendiente', 'Pendiente'),
-        ('En Proceso', 'En Proceso'),
+        ('En Progreso', 'En Progreso'),
         ('Resuelto', 'Resuelto'),
-        ('Rechazado', 'Rechazado'),
-    ]
+        ('Cerrado', 'Cerrado'),
+    )
 
-    vecino = models.ForeignKey(Vecino, on_delete=models.CASCADE, related_name='reclamos')
-    area = models.CharField(max_length=50, choices=AREA_CHOICES)
-    tipo_reclamo = models.CharField(max_length=100, choices=TIPO_CHOICES)
+    BARRIO_CHOICES = (
+        ('Alberdi', 'Alberdi'),
+        ('Barracas', 'Barracas'),
+        ('Centro', 'Centro'),
+        ('Granaderos a Caballo', 'Granaderos a Caballo'),
+        ('Nueva Roma', 'Nueva Roma'),
+        ('Parque', 'Parque'),
+        ('San Carlos', 'San Carlos'),
+        ('San Jorge', 'San Jorge'),
+        ('Yapeyú', 'Yapeyú'),
+        ('Otro', 'Otro'),
+    )
+
+    vecino = models.ForeignKey(Vecino, on_delete=models.CASCADE, related_name='reclamos', verbose_name="Vecino")
+    area = models.CharField(max_length=50, choices=AREA_CHOICES, verbose_name="Área Municipal")
+    tipo_reclamo = models.CharField(max_length=100, choices=TIPO_CHOICES, verbose_name="Tipo de Incidente")
     
     calle = models.CharField(max_length=100, verbose_name="Calle")
     numero = models.CharField(max_length=20, verbose_name="Número o altura")
-    barrio = models.CharField(max_length=100, verbose_name="Barrio del reclamo")
+    barrio = models.CharField(max_length=100, choices=BARRIO_CHOICES, verbose_name="Barrio del reclamo")
     
     observacion = models.TextField(verbose_name="Observación / Detalles")
     foto = models.ImageField(upload_to='reclamos_fotos/', blank=True, null=True, verbose_name="Foto Adjunta")

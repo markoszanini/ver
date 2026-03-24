@@ -10,7 +10,7 @@ class ReclamoForm(forms.ModelForm):
             'tipo_reclamo': forms.Select(attrs={'class': 'form-select tipo-select'}),
             'calle': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: San Martín'}),
             'numero': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: 1234 o s/n'}),
-            'barrio': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Centro'}),
+            'barrio': forms.Select(attrs={'class': 'form-select'}),
             'observacion': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Describa el problema aquí...'}),
             'foto': forms.FileInput(attrs={'class': 'form-control'}),
         }
