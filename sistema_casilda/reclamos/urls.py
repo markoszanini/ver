@@ -8,4 +8,5 @@ urlpatterns = [
     path('nuevo/', views.nuevo_reclamo, name='nuevo_reclamo'),
     path('<int:reclamo_id>/', views.detalle_reclamo, name='detalle_reclamo'),
     path('api/unread_count/', views.admin_unread_count, name='admin_unread_count'),
+    path('api/tipos/', views.get_tipos_reclamo, name='get_tipos_reclamo'),
 ]

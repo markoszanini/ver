@@ -84,3 +84,38 @@ def admin_unread_count(request):
         return JsonResponse({'unread_count': 0})
     count = MensajeReclamo.objects.filter(es_empleado=False, leido=False).count()
     return JsonResponse({'unread_count': count})
+
+@login_required
+def get_tipos_reclamo(request):
+    area = request.GET.get('area', '')
+    
+    # Mapping based on Reclamo.TIPO_CHOICES in models.py
+    mapping = {
+        'Inspección': [
+            'Irregularidades en obras',
+            'Actividad comercial irregular',
+            'Poda no autorizada',
+            'Sustancias peligrosas',
+            'Ocupación de espacios públicos',
+            'Aguas servidas',
+            'Micro basural',
+            'Accesibilidad para personas con discapacidad'
+        ],
+        'Mantenimiento': [
+            'Arreglo calle de ripio',
+            'Boca de tormenta obstruída',
+            'Apertura y limpieza de cuneta',
+            'Caminos rurales',
+            'Colocación o reposición de tubos media caña cuneta',
+            'Daños en espacios públicos',
+            'Arreglo calle de tierra',
+            'Colocación de brea'
+        ],
+        'Salud': [
+            'Plagas y vectores en espacios públicos',
+            'Plagas y vectores en propiedad privada'
+        ]
+    }
+    
+    tipos = mapping.get(area, [])
+    return JsonResponse({'tipos': tipos})

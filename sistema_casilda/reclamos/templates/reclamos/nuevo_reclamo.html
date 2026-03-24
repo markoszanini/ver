@@ -135,12 +135,14 @@
                                         {% if form.area.errors %}<div class="text-danger x-small mt-1">{{ form.area.errors }}</div>{% endif %}
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Tipo de Incidente</label>
-                                        {{ form.tipo_reclamo }}
-                                        {% if form.tipo_reclamo.errors %}<div class="text-danger x-small mt-1">{{ form.tipo_reclamo.errors }}</div>{% endif %}
-                                    </div>
-                                </div>
+                                <label class="form-label">TIPO DE INCIDENTE</label>
+                                {{ form.tipo_reclamo }}
+                                <div class="form-text small text-muted" id="tipo-help">Seleccione un área primero.</div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                         </div>
                     </div>
 
@@ -161,12 +163,13 @@
                                     </div>
                                     <div class="col-md-2">
                                         <label class="form-label">Número</label>
-                                        {{ form.nro }}
-                                        {% if form.nro.errors %}<div class="text-danger x-small mt-1">{{ form.nro.errors }}</div>{% endif %}
+                                        {{ form.numero }}
+                                        {% if form.numero.errors %}<div class="text-danger x-small mt-1">{{ form.numero.errors }}</div>{% endif %}
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Referencia (Opcional)</label>
-                                        {{ form.referencia }}
+                                        <label class="form-label">Barrio</label>
+                                        {{ form.barrio }}
+                                        {% if form.barrio.errors %}<div class="text-danger x-small mt-1">{{ form.barrio.errors }}</div>{% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -184,8 +187,8 @@
                             <div class="accordion-body">
                                 <div class="mb-4">
                                     <label class="form-label">Descripción detallada del problema</label>
-                                    {{ form.descripcion }}
-                                    {% if form.descripcion.errors %}<div class="text-danger x-small mt-1">{{ form.descripcion.errors }}</div>{% endif %}
+                                    {{ form.observacion }}
+                                    {% if form.observacion.errors %}<div class="text-danger x-small mt-1">{{ form.observacion.errors }}</div>{% endif %}
                                 </div>
 
                                 <div class="mb-0">
@@ -216,4 +219,63 @@
         </div>
     </div>
 </div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const areaSelect = document.querySelector('.area-select');
+    const tipoSelect = document.querySelector('.tipo-select');
+    const tipoHelp = document.getElementById('tipo-help');
+
+    function resetTipo() {
+        tipoSelect.innerHTML = '<option value="">---------</option>';
+        tipoSelect.disabled = true;
+        if (tipoHelp) tipoHelp.innerText = "Seleccione un área municipal primero.";
+    }
+
+    // Inicializar estado según selección previa (o falta de ella)
+    if (!areaSelect.value) {
+        resetTipo();
+    }
+
+    areaSelect.addEventListener('change', function() {
+        const areaName = this.value;
+        
+        if (!areaName) {
+            resetTipo();
+            return;
+        }
+
+        tipoSelect.innerHTML = '<option value="">Cargando opciones...</option>';
+        tipoSelect.disabled = true;
+
+        fetch(`/reclamos/api/tipos/?area=${encodeURIComponent(areaName)}`)
+            .then(response => response.json())
+            .then(data => {
+                tipoSelect.innerHTML = '<option value="">---------</option>';
+                if (data.tipos && data.tipos.length > 0) {
+                    data.tipos.forEach(tipo => {
+                        const option = document.createElement('option');
+                        option.value = tipo;
+                        option.textContent = tipo;
+                        tipoSelect.appendChild(option);
+                    });
+                    tipoSelect.disabled = false;
+                    if (tipoHelp) tipoHelp.innerText = "Seleccione la categoría específica del incidente.";
+                } else {
+                    const option = document.createElement('option');
+                    option.value = "";
+                    option.textContent = "No hay tipos definidos";
+                    tipoSelect.appendChild(option);
+                    if (tipoHelp) tipoHelp.innerText = "Esta área no tiene incidentes configurados.";
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching tipos:', error);
+                tipoSelect.innerHTML = '<option value="">Error al cargar categorías</option>';
+            });
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}
