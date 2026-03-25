@@ -147,6 +147,19 @@
             right: 20px;
             z-index: 9999;
         }
+        /* Global Fluid Adjustment for wide screens */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 95% !important;
+                padding-left: 2rem !important;
+                padding-right: 2rem !important;
+            }
+        }
+        
+        /* Smooth transition for layout changes */
+        .container, .container-fluid {
+            transition: max-width 0.3s ease-in-out;
+        }
     </style>
     {% block extra_css %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
