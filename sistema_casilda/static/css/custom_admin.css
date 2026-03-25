@@ -41,40 +41,23 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
 }
 
 /* Sidebar (Clean White) */
-/* Sidebar Unification (White & Green CRM) */
-.main-sidebar, .sidebar, .user-panel, .brand-link, .main-sidebar .brand-link {
+.main-sidebar {
     background-color: #ffffff !important;
-    box-shadow: none !important;
     border-right: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
 }
 
-.brand-link {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.brand-link, .main-sidebar .brand-link {
+    background-color: #ffffff !important;
+    color: var(--muni-green) !important;
     border-bottom: 2px solid var(--muni-yellow) !important;
-    padding: 1rem 0.5rem !important;
-    min-height: 64px !important;
+    text-align: center;
 }
 
 .brand-image {
-    max-height: 45px !important;
+    max-height: 40px !important;
     width: auto !important;
-    margin: 0 !important;
-    float: none !important;
-}
-
-.user-panel {
-    border-bottom: 1px solid var(--border-color) !important;
-    padding: 15px 10px !important;
-    margin: 0 !important;
-}
-
-.user-panel .info a {
-    color: var(--muni-green) !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-    padding-left: 10px !important;
+    opacity: 1 !important;
 }
 
 .sidebar .nav-link {
