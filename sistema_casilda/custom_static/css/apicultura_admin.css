@@ -22,18 +22,8 @@
     min-width: 500px !important;
 }
 
-/* Alineación general de filas para evitar escalonamiento con Select2/Inputs */
-.form-row {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important; /* Centrado vertical para Select2 e Inputs */
-    gap: 15px !important;
-}
-
-.form-row > div {
-    flex: 1;
-    min-width: 200px;
-}
+/* Alineación general de filas - Removido flex conflictivo */
+/* .form-row { ... } */
 
 /* Forzar ancho en observaciones */
 .field-observaciones {
@@ -66,18 +56,26 @@
     min-width: 200px !important;
 }
 
-/* Fix para TabularInline (Capacitaciones) EXTREMO */
-.tabular.inline-related .module table,
-div[class*="capacitacion"] table {
-    width: 100% !important;
-    min-width: 1000px !important; 
+/* Fix para TabularInline (Capacitaciones) VERIFICADO */
+#capacitaciones-group .tabular table, 
+#capacitaciones-group .tabular table thead, 
+#capacitaciones-group .tabular table tbody, 
+#capacitaciones-group .tabular table tr {
     display: table !important;
+    width: 100% !important;
 }
 
-.tabular.inline-related fieldset.module,
-div[class*="capacitacion"] fieldset {
-    overflow-x: auto !important;
-    display: block !important;
+#capacitaciones-group .tabular table thead tr th,
+#capacitaciones-group .tabular table tbody tr td {
+    display: table-cell !important;
+    vertical-align: middle !important;
+    padding: 8px !important;
+}
+
+/* Forzar que los inputs no rompan la celda */
+#capacitaciones-group .tabular table tbody tr td input {
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 /* Asegurar que el JS pueda mostrarlo remove-class hidden-field */

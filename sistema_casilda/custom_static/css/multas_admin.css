@@ -3,7 +3,26 @@
 /* Hacer que todas las cajas Select y Autocompletado sean super anchas y visibles */
 .select2-container {
     width: 100% !important;
-    min-width: 320px !important;
+}
+
+/* Alineación Horizontal de Etiquetas y Campos */
+.form-row > div {
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+}
+
+.form-row label {
+    min-width: 130px !important; /* Ancho base para que las etiquetas no se encimen */
+    margin-bottom: 0 !important;
+    margin-right: 15px !important;
+    font-weight: 500 !important;
+    color: #495057 !important;
+}
+
+/* Asegurar que el input/select ocupe el resto de la fila */
+.form-row input, .form-row select, .form-row .select2-container, .form-row textarea {
+    flex: 1 !important;
 }
 
 /* Espaciado adicional para mejor lectura (altura y alineación vertical) */

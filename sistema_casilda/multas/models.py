@@ -71,7 +71,12 @@ class Animal(models.Model):
     id_animal = models.AutoField(primary_key=True)
     raza = models.CharField(max_length=50, null=True, blank=True)
     especie = models.CharField(max_length=50, null=True, blank=True)
-    sexo = models.CharField(max_length=10, null=True, blank=True)
+    SEXO_CHOICES = [
+        ('Femenino', 'Femenino'),
+        ('Masculino', 'Masculino'),
+        ('Otro', 'Otro'),
+    ]
+    sexo = models.CharField(max_length=10, choices=SEXO_CHOICES, null=True, blank=True)
     propietario = models.ForeignKey(Persona, on_delete=models.SET_NULL, null=True, blank=True, db_column='ID_PROPIETARIO', related_name='animales')
 
     class Meta:

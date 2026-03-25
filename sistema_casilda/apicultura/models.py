@@ -3,12 +3,14 @@ from portal.models import Localidad
 
 class Apicultor(models.Model):
     id_apicultor = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=200, blank=True, null=True, verbose_name="Nombre")
+    apellido = models.CharField(max_length=100, blank=True, null=True, verbose_name="Apellido")
+    nombre = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nombre")
     dni = models.CharField(max_length=20, blank=True, null=True, verbose_name="DNI")
     telefono = models.CharField(max_length=30, blank=True, null=True, verbose_name="Teléfono")
     email = models.EmailField(max_length=200, blank=True, null=True, verbose_name="Email")
     localidad = models.ForeignKey(Localidad, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Localidad")
-    domicilio = models.CharField(max_length=200, blank=True, null=True, verbose_name="Domicilio")
+    calle = models.CharField(max_length=150, blank=True, null=True, verbose_name="Calle/Dirección")
+    altura = models.CharField(max_length=10, blank=True, null=True, verbose_name="Altura/Nro")
     cuit_cuil = models.CharField(max_length=20, blank=True, null=True, verbose_name="CUIT/CUIL")
     estado = models.CharField(max_length=15, default='Activo', verbose_name="Estado")
     observaciones = models.TextField(max_length=4000, blank=True, null=True, verbose_name="Observaciones")
@@ -19,7 +21,7 @@ class Apicultor(models.Model):
         verbose_name_plural = "Apicultores"
 
     def __str__(self):
-        return f"{self.nombre} ({self.cuit_cuil})"
+        return f"{self.apellido}, {self.nombre} ({self.cuit_cuil})"
 
 class Extraccion(models.Model):
     FORMA_PAGO_CHOICES = [
@@ -97,7 +99,7 @@ class Extraccion(models.Model):
         )
 
     def __str__(self):
-        return f"Extracción {self.id_extraccion} - {self.apicultor.nombre}"
+        return f"Extracción {self.id_extraccion} - {self.apicultor.apellido}, {self.apicultor.nombre}"
 
 class LiquidacionExtraccion(models.Model):
     id_liquidacion = models.AutoField(primary_key=True)
@@ -114,7 +116,7 @@ class LiquidacionExtraccion(models.Model):
         verbose_name_plural = "Liquidaciones"
 
     def __str__(self):
-        return f"Liq. {self.id_liquidacion} - {self.extraccion.apicultor.nombre}"
+        return f"Liq. {self.id_liquidacion} - {self.extraccion.apicultor.apellido}, {self.extraccion.apicultor.nombre}"
 
 class ApicultorInstitucional(models.Model):
     id_institucional = models.AutoField(primary_key=True)

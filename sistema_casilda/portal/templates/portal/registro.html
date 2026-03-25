@@ -56,9 +56,13 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="col-md-8 mb-3">
-                            <label class="form-label fw-semibold">Domicilio (Opcional)</label>
-                            <input type="text" name="domicilio" class="form-control" placeholder="Calle 123" value="{{ form.domicilio.value|default:'' }}">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Calle/Dirección</label>
+                            <input type="text" name="calle" class="form-control" placeholder="Ej: Av. Pellegrini" value="{{ form.calle.value|default:'' }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label fw-semibold">Altura/Nro</label>
+                            <input type="text" name="altura" class="form-control" placeholder="1234" value="{{ form.altura.value|default:'' }}">
                         </div>
                     </div>
 

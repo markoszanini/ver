@@ -22,7 +22,7 @@ class RegistroVecinoForm(forms.ModelForm):
 
     class Meta:
         model = Vecino
-        fields = ['telefono', 'domicilio', 'localidad']
+        fields = ['telefono', 'calle', 'altura', 'localidad']
 
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')

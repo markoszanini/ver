@@ -125,7 +125,7 @@
                 <div class="accordion-body">
                     <div class="row g-4">
                         {% for field in form %}
-                            <div class="{% if field.name == 'observaciones' %}col-12{% else %}col-md-6{% endif %}">
+                            <div class="{% if field.name == 'observaciones' %}col-12{% elif field.name == 'altura' %}col-md-2{% elif field.name == 'calle' %}col-md-4{% else %}col-md-6{% endif %}">
                                 <label class="form-label">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.help_text %}<div class="form-text mt-1 x-small opacity-75">{{ field.help_text }}</div>{% endif %}

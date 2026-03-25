@@ -276,11 +276,18 @@ JAZZMIN_SETTINGS = {
             "url": "empleo:perfiles_cv", 
             "icon": "fas fa-search",
         }],
-        "ferias": [{
-            "name": "Nuevo feriante", 
-            "url": "admin:ferias_feriante_add", 
-            "icon": "fas fa-user-plus",
-        }],
+        "ferias": [
+            {
+                "name": "Crear feria", 
+                "url": "admin:ferias_feria_add", 
+                "icon": "fas fa-plus",
+            },
+            {
+                "name": "Nuevo feriante", 
+                "url": "admin:ferias_feriante_add", 
+                "icon": "fas fa-user-plus",
+            }
+        ],
         "apicultura": [
             {"name": "Nuevo apicultor", "url": "admin:apicultura_apicultor_add", "icon": "fas fa-user-plus"},
             {"name": "Listado de apicultores", "url": "admin:apicultura_apicultor_changelist", "icon": "fas fa-users"},

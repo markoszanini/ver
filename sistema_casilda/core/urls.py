@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('admin/apicultura/', include('apicultura.urls')),
     path('admin/', admin.site.urls),
     path('', include('portal.urls')),
     path('empleo/', include('empleo.urls')),
@@ -31,7 +32,6 @@ urlpatterns = [
     path('turnos/', include('turnos.urls')),
     path('capacitaciones/', include('capacitaciones.urls')),
     path('expedientes/', include('expedientes.urls')),
-    path('admin/apicultura/', include('apicultura.urls')),
 ]
 
 if settings.DEBUG:

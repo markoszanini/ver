@@ -54,7 +54,7 @@ def generar_informe(request):
 
                     dic = {
                         'nro_consecutivo': e.nro_consecutivo or f"#{e.id_extraccion}",
-                        'apicultor': e.apicultor.nombre,
+                        'apicultor': f"{e.apicultor.apellido}, {e.apicultor.nombre}",
                         'total_kg': float(e.total_kg or 0),
                         'precio_por_kg': float(e.precio_por_kg or 0),
                     }

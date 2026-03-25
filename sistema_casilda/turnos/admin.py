@@ -6,6 +6,56 @@ from .models import ConfiguracionTurno, Turno
 class ConfiguracionTurnoAdmin(admin.ModelAdmin):
     list_display = ('tipo_turno', 'hora_inicio', 'hora_fin', 'turnos_por_hora', 'dias_habiles')
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+            
+        funcionario = getattr(request.user, 'funcionario_link', None)
+        if funcionario:
+            nombre_area = funcionario.area.nombre.lower() if funcionario.area else ""
+            nombre_depto = funcionario.departamento.nombre.lower() if funcionario.departamento else ""
+            
+            allowed_types = []
+            if 'gobierno' in nombre_area and 'tránsito' in nombre_depto:
+                allowed_types.append('LICENCIA')
+            if 'desarrollo' in nombre_area and 'bienestar' in nombre_area:
+                allowed_types.append('PSICOFISICO')
+                
+            return qs.filter(tipo_turno__in=allowed_types)
+        return qs.none()
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "tipo_turno" and not request.user.is_superuser:
+            funcionario = getattr(request.user, 'funcionario_link', None)
+            if funcionario:
+                nombre_area = funcionario.area.nombre.lower() if funcionario.area else ""
+                nombre_depto = funcionario.departamento.nombre.lower() if funcionario.departamento else ""
+                
+                choices = []
+                if 'gobierno' in nombre_area and 'tránsito' in nombre_depto:
+                    choices.append(('LICENCIA', 'Licencia de Conducir'))
+                if 'desarrollo' in nombre_area and 'bienestar' in nombre_area:
+                    choices.append(('PSICOFISICO', 'Psicofísico'))
+                
+                if choices:
+                    kwargs['choices'] = choices
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+    def get_changeform_initial_data(self, request):
+        initial = super().get_changeform_initial_data(request)
+        if not request.user.is_superuser:
+            funcionario = getattr(request.user, 'funcionario_link', None)
+            if funcionario:
+                nombre_area = funcionario.area.nombre.lower() if funcionario.area else ""
+                nombre_depto = funcionario.departamento.nombre.lower() if funcionario.departamento else ""
+                
+                if 'gobierno' in nombre_area and 'tránsito' in nombre_depto:
+                    initial['tipo_turno'] = 'LICENCIA'
+                elif 'desarrollo' in nombre_area and 'bienestar' in nombre_area:
+                    initial['tipo_turno'] = 'PSICOFISICO'
+        return initial
+
 @admin.register(Turno)
 class TurnoAdmin(admin.ModelAdmin):
     list_display = ('fecha', 'hora', 'tipo_turno', 'vecino', 'estado')

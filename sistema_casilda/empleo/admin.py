@@ -70,7 +70,7 @@ class PostulanteAdmin(admin.ModelAdmin):
             'fields': (
                 ('nombre', 'apellido'),
                 ('fecha_nac', 'sexo'),
-                ('domicilio', 'localidad'),
+                ('calle', 'altura', 'localidad'),
                 ('localidad_detalle', 'cp'),
                 ('telefono', 'mail'),
                 'situacion_actual',
