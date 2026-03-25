@@ -47,11 +47,17 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     box-shadow: none !important;
 }
 
-.brand-link {
+.brand-link, .main-sidebar .brand-link {
     background-color: #ffffff !important;
     color: var(--muni-green) !important;
     border-bottom: 2px solid var(--muni-yellow) !important;
     text-align: center;
+}
+
+.brand-image {
+    max-height: 40px !important;
+    width: auto !important;
+    opacity: 1 !important;
 }
 
 .sidebar .nav-link {
@@ -59,6 +65,17 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     margin: 4px 10px !important;
     border-radius: 8px !important;
     font-weight: 500 !important;
+}
+
+/* User Panel Contrast & Sidebar fix */
+.main-sidebar, .sidebar, .user-panel {
+    background-color: #ffffff !important;
+}
+
+.user-panel .info a {
+    color: var(--muni-green) !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
 }
 
 .sidebar .nav-link:hover {
