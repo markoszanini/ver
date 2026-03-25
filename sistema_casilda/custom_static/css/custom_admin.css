@@ -170,3 +170,10 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     color: var(--muni-dark) !important;
     border-color: var(--border-color) !important;
 }
+
+/* Admin Login/Logout Logo Resize */
+.login-logo img {
+    max-height: 100px !important;
+    width: auto !important;
+    margin-bottom: 20px;
+}

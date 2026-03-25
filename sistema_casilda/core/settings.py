@@ -171,7 +171,7 @@ JAZZMIN_SETTINGS = {
         ],
     "navigation_expanded": False,
     "show_ui_builder": False,
-    "custom_css": "css/custom_admin.css?v=19",
+    "custom_css": "css/custom_admin.css?v=20",
     "custom_js": "js/admin_bell.js?v=19",
     "custom_links": {
         "impuestos": [
