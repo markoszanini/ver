@@ -51,45 +51,45 @@ document.addEventListener("DOMContentLoaded", function() {
     // INJECT CRM LIGHT THEME CSS
     const style = document.createElement('style');
     style.textContent = `
-        /* Overrides para Admin Casilda CRM */
-        html, body, .wrapper, .content-wrapper, .main-sidebar, .card, .content, .info-box, .modal-content, .form-row, .inline-related, .tabular, .module, .submit-row {
-            background-color: #F5F7FA !important;
-            color: #1F2937 !important;
-        }
-
-        .main-header.navbar {
-            background-color: #1E7F5C !important;
-        }
-
-        .main-sidebar, .sidebar, .user-panel {
+        /* Overrides para Admin Casilda CRM (Nuclear White) */
+        .main-sidebar, .main-sidebar::before, .sidebar, .brand-link, .user-panel {
             background-color: #ffffff !important;
             border-right: 1px solid #E5E7EB !important;
         }
 
         .brand-link {
-            background-color: #ffffff !important;
-            color: #1E7F5C !important;
-            border-bottom: 2px solid #F2B705 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            padding: 0.8rem 0.5rem !important;
+            border-bottom: 2px solid #F2B705 !important;
+            padding: 1.2rem 0.5rem !important;
+            min-height: 80px !important;
         }
 
         .brand-link img {
-            max-height: 42px !important;
+            max-height: 55px !important;
             width: auto !important;
-            margin: 0 !important;
         }
 
-        .user-panel .info {
-            padding: 10px 15px !important;
+        .user-panel {
+            border-bottom: 1px solid #E5E7EB !important;
+            padding: 18px 10px !important;
+            display: flex !important;
+            justify-content: center !important;
         }
 
         .user-panel .info a {
             color: #1E7F5C !important;
-            font-weight: 700 !important;
-            font-size: 0.95rem !important;
+            font-weight: 800 !important;
+            font-size: 1.1rem !important;
+        }
+
+        .nav-sidebar .nav-link {
+            color: #495057 !important;
+        }
+
+        .nav-sidebar .nav-link i {
+            color: #1E7F5C !important;
         }
 
         /* Buttons CRM */

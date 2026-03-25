@@ -40,12 +40,11 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     color: #ffffff !important;
 }
 
-/* Sidebar (Clean White) */
-/* Sidebar Unification (White & Green CRM) */
-.main-sidebar, .sidebar, .user-panel, .brand-link, .main-sidebar .brand-link {
+/* NUCLEAR SIDEBAR UNIFICATION (White Premium) */
+.main-sidebar, .main-sidebar::before, .sidebar, .brand-link, .user-panel {
     background-color: #ffffff !important;
-    box-shadow: none !important;
     border-right: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
 }
 
 .brand-link {
@@ -53,28 +52,57 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     align-items: center !important;
     justify-content: center !important;
     border-bottom: 2px solid var(--muni-yellow) !important;
-    padding: 1rem 0.5rem !important;
-    min-height: 64px !important;
+    padding: 1.2rem 0.5rem !important;
+    min-height: 80px !important;
 }
 
-.brand-image {
-    max-height: 45px !important;
+.brand-link .brand-image {
+    max-height: 55px !important;
     width: auto !important;
     margin: 0 !important;
     float: none !important;
+    opacity: 1 !important;
 }
 
 .user-panel {
     border-bottom: 1px solid var(--border-color) !important;
-    padding: 15px 10px !important;
+    padding: 18px 10px !important;
     margin: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 .user-panel .info a {
     color: var(--muni-green) !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-    padding-left: 10px !important;
+    font-weight: 800 !important;
+    font-size: 1.1rem !important;
+    text-transform: capitalize;
+}
+
+/* Nav Links Contrast (Dark on Light) */
+.nav-sidebar .nav-link {
+    color: #495057 !important;
+    font-weight: 600 !important;
+}
+
+.nav-sidebar .nav-link i {
+    color: var(--muni-green) !important;
+    margin-right: 10px !important;
+}
+
+.nav-sidebar .nav-item:hover > .nav-link {
+    background-color: var(--muni-green-light) !important;
+    color: var(--muni-green) !important;
+}
+
+.nav-sidebar .nav-item > .nav-link.active {
+    background-color: var(--muni-green) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(30, 127, 92, 0.2) !important;
+}
+
+.nav-sidebar .nav-item > .nav-link.active i {
+    color: #ffffff !important;
 }
 
 .sidebar .nav-link {
