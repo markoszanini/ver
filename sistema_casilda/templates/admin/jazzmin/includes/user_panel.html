@@ -1,0 +1,18 @@
+{% load static %}
+<div class="user-panel mt-3 pb-3 mb-3 d-flex flex-column align-items-center">
+    <div class="image mb-3 mt-2">
+        <img src="{% static 'img/avatar_premium.png' %}" class="img-circle elevation-2" alt="User Image" style="width: 75px; height: 75px; object-fit: cover; border: 3px solid #F2B705; background: #fff;">
+    </div>
+    <div class="info text-center" style="width: 100%; padding: 0 10px;">
+        <a href="#" class="d-block font-weight-bold mb-1" style="color: #ffffff !important; font-size: 1rem; text-decoration: none;">
+            {{ request.user.first_name }} {{ request.user.last_name|default:request.user.username }}
+        </a>
+        <div class="user-role" style="color: #d1d5db; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;">
+            {% if request.user.funcionario_link %}
+                {{ request.user.funcionario_link.get_rango_display }}
+            {% else %}
+                Administración
+            {% endif %}
+        </div>
+    </div>
+</div>

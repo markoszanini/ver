@@ -68,7 +68,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -144,8 +144,8 @@ JAZZMIN_SETTINGS = {
     "site_title": "Casilda Gestión",
     "site_header": "Municipalidad de Casilda",
     "site_brand": "Casilda Conecta",
-    "site_logo": "img/logo_muni_v3.png",
-    "login_logo": "img/logo_muni_v3.png",
+    "site_logo": "img/logo_33.png",
+    "login_logo": "img/logo_33.png",
     "welcome_sign": "Bienvenido al Sistema de Gestión Municipal",
         "hide_models": [
             "multas.Persona",

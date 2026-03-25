@@ -40,69 +40,79 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     color: #ffffff !important;
 }
 
-/* NUCLEAR SIDEBAR UNIFICATION (White Premium) */
-.main-sidebar, .main-sidebar::before, .sidebar, .brand-link, .user-panel {
-    background-color: #ffffff !important;
-    border-right: 1px solid var(--border-color) !important;
-    box-shadow: none !important;
+/* Sidebar (Clean White) */
+/* 1. Limpieza de elementos Jazzmin redundantes en el logo */
+.brand-link span, .brand-link i, #jazzy-logo span {
+    display: none !important;
 }
 
-.brand-link {
+/* 2. Contenedor del Logo (Centrado y Estilo Tarjeta) */
+.brand-link, .main-sidebar .brand-link {
+    background-color: #1e272e !important;
+    margin: 10px !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+    min-height: 80px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-bottom: 2px solid var(--muni-yellow) !important;
-    padding: 1.2rem 0.5rem !important;
-    min-height: 80px !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
 }
 
+/* 3. Ajuste de la imagen del logo 33.png */
 .brand-link .brand-image {
+    float: none !important;
+    margin: 0 !important;
     max-height: 55px !important;
     width: auto !important;
-    margin: 0 !important;
-    float: none !important;
+    border-radius: 8px !important;
+    object-fit: contain !important;
     opacity: 1 !important;
 }
 
+/* Rest of Sidebar (Stable White) */
+.main-sidebar, .sidebar, .user-panel {
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
 .user-panel {
-    border-bottom: 1px solid var(--border-color) !important;
-    padding: 18px 10px !important;
-    margin: 0 !important;
+    background-color: #1e272e !important; /* Matches brand-link for consistency */
+    margin: 10px !important;
+    border-radius: 12px !important;
+    padding: 20px 10px !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
     display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
     justify-content: center !important;
 }
 
+.user-panel .image {
+    padding: 0 !important;
+    margin-bottom: 15px !important;
+}
+
+.user-panel .img-circle {
+    width: 75px !important;
+    height: 75px !important;
+    border: 3px solid var(--muni-yellow) !important;
+    background-color: #ffffff;
+}
+
+.user-panel .info {
+    padding: 0 !important;
+    text-align: center !important;
+}
+
 .user-panel .info a {
-    color: var(--muni-green) !important;
-    font-weight: 800 !important;
-    font-size: 1.1rem !important;
-    text-transform: capitalize;
-}
-
-/* Nav Links Contrast (Dark on Light) */
-.nav-sidebar .nav-link {
-    color: #495057 !important;
-    font-weight: 600 !important;
-}
-
-.nav-sidebar .nav-link i {
-    color: var(--muni-green) !important;
-    margin-right: 10px !important;
-}
-
-.nav-sidebar .nav-item:hover > .nav-link {
-    background-color: var(--muni-green-light) !important;
-    color: var(--muni-green) !important;
-}
-
-.nav-sidebar .nav-item > .nav-link.active {
-    background-color: var(--muni-green) !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(30, 127, 92, 0.2) !important;
-}
-
-.nav-sidebar .nav-item > .nav-link.active i {
-    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    padding: 0 !important;
 }
 
 .sidebar .nav-link {

@@ -3,13 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // FORCE LIGHT MODE (Nuclear Option v2 - BS5 Theme Neutralizer)
     const forceLight = () => {
-        // Target HTML element (Bootstrap 5 Global Theme)
         document.documentElement.setAttribute('data-bs-theme', 'light');
         document.documentElement.style.colorScheme = 'light';
         
         const body = document.body;
-        
-        // Remove all possible dark classes
         const darkClasses = [
             'dark-mode', 'sidebar-dark-primary', 'sidebar-dark-warning', 
             'sidebar-dark-success', 'sidebar-dark-danger', 'sidebar-dark-info',
@@ -18,17 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
         
         darkClasses.forEach(cls => {
             body.classList.remove(cls);
-            document.querySelectorAll('.' + cls).forEach(el => {
-                el.classList.remove(cls);
-                el.removeAttribute('data-bs-theme');
-            });
+            document.querySelectorAll('.' + cls).forEach(el => el.classList.remove(cls));
         });
 
-        // Add light classes
+        // Add light classes to main containers
         body.classList.add('sidebar-light-primary');
+        
         const sidebar = document.querySelector('.main-sidebar');
         if (sidebar) {
-            sidebar.setAttribute('data-bs-theme', 'light');
             sidebar.classList.remove('sidebar-dark-primary');
             sidebar.classList.add('sidebar-light-primary');
             sidebar.style.backgroundColor = "#ffffff";
@@ -36,14 +30,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const navbar = document.querySelector('.main-header.navbar');
         if (navbar) {
-            navbar.setAttribute('data-bs-theme', 'light');
             navbar.classList.remove('navbar-dark');
-            navbar.classList.add('navbar-light');
+            navbar.classList.add('navbar-light', 'navbar-white');
             navbar.style.backgroundColor = "#1E7F5C";
         }
 
+        // Specific Brand & User Panel Fix
+        document.querySelectorAll('.brand-link, .user-panel').forEach(block => {
+            block.style.backgroundColor = "#ffffff";
+            block.classList.remove('sidebar-dark-primary');
+        });
+
         localStorage.setItem('jazzmin-theme-mode', 'light');
-        localStorage.setItem('jazzmin-dark-mode', 'false');
     };
 
     forceLight();
@@ -63,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
             background-color: #1E7F5C !important;
         }
 
-        .main-sidebar {
+        .main-sidebar, .sidebar, .user-panel {
             background-color: #ffffff !important;
             border-right: 1px solid #E5E7EB !important;
         }
@@ -72,6 +70,26 @@ document.addEventListener("DOMContentLoaded", function() {
             background-color: #ffffff !important;
             color: #1E7F5C !important;
             border-bottom: 2px solid #F2B705 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0.8rem 0.5rem !important;
+        }
+
+        .brand-link img {
+            max-height: 42px !important;
+            width: auto !important;
+            margin: 0 !important;
+        }
+
+        .user-panel .info {
+            padding: 10px 15px !important;
+        }
+
+        .user-panel .info a {
+            color: #1E7F5C !important;
+            font-weight: 700 !important;
+            font-size: 0.95rem !important;
         }
 
         /* Buttons CRM */
@@ -80,7 +98,6 @@ document.addEventListener("DOMContentLoaded", function() {
             border-color: #1E7F5C !important;
             color: #ffffff !important;
             border-radius: 8px !important;
-            font-weight: 600 !important;
         }
 
         .btn-warning, .add-row a {
