@@ -79,10 +79,10 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
 }
 
 .user-panel {
-    background-color: #1e272e !important; /* Matches brand-link for consistency */
-    margin: 10px !important;
+    background-color: #1e272e !important;
+    margin: 5px 10px !important;
     border-radius: 12px !important;
-    padding: 20px 10px !important;
+    padding: 12px 10px !important;
     border-bottom: none !important;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
     display: flex !important;
@@ -93,13 +93,13 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
 
 .user-panel .image {
     padding: 0 !important;
-    margin-bottom: 15px !important;
+    margin-bottom: 8px !important;
 }
 
 .user-panel .img-circle {
-    width: 75px !important;
-    height: 75px !important;
-    border: 3px solid var(--muni-yellow) !important;
+    width: 60px !important;
+    height: 60px !important;
+    border: 2px solid var(--muni-yellow) !important;
     background-color: #ffffff;
 }
 
@@ -111,8 +111,19 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
 .user-panel .info a {
     color: #ffffff !important;
     font-weight: 700 !important;
-    font-size: 1rem !important;
+    font-size: 0.9rem !important;
     padding: 0 !important;
+    display: block !important;
+}
+
+.user-role {
+    display: block !important;
+    color: #d1d5db !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    margin-top: 2px;
 }
 
 .sidebar .nav-link {
