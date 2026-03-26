@@ -181,16 +181,17 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'portal:dashboard' %}">
-                                <i class="fa-solid fa-chart-line me-1"></i> Mi Panel
+                                <i class="fa-solid fa-{% if user.is_staff %}user-tie{% else %}chart-line{% endif %} me-1"></i> 
+                                {% if user.is_staff %}Portal Empleado{% else %}Mi Panel{% endif %}
                             </a>
                         </li>
                         {% if user.is_staff %}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/admin/" style="color: #ffca28 !important;">
-                                <i class="fa-solid fa-lock me-1"></i> Panel Empleado
+                                <i class="fa-solid fa-lock me-1"></i> Panel de Gestión
                             </a>
                         </li>
-                        {% endif %}
+                        {% else %}
                         <li class="nav-item me-2">
                             <a class="nav-link text-white position-relative" href="{% url 'reclamos:mis_reclamos' %}">
                                 <i class="fa-solid fa-bell"></i>
@@ -201,6 +202,7 @@
                                 {% endif %}
                             </a>
                         </li>
+                        {% endif %}
                         <li class="nav-item ms-3">
                             <span class="text-white-50 me-3">Hola, {{ user.first_name|default:user.username }}</span>
                             <a class="btn btn-outline-light btn-sm" href="{% url 'portal:logout' %}">Salir</a>

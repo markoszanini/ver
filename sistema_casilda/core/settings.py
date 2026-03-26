@@ -28,6 +28,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-6j((ys)amt4zbx+vv@oso
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    'https://*.ngrok-free.dev',
+]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -55,6 +60,7 @@ INSTALLED_APPS = [
     'impuestos',
     'turnos',
     'capacitaciones',
+    'recursos_humanos',
 ]
 
 MIDDLEWARE = [

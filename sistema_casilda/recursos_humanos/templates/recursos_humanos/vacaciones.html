@@ -1,0 +1,72 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Mis Vacaciones - Portal del Empleado{% endblock %}
+
+{% block content %}
+<div class="glass-hero text-white mb-5" style="background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Mis Vacaciones</h1>
+                <p class="lead opacity-75 mb-0">Consulta tus días disponibles y períodos devengados.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <a href="{% url 'recursos_humanos:portal_empleado' %}" class="btn btn-accent px-4 py-2 rounded-pill shadow-sm">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Portal
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-4 animate-up">
+            <div class="glass-card p-4 h-100 text-center bg-white shadow-lg border-0">
+                <div class="indicator-badge bg-success bg-opacity-10 text-success mx-auto mb-3" style="width: 65px; height: 65px; font-size: 1.8rem; border-radius: 15px;">
+                    <i class="fa-solid fa-umbrella-beach"></i>
+                </div>
+                <h5 class="fw-bold text-dark mb-1">Días Disponibles</h5>
+                {% if vacaciones %}
+                    <h1 class="display-2 fw-bold text-success mb-0">{{ vacaciones.dias_disponibles }}</h1>
+                    <p class="text-muted">Período {{ vacaciones.anio_correspondiente }}</p>
+                {% else %}
+                    <p class="text-muted italic py-3">Sin información cargada.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-6 animate-up" style="animation-delay: 0.1s;">
+            <div class="glass-card p-4 h-100 bg-white shadow-lg border-0">
+                <h5 class="fw-bold mb-4 border-bottom pb-2"><i class="fa-solid fa-chart-pie text-info me-2"></i> Detalle de Consumo</h5>
+                {% if vacaciones %}
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Días Totales Otorgados</span>
+                        <span class="fw-bold">{{ vacaciones.dias_totales }} días</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Días Tomados</span>
+                        <span class="fw-bold text-danger">{{ vacaciones.dias_tomados }} días</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 pt-2 border-top">
+                        <span class="text-dark fw-bold">Saldo Actual</span>
+                        <span class="badge bg-success fs-5 px-3 rounded-pill">{{ vacaciones.dias_disponibles }} días</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info border-0 bg-info bg-opacity-10 d-flex align-items-center mb-0">
+                    <i class="fa-solid fa-circle-info fs-4 me-3"></i>
+                    <p class="mb-0 small">Los pedidos de vacaciones deben realizarse a través de tu superior directo y luego reflejarse aquí tras la aprobación de RRHH.</p>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <p class="text-muted italic">No hay información de vacaciones disponible para tu usuario. Si crees que esto es un error, contacta a RRHH.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

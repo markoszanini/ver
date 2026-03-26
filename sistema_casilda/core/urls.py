@@ -32,6 +32,7 @@ urlpatterns = [
     path('turnos/', include('turnos.urls')),
     path('capacitaciones/', include('capacitaciones.urls')),
     path('expedientes/', include('expedientes.urls')),
+    path('personal/', include('recursos_humanos.urls')),
 ]
 
 if settings.DEBUG:

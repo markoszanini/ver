@@ -13,4 +13,5 @@ urlpatterns = [
     path('ferias/registro/', views.registro_feriante, name='registro_feriante'),
     path('ferias/mis-ferias/', views.mis_ferias, name='mis_ferias'),
     path('ferias/inscribirse/<int:feria_id>/', views.inscribirse_feria, name='inscribirse_feria'),
+    path('omic/', views.omic_view, name='omic'),
 ]
