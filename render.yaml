@@ -8,8 +8,8 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: "True"  # Dejamos en True para la demo inicial si hay errores
+        value: "True"
       - key: PYTHON_VERSION
         value: "3.11.1"
-      - key: RENDER_EXTERNAL_HOSTNAME
-        fromContext: hostname
+# Render proporciona RENDER_EXTERNAL_HOSTNAME automáticamente en la variable de entorno.
+# No es necesario definirlo aquí con 'fromContext'.
