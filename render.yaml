@@ -5,17 +5,11 @@ services:
     buildCommand: "./build.sh"
     startCommand: "cd sistema_casilda && gunicorn core.wsgi:application"
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: casilda-db
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: "False"
+        value: "True"  # Dejamos en True para la demo inicial si hay errores
       - key: PYTHON_VERSION
         value: "3.11.1"
-
-databases:
-  - name: casilda-db
-    plan: free
+      - key: RENDER_EXTERNAL_HOSTNAME
+        fromContext: hostname
