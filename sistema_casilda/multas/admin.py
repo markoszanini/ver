@@ -72,52 +72,60 @@ class ActaAdmin(admin.ModelAdmin):
     exclude = ('persona', 'vehiculo', 'animal', 'inmueble')
 
     def get_fieldsets(self, request, obj=None):
-        resolucion_fields = ('motivo', 'importe', 'uf')
-        if obj: # Si es edición, se permite ver el estado
-            resolucion_fields = ('estado', 'motivo', 'importe', 'uf')
+        # Campos de resolución unificados en el bloque principal
+        main_fields = [
+            ('numero_acta', 'fecha_infraccion'),
+            'tipo_acta',
+            'motivo',  # Posicionado debajo de tipo_acta como se solicitó
+            ('inspector', 'lugar_infraccion'),
+            'descripcion',
+            'foto_infraccion',
+        ]
+        
+        # Agregar campos de importe y estado al final del bloque principal
+        if obj: # Si es edición
+            main_fields.append(('estado', 'importe', 'uf'))
+        else: # Si es creación
+            main_fields.append(('importe', 'uf'))
 
         return (
             ('Acta de Infracción', {
-                'fields': (
-                    ('numero_acta', 'fecha_infraccion'),
-                    'tipo_acta',
-                    ('inspector', 'lugar_infraccion'),
-                    'descripcion',
-                    'foto_infraccion',
-                )
-            }),
-            ('Resolución de Infracción', {
-                'fields': resolucion_fields
+                'fields': tuple(main_fields)
             }),
             ('Datos Personales', {
                 'classes': ('fieldset-persona',),
                 'fields': (
                     ('pers_dni',),
-                    ('pers_apellido', 'pers_nombre', 'pers_fecha_nacimiento'),
-                    ('pers_calle', 'pers_numero', 'pers_codigo_postal', 'pers_localidad'),
-                    ('pers_telefono', 'pers_correo'),
+                    ('pers_apellido', 'pers_nombre'),
+                    ('pers_fecha_nacimiento', 'pers_localidad'),
+                    ('pers_calle', 'pers_numero'),
+                    ('pers_codigo_postal', 'pers_telefono', 'pers_correo'),
                 )
             }),
             ('Datos del Vehículo', {
                 'classes': ('fieldset-vehiculo',),
                 'fields': (
                     ('veh_patente',),
-                    ('veh_marca', 'veh_modelo', 'veh_color'),
-                    ('veh_tipo_vehiculo', 'veh_categoria', 'veh_anio_fabricacion'),
+                    ('veh_marca', 'veh_modelo'),
+                    ('veh_color', 'veh_tipo_vehiculo'),
+                    ('veh_categoria', 'veh_anio_fabricacion'),
                 )
             }),
             ('Datos del Inmueble', {
                 'classes': ('fieldset-inmueble',),
                 'fields': (
-                    ('inm_nomenclatura', 'inm_cuil', 'inm_razon_social'),
-                    ('inm_calle', 'inm_numero', 'inm_manzana', 'inm_seccion', 'inm_parcela'),
+                    ('inm_nomenclatura', 'inm_cuil'),
+                    ('inm_razon_social',),
+                    ('inm_calle', 'inm_numero'),
+                    ('inm_manzana', 'inm_seccion', 'inm_parcela'),
                     ('inm_tipo_inmueble', 'inm_uso_inmueble', 'inm_metros_cuadrados'),
                 )
             }),
             ('Datos del Animal', {
                 'classes': ('fieldset-animal',),
                 'fields': (
-                    ('ani_especie', 'ani_raza', 'ani_sexo'),
+                    ('ani_especie', 'ani_raza'),
+                    ('ani_sexo',),
                 )
             }),
         )

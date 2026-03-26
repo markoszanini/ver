@@ -71,7 +71,7 @@ class FerianteAdmin(admin.ModelAdmin):
                 ('nombre', 'apellido'),
                 ('dni', 'sexo'),
                 ('mail', 'telefono'),
-                ('localidad', 'direccion'),
+                ('localidad', 'calle', 'altura'),
                 'red_social',
             )
         }),

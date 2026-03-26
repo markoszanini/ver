@@ -17,8 +17,8 @@ class ApicultorCapacitacionInline(admin.TabularInline):
 
 @admin.register(Apicultor)
 class ApicultorAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'cuit_cuil', 'localidad', 'estado')
-    search_fields = ('nombre', 'cuit_cuil', 'dni')
+    list_display = ('apellido', 'nombre', 'cuit_cuil', 'localidad', 'estado')
+    search_fields = ('apellido', 'nombre', 'cuit_cuil', 'dni')
     list_filter = ('estado', 'localidad')
     exclude = ('estado',)
 
@@ -26,9 +26,9 @@ class ApicultorAdmin(admin.ModelAdmin):
         ('Información Personal', {
             'fields': (
                 ('dni', 'cuit_cuil'),
-                'nombre',
+                ('apellido', 'nombre'),
                 ('telefono', 'email'),
-                'domicilio',
+                ('calle', 'altura'),
                 'localidad',
                 'observaciones',
             )
@@ -64,7 +64,7 @@ def imprimir_acta_balance(modeladmin, request, queryset):
     for e in queryset:
         dic = {
             'id_extraccion': e.id_extraccion,
-            'apicultor': e.apicultor.nombre,
+            'apicultor': f"{e.apicultor.apellido}, {e.apicultor.nombre}",
             'total_kg': float(e.total_kg or 0),
         }
         totales['sum_kg'] += dic['total_kg']
@@ -125,7 +125,7 @@ class LiquidacionExtraccionInline(admin.TabularInline):
 @admin.register(Extraccion)
 class ExtraccionAdmin(admin.ModelAdmin):
     list_display = ('id_extraccion', 'apicultor', 'fecha_extraccion', 'total_kg', 'forma_pago')
-    search_fields = ('apicultor__nombre',)
+    search_fields = ('apicultor__apellido', 'apicultor__nombre')
     list_filter = ('forma_pago', 'temporada', 'fecha_extraccion')
     inlines = [LiquidacionExtraccionInline]
     actions = [imprimir_acta_balance]

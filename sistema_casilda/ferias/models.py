@@ -46,11 +46,17 @@ class Feriante(models.Model):
     nombre = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nombre")
     apellido = models.CharField(max_length=100, blank=True, null=True, verbose_name="Apellido")
     dni = models.CharField(max_length=15, unique=True, verbose_name="DNI")
-    sexo = models.CharField(max_length=10, blank=True, null=True, verbose_name="Sexo")
+    SEXO_CHOICES = [
+        ('Femenino', 'Femenino'),
+        ('Masculino', 'Masculino'),
+        ('Otro', 'Otro'),
+    ]
+    sexo = models.CharField(max_length=10, choices=SEXO_CHOICES, blank=True, null=True, verbose_name="Sexo")
     mail = models.EmailField(max_length=150, blank=True, null=True, verbose_name="Correo Electrónico")
     telefono = models.CharField(max_length=30, blank=True, null=True, verbose_name="Teléfono")
     localidad = models.ForeignKey(Localidad, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Localidad")
-    direccion = models.CharField(max_length=150, blank=True, null=True, verbose_name="Dirección")
+    calle = models.CharField(max_length=150, blank=True, null=True, verbose_name="Calle")
+    altura = models.CharField(max_length=10, blank=True, null=True, verbose_name="Altura")
     red_social = models.CharField(max_length=150, blank=True, null=True, verbose_name="Red Social")
     nombre_emprendimiento = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nombre Emprendimiento")
     TIPO_ELABORACION_CHOICES = [

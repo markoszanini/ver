@@ -1,0 +1,69 @@
+Operations to perform:
+  Apply all migrations: admin, apicultura, auth, capacitaciones, compras, contenttypes, empleo, expedientes, ferias, impuestos, multas, organigrama, portal, reclamos, sessions, turnos
+Running pre-migrate handlers for application admin
+Running pre-migrate handlers for application auth
+Running pre-migrate handlers for application contenttypes
+Running pre-migrate handlers for application sessions
+Running pre-migrate handlers for application expedientes
+Running pre-migrate handlers for application compras
+Running pre-migrate handlers for application ferias
+Running pre-migrate handlers for application apicultura
+Running pre-migrate handlers for application empleo
+Running pre-migrate handlers for application portal
+Running pre-migrate handlers for application multas
+Running pre-migrate handlers for application organigrama
+Running pre-migrate handlers for application reclamos
+Running pre-migrate handlers for application impuestos
+Running pre-migrate handlers for application turnos
+Running pre-migrate handlers for application capacitaciones
+Running migrations:
+Traceback (most recent call last):
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\manage.py", line 22, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\core\management\__init__.py", line 443, in execute_from_command_line
+    utility.execute()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\core\management\__init__.py", line 437, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\core\management\base.py", line 420, in run_from_argv
+    self.execute(*args, **cmd_options)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\core\management\base.py", line 464, in execute
+    output = self.handle(*args, **options)
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\core\management\base.py", line 111, in wrapper
+    res = handle_func(*args, **kwargs)
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\core\management\commands\migrate.py", line 354, in handle
+    post_migrate_state = executor.migrate(
+        targets,
+    ...<3 lines>...
+        fake_initial=fake_initial,
+    )
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\db\migrations\executor.py", line 137, in migrate
+    state = self._migrate_all_forwards(
+        state, plan, full_plan, fake=fake, fake_initial=fake_initial
+    )
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\db\migrations\executor.py", line 169, in _migrate_all_forwards
+    state = self.apply_migration(
+        state, migration, fake=fake, fake_initial=fake_initial
+    )
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\db\migrations\executor.py", line 254, in apply_migration
+    with self.connection.schema_editor(
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        atomic=migration.atomic
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    ) as schema_editor:
+    ^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\db\backends\sqlite3\schema.py", line 38, in __exit__
+    self.connection.check_constraints()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\db\backends\sqlite3\base.py", line 303, in check_constraints
+    raise IntegrityError(
+    ...<12 lines>...
+    )
+django.db.utils.IntegrityError: The row in table 'apicultura_apicultor' with primary key '1' has an invalid foreign key: apicultura_apicultor.localidad_id contains a value 'Casilda' that does not have a corresponding value in portal_localidad.id.
+  Applying apicultura.0003_alter_apicultor_localidad...

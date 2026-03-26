@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6j((ys)amt4zbx+vv@osog04q$@yz6g$v-1w)m#=*6+@0_sj=6'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-6j((ys)amt4zbx+vv@osog04q$@yz6g$v-1w)m#=*6+@0_sj=6')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -54,6 +59,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -68,7 +74,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,10 +94,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600
+    )
 }
 
 
@@ -130,8 +136,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = '/static/'
-import os
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -144,8 +158,8 @@ JAZZMIN_SETTINGS = {
     "site_title": "Casilda Gestión",
     "site_header": "Municipalidad de Casilda",
     "site_brand": "Casilda Conecta",
-    "site_logo": "img/logo_icon.png",
-    "login_logo": "img/logo_muni.png",
+    "site_logo": "img/logo_33.png",
+    "login_logo": "img/logo_33.png",
     "welcome_sign": "Bienvenido al Sistema de Gestión Municipal",
         "hide_models": [
             "multas.Persona",
@@ -276,11 +290,18 @@ JAZZMIN_SETTINGS = {
             "url": "empleo:perfiles_cv", 
             "icon": "fas fa-search",
         }],
-        "ferias": [{
-            "name": "Nuevo feriante", 
-            "url": "admin:ferias_feriante_add", 
-            "icon": "fas fa-user-plus",
-        }],
+        "ferias": [
+            {
+                "name": "Crear feria", 
+                "url": "admin:ferias_feria_add", 
+                "icon": "fas fa-plus",
+            },
+            {
+                "name": "Nuevo feriante", 
+                "url": "admin:ferias_feriante_add", 
+                "icon": "fas fa-user-plus",
+            }
+        ],
         "apicultura": [
             {"name": "Nuevo apicultor", "url": "admin:apicultura_apicultor_add", "icon": "fas fa-user-plus"},
             {"name": "Listado de apicultores", "url": "admin:apicultura_apicultor_changelist", "icon": "fas fa-users"},

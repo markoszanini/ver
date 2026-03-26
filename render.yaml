@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sistema-casilda
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "cd sistema_casilda && gunicorn core.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "True"
+      - key: PYTHON_VERSION
+        value: "3.11.1"
+# Render proporciona RENDER_EXTERNAL_HOSTNAME automáticamente en la variable de entorno.
+# No es necesario definirlo aquí con 'fromContext'.

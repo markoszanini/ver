@@ -3,7 +3,7 @@ from .models import Vecino, Notificacion
 
 @admin.register(Vecino)
 class VecinoAdmin(admin.ModelAdmin):
-    list_display = ('user', 'dni', 'telefono', 'domicilio')
+    list_display = ('user', 'dni', 'telefono', 'calle', 'altura')
     search_fields = ('dni', 'user__first_name', 'user__last_name')
 
 @admin.register(Notificacion)

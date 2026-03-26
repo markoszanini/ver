@@ -41,17 +41,89 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
 }
 
 /* Sidebar (Clean White) */
-.main-sidebar {
-    background-color: #ffffff !important;
-    border-right: 1px solid var(--border-color) !important;
-    box-shadow: none !important;
+/* 1. Limpieza de elementos Jazzmin redundantes en el logo */
+.brand-link span, .brand-link i, #jazzy-logo span {
+    display: none !important;
 }
 
-.brand-link {
+/* 2. Contenedor del Logo (Centrado y Estilo Tarjeta) */
+.brand-link, .main-sidebar .brand-link {
+    background-color: #1e272e !important;
+    margin: 10px !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+    min-height: 80px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+}
+
+/* 3. Ajuste de la imagen del logo 33.png */
+.brand-link .brand-image {
+    float: none !important;
+    margin: 0 !important;
+    max-height: 55px !important;
+    width: auto !important;
+    border-radius: 8px !important;
+    object-fit: contain !important;
+    opacity: 1 !important;
+}
+
+/* Rest of Sidebar (Stable White) */
+.main-sidebar, .sidebar, .user-panel {
     background-color: #ffffff !important;
-    color: var(--muni-green) !important;
-    border-bottom: 2px solid var(--muni-yellow) !important;
-    text-align: center;
+    box-shadow: none !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+.user-panel {
+    background-color: #1e272e !important;
+    margin: 5px 10px !important;
+    border-radius: 12px !important;
+    padding: 12px 10px !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.user-panel .image {
+    padding: 0 !important;
+    margin-bottom: 8px !important;
+}
+
+.user-panel .img-circle {
+    width: 60px !important;
+    height: 60px !important;
+    border: 2px solid var(--muni-yellow) !important;
+    background-color: #ffffff;
+}
+
+.user-panel .info {
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+.user-panel .info a {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+.user-role {
+    display: block !important;
+    color: #d1d5db !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    margin-top: 2px;
 }
 
 .sidebar .nav-link {
@@ -59,6 +131,17 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     margin: 4px 10px !important;
     border-radius: 8px !important;
     font-weight: 500 !important;
+}
+
+/* User Panel Contrast & Sidebar fix */
+.main-sidebar, .sidebar, .user-panel {
+    background-color: #ffffff !important;
+}
+
+.user-panel .info a {
+    color: var(--muni-green) !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
 }
 
 .sidebar .nav-link:hover {
@@ -171,9 +254,68 @@ html, body, .wrapper, .content-wrapper, .main-header, .main-sidebar, .card, .con
     border-color: var(--border-color) !important;
 }
 
-/* Admin Login/Logout Logo Resize */
-.login-logo img {
+/* Ocultar botón 'Guardar y continuar editando' globalmente (Verificado) */
+input[name="_continue"] {
+    display: none !important;
+}
+
+/* 1. Corrección de Alineación Vertical y Altura de Select2 */
+.select2-container--default .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important; /* Centra el texto verticalmente */
+    padding-left: 12px !important;
+    color: var(--muni-dark) !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important; /* Centra la flecha */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+/* 2. Corrección de Alineación Horizontal y Ancho */
+.form-group .select2-container, .form-row .select2-container {
+    width: 100% !important; /* Asegura que llene la columna */
+}
+
+/* 3. Alineación con Iconos de Widgets Relacionados (Agregar/Cambiar/Ver) */
+.related-widget-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+.related-widget-wrapper .select2-container {
+    flex: 1 !important;
+    margin-right: 5px !important;
+}
+
+.related-widget-wrapper-link {
+    margin-top: 0 !important; /* Evita que los iconos se desplacen hacia arriba */
+}
+
+/* Ajustes para tablas inlines */
+.tabular td, .tabular th {
+    vertical-align: middle !important;
+    padding: 10px 15px !important;
+}
+
+/* Jazzmin Login Logo Resize (Combined) */
+.login-logo img, .login-box .login-logo img, .login-page .login-logo img {
     max-height: 100px !important;
+    max-width: 180px !important;
     width: auto !important;
-    margin-bottom: 20px;
+    height: auto !important;
+    margin-bottom: 20px !important;
+}
+
+.login-box {
+    width: 400px !important;
 }

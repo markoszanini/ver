@@ -51,8 +51,14 @@ class Postulante(models.Model):
     nombre = models.CharField(max_length=150)
     apellido = models.CharField(max_length=150)
     fecha_nac = models.DateField(blank=True, null=True)
-    sexo = models.CharField(max_length=30, blank=True, null=True)
-    domicilio = models.CharField(max_length=200, blank=True, null=True)
+    SEXO_CHOICES = [
+        ('Femenino', 'Femenino'),
+        ('Masculino', 'Masculino'),
+        ('Otro', 'Otro'),
+    ]
+    sexo = models.CharField(max_length=30, choices=SEXO_CHOICES, blank=True, null=True)
+    calle = models.CharField(max_length=200, blank=True, null=True)
+    altura = models.CharField(max_length=10, blank=True, null=True)
     localidad = models.ForeignKey(Localidad, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Localidad")
     localidad_detalle = models.CharField(max_length=200, blank=True, null=True)
     cp = models.CharField(max_length=20, blank=True, null=True)
