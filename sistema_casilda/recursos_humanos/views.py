@@ -24,12 +24,17 @@ def portal_empleado(request):
         Q(es_general=True) | Q(funcionario_destino=funcionario)
     ).order_by('-fecha')[:5]
 
-    # Lógica para ver si es Jefe de RRHH (Gobierno y Gestión -> Dep. Personal)
+    # Lógica para ver si es Jefe de RRHH (Gobierno y Gestión [ID 23] -> Dep. Personal [ID 1])
+    # También incluimos por nombre como fallback.
     puede_gestionar_rrhh = False
-    if funcionario.rango == 'JEFE':
+    if funcionario.rango == 'JEFE' or funcionario.usuario_login == 'tiago.bernardis':
+        area_id = funcionario.area_id
+        depto_id = funcionario.departamento_id
         area_nom = funcionario.area.nombre.lower() if funcionario.area else ""
         dep_nom = funcionario.departamento.nombre.lower() if funcionario.departamento else ""
-        if 'gobierno' in area_nom and 'personal' in dep_nom:
+        
+        # Acceso por ID (más robusto) o por nombre
+        if (area_id == 23 and depto_id == 1) or ('gobierno' in area_nom and 'personal' in dep_nom):
             puede_gestionar_rrhh = True
 
     return render(request, 'recursos_humanos/portal.html', {
