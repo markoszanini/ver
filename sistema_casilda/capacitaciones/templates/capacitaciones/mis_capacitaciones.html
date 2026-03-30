@@ -86,9 +86,15 @@
                                     Curso finalizado
                                 </div>
                             {% endif %}
-                            <a href="#" class="btn btn-outline-dark btn-sm rounded-pill opacity-50 disabled">
-                                <i class="fa-solid fa-file-pdf me-2"></i> Ver Comprobante
-                            </a>
+                            {% if insc.estado == 'FINALIZADO' %}
+                                <a href="{% url 'capacitaciones:descargar_certificado' insc.id %}" target="_blank" class="btn btn-muni btn-muni-primary btn-sm shadow-sm">
+                                    <i class="fa-solid fa-graduation-cap me-2"></i> Descargar Certificado
+                                </a>
+                            {% else %}
+                                <a href="#" class="btn btn-outline-dark btn-sm rounded-pill opacity-50 disabled">
+                                    <i class="fa-solid fa-file-pdf me-2"></i> Certificado Pendiente
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

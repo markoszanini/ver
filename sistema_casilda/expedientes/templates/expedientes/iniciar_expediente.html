@@ -1,0 +1,90 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Iniciar Expediente Interno - Casilda{% endblock %}
+
+{% block content %}
+<section class="glass-hero py-4 mb-5">
+    <div class="container">
+        <h1 class="display-5 fw-bold text-white mb-2">Nuevo Expediente Interno</h1>
+        <p class="lead text-white opacity-75">Inicie una solicitud oficial dirigida a otra oficina municipal.</p>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-card p-4 p-md-5">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="card bg-info bg-opacity-5 border-info border-opacity-10 mb-4">
+                        <div class="card-body d-flex align-items-center">
+                            <i class="fa-solid fa-building-user fs-3 text-info me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Oficina de Origen (Configurado por su perfil)</h6>
+                                <p class="mb-0 text-muted small">
+                                    {% if funcionario.oficina %}
+                                        {{ funcionario.oficina.nombre }}
+                                    {% elif funcionario.departamento %}
+                                        {{ funcionario.departamento.nombre }}
+                                    {% endif %}
+                                    {% if funcionario.area %}- {{ funcionario.area.nombre }}{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Asunto / Motivo *</label>
+                        {{ form.asunto }}
+                        <div class="form-text">Sea descriptivo para facilitar la clasificación en Mesa de Entradas.</div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Dirigido a *</label>
+                            {{ form.dirigido_a }}
+                            <div class="form-text">Persona o Cargo al que se envía.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Documento / Foto</label>
+                            {{ form.foto }}
+                            <div class="form-text">Adjunte la nota o documentación respaldatoria.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Oficina de Destino Sugerida *</label>
+                        {{ form.oficina_destino_sugerida }}
+                        <div class="form-text">Seleccione la oficina donde debe tramitarse.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Observaciones Internas</label>
+                        {{ form.observaciones }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="btn btn-light px-4">Cancelar</a>
+                        <button type="submit" class="btn-muni btn-muni-primary px-5">Iniciar Expediente</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap-5',
+            width: '100%',
+            placeholder: 'Seleccione la oficina...',
+            allowClear: true
+        });
+    });
+</script>
+{% endblock %}

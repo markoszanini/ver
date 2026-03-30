@@ -51,6 +51,7 @@ class Inscripcion(models.Model):
     vecino = models.ForeignKey(Vecino, on_delete=models.CASCADE, related_name='capacitaciones')
     fecha_inscripcion = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='INSCRIPTO')
+    certificado = models.FileField(upload_to='capacitaciones/certificados/', blank=True, null=True, verbose_name="Certificado en PDF")
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None

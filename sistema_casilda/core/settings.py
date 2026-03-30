@@ -188,6 +188,8 @@ JAZZMIN_SETTINGS = {
             "expedientes.MovimientoExpediente",
             "apicultura.Apicultor",
             "apicultura.Extraccion",
+            "compras.OrdenCompra",
+            "compras.DetalleOrdenCompra",
         ],
     "navigation_expanded": False,
     "show_ui_builder": False,
@@ -314,6 +316,18 @@ JAZZMIN_SETTINGS = {
             {"name": "Nueva extracción", "url": "admin:apicultura_extraccion_add", "icon": "fas fa-plus-circle"},
             {"name": "Listado de extracciones", "url": "admin:apicultura_extraccion_changelist", "icon": "fas fa-clipboard-list"},
             {"name": "Generar informe", "url": "/admin/apicultura/generar-informe/", "icon": "fas fa-file-pdf"},
+        ],
+        "compras": [
+            {
+                "name": "Gestión de Compras",
+                "url": "/compras/iniciar/",
+                "icon": "fas fa-cart-shopping",
+            },
+            {
+                "name": "Mis Órdenes",
+                "url": "/compras/mis-ordenes/",
+                "icon": "fas fa-list-check",
+            }
         ]
     },
 }

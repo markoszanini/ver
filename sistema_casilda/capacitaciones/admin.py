@@ -105,9 +105,28 @@ class CapacitacionAdmin(admin.ModelAdmin):
 
 @admin.register(Inscripcion)
 class InscripcionAdmin(admin.ModelAdmin):
-    list_display = ('capacitacion', 'vecino', 'fecha_inscripcion', 'estado')
+    list_display = ('capacitacion', 'vecino', 'fecha_inscripcion', 'estado', 'ver_certificado')
     list_filter = ('estado', 'capacitacion__area_responsable')
     search_fields = ('vecino__user__first_name', 'vecino__user__last_name', 'vecino__user__username', 'capacitacion__nombre')
+    actions = ['marcar_como_finalizado']
+
+    def ver_certificado(self, obj):
+        if obj.estado == 'FINALIZADO':
+            from django.urls import reverse
+            from django.utils.html import format_html
+            url = reverse('capacitaciones:descargar_certificado', args=[obj.id])
+            return format_html('<a class="button" href="{}" target="_blank">📄 Ver/Generar</a>', url)
+        return "N/A"
+    ver_certificado.short_description = "Certificado"
+
+    @admin.action(description="Marcar como Finalizado/Asistió (Habilita Certificado)")
+    def marcar_como_finalizado(self, request, queryset):
+        rows_updated = queryset.update(estado='FINALIZADO')
+        if rows_updated == 1:
+            message_bit = "1 inscripción fue marcada"
+        else:
+            message_bit = f"{rows_updated} inscripciones fueron marcadas"
+        self.message_user(request, f"{message_bit} como Finalizado.")
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

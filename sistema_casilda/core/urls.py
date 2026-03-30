@@ -33,6 +33,7 @@ urlpatterns = [
     path('capacitaciones/', include('capacitaciones.urls')),
     path('expedientes/', include('expedientes.urls')),
     path('personal/', include('recursos_humanos.urls')),
+    path('compras/', include('compras.urls')),
 ]
 
 if settings.DEBUG:

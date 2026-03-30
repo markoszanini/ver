@@ -35,6 +35,15 @@ class Expediente(models.Model):
     apellido_titular_manual = models.CharField(max_length=100, blank=True, null=True, verbose_name="Apellido Titular (Manual)")
     dni_titular_manual = models.CharField(max_length=20, blank=True, null=True, verbose_name="DNI Titular (Manual)")
 
+    # Auditoría y Flujo Interno
+    confirmado = models.BooleanField(default=False, verbose_name="Confirmado por Mesa")
+    creado_por = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados_user')
+    solicitante_interno = models.ForeignKey('organigrama.Funcionario', on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_solicitados')
+
+    # Destino para Expedientes Internos
+    dirigido_a = models.CharField(max_length=200, blank=True, null=True, verbose_name="Dirigido a (Nombre/Cargo)")
+    oficina_destino_sugerida = models.ForeignKey('organigrama.Oficina', on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_sugeridos_destino')
+
     class Meta:
         verbose_name = "Expediente"
         verbose_name_plural = "Expedientes"
@@ -71,26 +80,23 @@ class Expediente(models.Model):
         return "Pendiente de Asignación"
 
     def save(self, *args, **kwargs):
-        if not self.nro_expediente:
+        # Solo asignar número si está confirmado y aún no tiene uno
+        if self.confirmado and not self.nro_expediente:
             import datetime
             anio_actual = datetime.date.today().year
             
             # Buscamos todos los expedientes del año actual para encontrar el máximo
-            # Filtramos por los que terminan en /YYYY
             expedientes_anio = Expediente.objects.filter(nro_expediente__endswith=f"/{anio_actual}")
             
             numeros = []
             for exp in expedientes_anio:
                 try:
-                    # El formato es NNNN/YYYY o NNNNN/YYYY
                     parte_num = exp.nro_expediente.split('/')[0]
                     numeros.append(int(parte_num))
                 except (ValueError, IndexError):
                     continue
             
             proximo_numero = max(numeros) + 1 if numeros else 1
-            
-            # Formatear con ceros a la izquierda (mínimo 4)
             self.nro_expediente = f"{proximo_numero:04d}/{anio_actual}"
             
         # Intentar vinculación automática por DNI si se cargó manual y no hay vínculo

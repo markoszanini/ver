@@ -26,8 +26,8 @@ class OrdenCompraAdmin(admin.ModelAdmin):
     inlines = [DetalleOrdenCompraInline]
 
     def changelist_view(self, request, extra_context=None):
-        # Redirigir directamente al formulario de creación para saltearse el listado
-        return redirect(reverse('admin:compras_ordencompra_add'))
+        # Redirigir directamente al nuevo formulario profesional en el portal
+        return redirect('compras:iniciar_oc_portal')
 
     def get_fieldsets(self, request, obj=None):
         return (
@@ -55,6 +55,9 @@ class OrdenCompraAdmin(admin.ModelAdmin):
                 from django.core.exceptions import ValidationError
                 raise ValidationError("Debe ingresar al menos un producto con cantidad y detalle para guardar la orden.")
         formset.save()
+
+    def add_view(self, request, form_url='', extra_context=None):
+        return redirect('compras:iniciar_oc_portal')
 
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
         from django.core.exceptions import ValidationError

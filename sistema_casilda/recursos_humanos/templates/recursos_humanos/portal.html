@@ -52,6 +52,12 @@
                     <a href="{% url 'recursos_humanos:mis_vacaciones' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-umballa me-2 w-20"></i> Vacaciones
                     </a>
+                    <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-folder-tree me-2 w-20"></i> Mis Solicitudes
+                    </a>
+                    <a href="{% url 'compras:mis_ordenes_portal' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-receipt me-2 w-20"></i> Mis Órdenes
+                    </a>
                     <hr>
                     <a href="{% url 'portal:logout' %}" class="dash-sidebar-link text-danger text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-right-from-bracket me-2 w-20"></i> Cerrar Sesión
@@ -66,8 +72,9 @@
             <div class="glass-card p-4 mb-4 border-start border-4 border-warning bg-warning bg-opacity-5">
                 <h5 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-briefcase me-2 text-warning"></i> Mis Herramientas de Trabajo</h5>
                 <div class="row g-3">
-                    {% if perms.expedientes.view_expediente %}
+                    {% if perms.expedientes.view_expediente or funcionario.rango == 'JEFE' or funcionario.rango == 'SECRETARIO' %}
                     <div class="col-md-4">
+                        {% if 'mesa de entrada' in funcionario.departamento.nombre|lower %}
                         <a href="/admin/expedientes/expediente/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
                             <i class="fa-solid fa-folder-open fs-4 text-success me-3"></i>
                             <div>
@@ -75,16 +82,25 @@
                                 <small class="text-muted">Carga y seguimiento</small>
                             </div>
                         </a>
+                        {% else %}
+                        <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-folder-plus fs-4 text-success me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Iniciar Expediente</h6>
+                                <small class="text-muted">Solicitudes internas</small>
+                            </div>
+                        </a>
+                        {% endif %}
                     </div>
                     {% endif %}
 
-                    {% if perms.compras.view_ordencompra %}
+                    {% if perms.compras.view_ordencompra or funcionario.rango == 'JEFE' or funcionario.rango == 'SECRETARIO' %}
                     <div class="col-md-4">
-                        <a href="/admin/compras/ordencompra/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
-                            <i class="fa-solid fa-cart-shopping fs-4 text-primary me-3"></i>
+                        <a href="{% url 'compras:iniciar_oc_portal' %}" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-cart-plus fs-4 text-primary me-3"></i>
                             <div>
                                 <h6 class="mb-0 fw-bold">Gestión de Compras</h6>
-                                <small class="text-muted">Órdenes y proveedores</small>
+                                <small class="text-muted">Nuevo Sistema Profesional</small>
                             </div>
                         </a>
                     </div>
@@ -236,7 +252,7 @@
                             <h2 class="display-4 fw-bold text-success mb-0">{{ vacaciones.dias_disponibles }}</h2>
                             <p class="text-muted">Días Disponibles (Año {{ vacaciones.anio_correspondiente }})</p>
                             <div class="progress mt-3" style="height: 10px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: {% widthratio vacaciones.dias_tomados vacaciones.dias_totales 100 %}%"></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {% widthratio vacaciones.dias_tomados vacaciones.dias_totales 100 %}%;"></div>
                             </div>
                             <small class="text-muted mt-2 d-block">Has tomado {{ vacaciones.dias_tomados }} de {{ vacaciones.dias_totales }} días.</small>
                         </div>
