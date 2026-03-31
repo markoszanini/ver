@@ -65,7 +65,10 @@
             </div>
             <div class="col-md-5 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
                 <div class="d-flex flex-column flex-md-row justify-content-md-end gap-2 align-items-center">
-                    <a href="/capacitaciones/mis-capacitaciones/" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                    <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                    </a>
+                    <a href="/capacitaciones/mis-capacitaciones/" class="btn-accion-pill shadow-lg">
                         <i class="fa-solid fa-bookmark me-2"></i> Mis Inscripciones
                     </a>
                 </div>
@@ -134,7 +137,7 @@
                 </div>
                 <h3 class="fw-bold text-dark mb-3">No hay inscripciones abiertas hoy</h3>
                 <p class="text-muted mx-auto" style="max-width: 500px;">Estamos preparando los nuevos talleres para el próximo semestre. ¡Vuelve pronto a consultar la cartelera!</p>
-                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary mt-4 px-5">Regresar al Panel</a>
+                <!-- Botón removido por redundancia con el de la cabecera -->
             </div>
         {% endif %}
     </div>

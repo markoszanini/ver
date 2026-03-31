@@ -67,6 +67,24 @@ class PostulanteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        # Forzar que no tengan valor inicial por defecto (que no sea 'N')
+        if not self.instance.pk:
+            self.fields['movilidad_propia'].initial = None
+            self.fields['licencia_conducir'].initial = None
+            self.fields['disponibilidad_viajar'].initial = None
+
+        # Personalizar el label de la opción vacía
+        self.fields['movilidad_propia'].empty_label = "---------"
+        self.fields['licencia_conducir'].empty_label = "---------"
+        self.fields['disponibilidad_viajar'].empty_label = "---------"
+        
+        # Asegurar que SN_CHOICES incluya la opción vacía y sean requeridos en el formulario
+        # aunque sean nulos en la DB para forzar la elección.
+        self.fields['movilidad_propia'].required = True
+        self.fields['licencia_conducir'].required = True
+        self.fields['disponibilidad_viajar'].required = True
+
         for name, field in self.fields.items():
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({'class': 'form-check-input'})

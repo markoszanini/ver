@@ -4,21 +4,19 @@
 {% block title %}Mis Órdenes de Compra - Casilda{% endblock %}
 
 {% block content %}
-<section class="glass-hero py-4 mb-5 shadow-sm">
-    <div class="container animate-up">
-        <div class="row align-items-center">
-            <div class="col-md-6 text-center text-md-start">
-                <h1 class="display-5 fw-bold text-white mb-0">Mis Órdenes de Compra</h1>
-                <p class="lead text-white opacity-75 mb-0">Listado de sus solicitudes generadas.</p>
-            </div>
-            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
-                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-light shadow-sm d-inline-flex align-items-center rounded-pill me-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i> VOLVER AL PANEL
-                </a>
-                <a href="{% url 'compras:iniciar_oc_portal' %}" class="btn-muni btn-muni-primary shadow d-inline-flex align-items-center rounded-pill">
-                    <i class="fa-solid fa-plus me-2"></i> NUEVA ORDEN
-                </a>
-            </div>
+<section class="glass-hero py-4 mb-5">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5 fw-bold text-white mb-0">Mis Órdenes de Compra</h1>
+            <p class="lead text-white opacity-75 mb-0">Listado de sus solicitudes generadas.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
+                <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+            </a>
+            <a href="{% url 'compras:iniciar_oc_portal' %}" class="btn-accion-pill shadow-lg">
+                <i class="fa-solid fa-plus me-2"></i> Nueva Orden
+            </a>
         </div>
     </div>
 </section>

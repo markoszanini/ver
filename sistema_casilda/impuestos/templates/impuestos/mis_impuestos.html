@@ -25,7 +25,7 @@
                 <p class="lead opacity-75 mb-0">Consultá tu estado de deuda, vencimientos y gestioná tus pagos digitalmente.</p>
             </div>
             <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
-                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
                     <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
                 </a>
             </div>
@@ -75,7 +75,7 @@
                     </div>
                     <h4 class="fw-bold text-dark">Sin cuentas vinculadas</h4>
                     <p class="text-muted mb-4">Actualmente no se registran cuentas tributarias o partidas inmobiliarias vinculadas a tu perfil de vecino.</p>
-                    <a href="{% url 'portal:dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">Volver al Panel</a>
+                    <!-- Botón removido por redundancia con el de la cabecera -->
                 </div>
             </div>
         </div>

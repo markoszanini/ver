@@ -50,7 +50,7 @@
                         <i class="fa-solid fa-file-pdf me-2 w-20"></i> Recibos de Sueldo
                     </a>
                     <a href="{% url 'recursos_humanos:mis_vacaciones' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
-                        <i class="fa-solid fa-umballa me-2 w-20"></i> Vacaciones
+                        <i class="fa-solid fa-umbrella-beach me-2 w-20"></i> Vacaciones
                     </a>
                     <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-folder-tree me-2 w-20"></i> Mis Solicitudes
@@ -229,7 +229,7 @@
                         <ul class="list-unstyled mb-0">
                             <li class="mb-3 d-flex justify-content-between">
                                 <span class="text-muted">Legajo Nro:</span>
-                                <span class="fw-bold text-dark">{{ funcionario.id_empleado_externo|default:"No asignado" }}</span>
+                                <span class="fw-bold text-dark">{{ funcionario.nro_legajo|default:"No asignado" }}</span>
                             </li>
                             <li class="mb-3 d-flex justify-content-between">
                                 <span class="text-muted">Área:</span>

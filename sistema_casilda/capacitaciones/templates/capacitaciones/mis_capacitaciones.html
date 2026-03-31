@@ -33,12 +33,15 @@
         <div class="row align-items-center">
             <div class="col-md-7 text-center text-md-start">
                 <h1 class="display-5 fw-bold mb-1">Mis Capacitaciones</h1>
-                <p class="lead opacity-75 mb-0">Hace el seguimiento de tus cursos y talleres activos.</p>
+                <p class="lead opacity-75 mb-0">Contenidos y certificados de los cursos en los que participas.</p>
             </div>
             <div class="col-md-5 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
                 <div class="d-flex flex-column flex-md-row justify-content-md-end gap-2 align-items-center">
-                    <a href="{% url 'capacitaciones:explorar' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
-                        <i class="fa-solid fa-plus me-2"></i> Ver Oferta Educativa
+                    <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                    </a>
+                    <a href="{% url 'capacitaciones:explorar' %}" class="btn-accion-pill shadow-lg">
+                        <i class="fa-solid fa-search me-2"></i> Explorar Oferta
                     </a>
                 </div>
             </div>

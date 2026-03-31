@@ -10,9 +10,14 @@
             <h1 class="display-5 fw-bold text-white mb-2">Mis Solicitudes</h1>
             <p class="lead text-white opacity-75">Seguimiento de expedientes iniciados por usted.</p>
         </div>
-        <a href="{% url 'expedientes:iniciar_expediente_staff' %}" class="btn-muni btn-muni-primary px-4">
-            <i class="fa-solid fa-plus me-2"></i> Nuevo Expediente
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
+                <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+            </a>
+            <a href="{% url 'expedientes:iniciar_expediente_staff' %}" class="btn-accion-pill shadow-lg">
+                <i class="fa-solid fa-plus me-2"></i> Nuevo Expediente
+            </a>
+        </div>
     </div>
 </section>
 

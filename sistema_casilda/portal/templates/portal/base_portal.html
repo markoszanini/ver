@@ -149,7 +149,52 @@
             right: 20px;
             z-index: 9999;
         }
-        /* Global Fluid Adjustment for wide screens */
+        /* Botón Volver al Panel (Estilo pedido) */
+        .btn-volver-pill {
+            background-color: #f2b705 !important;
+            color: #000 !important;
+            text-transform: uppercase;
+            text-decoration: underline !important;
+            font-weight: 700;
+            border-radius: 50px !important;
+            padding: 0.5rem 1.5rem !important;
+            font-size: 0.8rem !important;
+            display: inline-flex;
+            align-items: center;
+            border: none !important;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-volver-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: #f7b731 !important;
+            color: #000 !important;
+        }
+
+        /* Botón de Acción Principal (Pill) */
+        .btn-accion-pill {
+            background-color: #f2b705 !important;
+            color: #000 !important;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: 50px !important;
+            padding: 0.5rem 1.5rem !important;
+            font-size: 0.8rem !important;
+            display: inline-flex;
+            align-items: center;
+            border: none !important;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-accion-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: #f7b731 !important;
+            color: #000 !important;
+        }
+
+        /* Fluid Adjustment for wide screens */
         @media (min-width: 1200px) {
             .container {
                 max-width: 95% !important;

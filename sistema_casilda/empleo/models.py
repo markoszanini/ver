@@ -42,7 +42,7 @@ class Postulante(models.Model):
     SITUACION_CHOICES = [
         ('1', 'Desocupado'),
         ('2', 'Estudiante'),
-        ('3', 'Changas/Eventual'),
+        ('3', 'Trabajo Informal / Eventual'),
         ('4', 'Monotributista'),
         ('21', 'Empleado'),
     ]
@@ -66,12 +66,12 @@ class Postulante(models.Model):
     mail = models.EmailField(max_length=150, blank=True, null=True)
     situacion_actual = models.CharField(max_length=50, blank=True, null=True, choices=SITUACION_CHOICES)
     sobre_mi = models.TextField(blank=True, null=True)
-    movilidad_propia = models.CharField(max_length=1, default='N', choices=SN_CHOICES)
+    movilidad_propia = models.CharField(max_length=1, null=True, blank=True, choices=SN_CHOICES)
     medio_movilidad = models.CharField(max_length=50, blank=True, null=True)
-    licencia_conducir = models.CharField(max_length=1, default='N', choices=SN_CHOICES)
+    licencia_conducir = models.CharField(max_length=1, null=True, blank=True, choices=SN_CHOICES)
     licencia_categoria = models.CharField(max_length=50, blank=True, null=True, choices=LICENCIA_CHOICES)
     licencia_vencimiento = models.DateField(blank=True, null=True)
-    disponibilidad_viajar = models.CharField(max_length=1, default='N', choices=SN_CHOICES)
+    disponibilidad_viajar = models.CharField(max_length=1, null=True, blank=True, choices=SN_CHOICES)
     disponibilidad_horaria = models.CharField(max_length=200, blank=True, null=True, choices=DISPONIBILIDAD_CHOICES)
     estado = models.CharField(max_length=30, default='ACTIVO')
     fecha_alta = models.DateTimeField(auto_now_add=True)
