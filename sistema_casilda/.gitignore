@@ -30,6 +30,7 @@ db.sqlite3
 db.sqlite3-journal
 *.sql
 *.json
+!db_backup_*.json
 
 # Media and Static
 media/
