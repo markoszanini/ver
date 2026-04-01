@@ -5,7 +5,7 @@ services:
     buildCommand: "./build.sh"
     startCommand: "gunicorn core.wsgi:application"
     healthCheckPath: "/"
-    releaseCommand: "python manage.py migrate && python manage.py loaddata db_backup_completo.json"
+    releaseCommand: "python manage.py migrate && python manage.py flush --no-input && python manage.py loaddata db_backup_completo.json"
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.x
