@@ -16,3 +16,6 @@ python manage.py collectstatic --no-input
 
 # Run migrations
 python manage.py migrate
+
+# Load initial data (only for this migration)
+python manage.py loaddata db_backup_completo.json
