@@ -13,7 +13,7 @@ charset-normalizer>=3.3.0
 cryptography>=42.0.0
 cssselect2>=0.7.0
 pypdf>=4.0.0
-python-bidi>=0.4.2
+python-bidi==0.4.2
 PyYAML>=6.0.1
 reportlab>=4.0.0
 requests>=2.31.0
