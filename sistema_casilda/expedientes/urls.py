@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, views_ajax
 
 app_name = 'expedientes'
 
@@ -15,6 +15,9 @@ urlpatterns = [
     path('mesa/dashboard/', views.mesa_dashboard, name='mesa_dashboard'),
     path('mesa/nuevo/', views.crear_expediente_mesa, name='crear_expediente_mesa'),
     path('mesa/confirmar/<int:id_expediente>/', views.confirmar_expediente_mesa, name='confirmar_expediente_mesa'),
+    
+    # AJAX Search
+    path('ajax/buscar-destinos/', views_ajax.buscar_destinos_ajax, name='buscar_destinos_ajax'),
 ]
 
 

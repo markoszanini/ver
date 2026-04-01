@@ -57,18 +57,28 @@
                         <i class="fa-solid fa-stamp me-2 text-success"></i> Procesar Foliado Oficial
                     </h5>
                     
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Punto de Destino Inicial *</label>
-                            {{ form.destino_oficina }}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Departamento (Opcional)</label>
-                            {{ form.destino_departamento }}
-                        </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold small">Área Directriz (Opcional)</label>
-                            {{ form.destino_area }}
+                            <label class="form-label fw-bold small">Punto de Destino Final *</label>
+                            <select id="destino_search" class="form-control select2-ajax">
+                                {% if expediente.destino_oficina_sugerido %}
+                                    <option value="oficina_{{ expediente.destino_oficina_sugerido.pk }}" selected>{{ expediente.destino_oficina_sugerido.nombre }} (Oficina - Sugerido)</option>
+                                {% elif expediente.destino_seccion_sugerido %}
+                                    <option value="seccion_{{ expediente.destino_seccion_sugerido.pk }}" selected>{{ expediente.destino_seccion_sugerido.nombre }} (Sección - Sugerido)</option>
+                                {% elif expediente.destino_subdivision_sugerido %}
+                                    <option value="subdivision_{{ expediente.destino_subdivision_sugerido.pk }}" selected>{{ expediente.destino_subdivision_sugerido.nombre }} (Subdivisión - Sugerido)</option>
+                                {% elif expediente.destino_division_sugerido %}
+                                    <option value="division_{{ expediente.destino_division_sugerido.pk }}" selected>{{ expediente.destino_division_sugerido.nombre }} (División - Sugerido)</option>
+                                {% elif expediente.destino_departamento_sugerido %}
+                                    <option value="departamento_{{ expediente.destino_departamento_sugerido.pk }}" selected>{{ expediente.destino_departamento_sugerido.nombre }} (Departamento - Sugerido)</option>
+                                {% elif expediente.destino_direccion_sugerido %}
+                                    <option value="direccion_{{ expediente.destino_direccion_sugerido.pk }}" selected>{{ expediente.destino_direccion_sugerido.nombre }} (Dirección - Sugerido)</option>
+                                {% elif expediente.destino_area_sugerido %}
+                                    <option value="area_{{ expediente.destino_area_sugerido.pk }}" selected>{{ expediente.destino_area_sugerido.nombre }} (Área - Sugerido)</option>
+                                {% endif %}
+                            </select>
+                            {{ form.destino_id }}
+                            {{ form.destino_type }}
+                            <div class="form-text small">Confirme o cambie el destino sugerido por el solicitante.</div>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-bold small">Nota de Mesa de Entrada</label>
@@ -95,12 +105,43 @@
 </div>
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('.select2').each(function() {
-            $(this).select2({ theme: 'bootstrap-5', width: '100%', dropdownParent: $(this).parent() });
+        $('#destino_search').select2({
+            theme: 'bootstrap-5',
+            width: '100%',
+            placeholder: 'Busque el destino definitivo...',
+            allowClear: true,
+            minimumInputLength: 2,
+            ajax: {
+                url: '{% url "expedientes:buscar_destinos_ajax" %}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return { q: params.term };
+                },
+                processResults: function (data) {
+                    return { results: data.results };
+                },
+                cache: true
+            }
         });
+
+        function updateHiddenFields() {
+            var data = $('#destino_search').select2('data')[0];
+            if (data && data.id) {
+                var parts = data.id.split('_');
+                $('input[name="destino_id"]').val(parts[1]);
+                $('input[name="destino_type"]').val(parts[0]);
+            }
+        }
+
+        $('#destino_search').on('select2:select', updateHiddenFields);
+        
+        // Inicializar si ya hay algo seleccionado (el sugerido)
+        updateHiddenFields();
     });
 </script>
 {% endblock %}

@@ -30,6 +30,12 @@ def mis_expedientes_internos(request):
     origen_q = Q()
     if funcionario.oficina:
         origen_q = Q(origen_oficina=funcionario.oficina)
+    elif funcionario.seccion:
+        origen_q = Q(origen_seccion=funcionario.seccion)
+    elif funcionario.subdivision:
+        origen_q = Q(origen_subdivision=funcionario.subdivision)
+    elif funcionario.division:
+        origen_q = Q(origen_division=funcionario.division)
     elif funcionario.departamento:
         origen_q = Q(origen_departamento=funcionario.departamento)
     elif funcionario.direccion:
@@ -41,6 +47,12 @@ def mis_expedientes_internos(request):
     location_q = Q()
     if funcionario.oficina:
         location_q = Q(actual_oficina=funcionario.oficina)
+    elif funcionario.seccion:
+        location_q = Q(actual_seccion=funcionario.seccion)
+    elif funcionario.subdivision:
+        location_q = Q(actual_subdivision=funcionario.subdivision)
+    elif funcionario.division:
+        location_q = Q(actual_division=funcionario.division)
     elif funcionario.departamento:
         location_q = Q(actual_departamento=funcionario.departamento)
     elif funcionario.direccion:
@@ -90,8 +102,11 @@ def iniciar_expediente_staff(request):
             expediente.creado_por = request.user
             expediente.solicitante_interno = funcionario
             expediente.origen_area = funcionario.area
-            expediente.origen_departamento = funcionario.departamento
             expediente.origen_direccion = funcionario.direccion
+            expediente.origen_departamento = funcionario.departamento
+            expediente.origen_division = funcionario.division
+            expediente.origen_subdivision = funcionario.subdivision
+            expediente.origen_seccion = funcionario.seccion
             expediente.origen_oficina = funcionario.oficina
             
             # Destino inicial: Mesa de Entradas para confirmación
@@ -102,6 +117,24 @@ def iniciar_expediente_staff(request):
             
             expediente.confirmado = False
             expediente.estado = 'Pendiente de Confirmación'
+
+            # Procesar destino inteligente
+            dest_id = form.cleaned_data.get('destino_id')
+            dest_type = form.cleaned_data.get('destino_type')
+
+            from organigrama.models import Area, Direccion, Departamento, Division, Subdivision, Seccion, Oficina
+            dest_map = {
+                'area': Area, 'direccion': Direccion, 'departamento': Departamento,
+                'division': Division, 'subdivision': Subdivision, 'seccion': Seccion, 'oficina': Oficina
+            }
+
+            if dest_type in dest_map:
+                try:
+                    obj = dest_map[dest_type].objects.get(pk=dest_id)
+                    setattr(expediente, f"destino_{dest_type}_sugerido", obj)
+                except:
+                    pass
+
             expediente.save()
             
             # Notificar a Mesa de Entradas
@@ -177,6 +210,9 @@ def procesar_expediente(request, id_expediente):
     is_at_location = False
     if funcionario:
         if (expediente.actual_oficina == funcionario.oficina and funcionario.oficina) or \
+           (expediente.actual_seccion == funcionario.seccion and funcionario.seccion) or \
+           (expediente.actual_subdivision == funcionario.subdivision and funcionario.subdivision) or \
+           (expediente.actual_division == funcionario.division and funcionario.division) or \
            (expediente.actual_departamento == funcionario.departamento and funcionario.departamento) or \
            (expediente.actual_direccion == funcionario.direccion and funcionario.direccion) or \
            (expediente.actual_area == funcionario.area and funcionario.area):
@@ -207,24 +243,43 @@ def procesar_expediente(request, id_expediente):
         if 'realizar_pase' in request.POST:
             form_pase = PaseExpedienteForm(request.POST)
             if form_pase.is_valid():
+                # Procesar destino segun tipo
+                dest_id = form_pase.cleaned_data.get('destino_id')
+                dest_type = form_pase.cleaned_data.get('destino_type')
+                
+                from organigrama.models import Area, Direccion, Departamento, Division, Subdivision, Seccion, Oficina
+                dest_map = {
+                    'area': Area, 'direccion': Direccion, 'departamento': Departamento,
+                    'division': Division, 'subdivision': Subdivision, 'seccion': Seccion, 'oficina': Oficina
+                }
+                
                 # Crear Movimiento
-                mov = MovimientoExpediente.objects.create(
+                mov = MovimientoExpediente(
                     expediente=expediente,
-                    destino_area=form_pase.cleaned_data.get('destino_area'),
-                    destino_direccion=form_pase.cleaned_data.get('destino_direccion'),
-                    destino_departamento=form_pase.cleaned_data.get('destino_departamento'),
-                    destino_oficina=form_pase.cleaned_data.get('destino_oficina'),
                     observacion=form_pase.cleaned_data.get('observacion_pase'),
                     usuario_emisor=f"{funcionario.apellido}, {funcionario.nombre}",
                     resolucion=expediente.ultima_resolucion,
                     estado='En Pase'
                 )
                 
-                # Actualizar Expediente
+                if dest_type in dest_map:
+                    try:
+                        obj = dest_map[dest_type].objects.get(pk=dest_id)
+                        setattr(mov, f"destino_{dest_type}", obj)
+                    except:
+                        pass
+                
+                mov.save()
+                
+                # Actualizar Expediente (Limpiar ubicacion previa y poner la nueva)
                 expediente.actual_area = mov.destino_area
                 expediente.actual_direccion = mov.destino_direccion
                 expediente.actual_departamento = mov.destino_departamento
+                expediente.actual_division = mov.destino_division
+                expediente.actual_subdivision = mov.destino_subdivision
+                expediente.actual_seccion = mov.destino_seccion
                 expediente.actual_oficina = mov.destino_oficina
+                
                 expediente.visto = False
                 expediente.estado = 'En trámite'
                 expediente.save()
@@ -263,6 +318,12 @@ def generar_notificaciones_destino(expediente, movimiento):
     filters = Q()
     if movimiento.destino_oficina:
         filters = Q(oficina=movimiento.destino_oficina)
+    elif movimiento.destino_seccion:
+        filters = Q(seccion=movimiento.destino_seccion)
+    elif movimiento.destino_subdivision:
+        filters = Q(subdivision=movimiento.destino_subdivision)
+    elif movimiento.destino_division:
+        filters = Q(division=movimiento.destino_division)
     elif movimiento.destino_departamento:
         filters = Q(departamento=movimiento.destino_departamento)
     elif movimiento.destino_direccion:
@@ -343,30 +404,36 @@ def crear_expediente_mesa(request):
             # Al ser creado por Mesa, podemos confirmarlo inmediatamente si tiene destino
             expediente.confirmado = True
             expediente.estado = 'En trámite'
-            
-            # El número se genera en el save() del modelo al detectar confirmado=True
             expediente.save()
             
-            # Movimiento inicial (Mesa -> Destino sugerido)
-            destino = form.cleaned_data.get('oficina_destino_sugerida')
-            if destino:
-                expediente.actual_oficina = destino
-                expediente.actual_departamento = destino.departamento
-                expediente.actual_direccion = destino.departamento.direccion if destino.departamento else None
-                expediente.actual_area = destino.departamento.direccion.area if (destino.departamento and destino.departamento.direccion) else None
-                expediente.save()
-                
-                mov = MovimientoExpediente.objects.create(
-                    expediente=expediente,
-                    destino_oficina=destino,
-                    destino_departamento=expediente.actual_departamento,
-                    destino_direccion=expediente.actual_direccion,
-                    destino_area=expediente.actual_area,
-                    usuario_emisor=expediente.registrado_por,
-                    observacion="Expediente iniciado y numerado por Mesa de Entradas.",
-                    estado='Iniciado'
-                )
-                generar_notificaciones_destino(expediente, mov)
+            # Movimiento inicial (Mesa -> Destino inteligente)
+            dest_id = form.cleaned_data.get('destino_id')
+            dest_type = form.cleaned_data.get('destino_type')
+            
+            from organigrama.models import Area, Direccion, Departamento, Division, Subdivision, Seccion, Oficina
+            dest_map = {
+                'area': Area, 'direccion': Direccion, 'departamento': Departamento,
+                'division': Division, 'subdivision': Subdivision, 'seccion': Seccion, 'oficina': Oficina
+            }
+            
+            if dest_type in dest_map:
+                try:
+                    obj = dest_map[dest_type].objects.get(pk=dest_id)
+                    setattr(expediente, f"actual_{dest_type}", obj)
+                    expediente.save()
+                    
+                    # Crear Movimiento inicial
+                    mov = MovimientoExpediente(
+                        expediente=expediente,
+                        usuario_emisor=expediente.registrado_por,
+                        observacion="Expediente iniciado y numerado por Mesa de Entradas.",
+                        estado='Iniciado'
+                    )
+                    setattr(mov, f"destino_{dest_type}", obj)
+                    mov.save()
+                    generar_notificaciones_destino(expediente, mov)
+                except:
+                    pass
 
             messages.success(request, f"Expediente {expediente.nro_expediente} creado y numerado correctamente.")
             return redirect('expedientes:mesa_dashboard')
@@ -394,33 +461,53 @@ def confirmar_expediente_mesa(request, id_expediente):
             expediente.estado = 'En trámite'
             expediente.registrado_por = f"{funcionario.apellido}, {funcionario.nombre}"
             
-            # Destino del primer pase oficial
-            expediente.actual_area = form.cleaned_data.get('destino_area')
-            expediente.actual_direccion = form.cleaned_data.get('destino_direccion')
-            expediente.actual_departamento = form.cleaned_data.get('destino_departamento')
-            expediente.actual_oficina = form.cleaned_data.get('destino_oficina')
-            expediente.save() # Aquí se genera el nro_expediente
-            
-            # Crear Movimiento
-            mov = MovimientoExpediente.objects.create(
-                expediente=expediente,
-                destino_area=expediente.actual_area,
-                destino_direccion=expediente.actual_direccion,
-                destino_departamento=expediente.actual_departamento,
-                destino_oficina=expediente.actual_oficina,
-                observacion=form.cleaned_data.get('nota_mesa'),
-                usuario_emisor=expediente.registrado_por,
-                estado='Confirmado'
-            )
-            generar_notificaciones_destino(expediente, mov)
-            
+            # Destino del primer pase oficial (Inteligente)
+            dest_id = form.cleaned_data.get('destino_id')
+            dest_type = form.cleaned_data.get('destino_type')
+
+            from organigrama.models import Area, Direccion, Departamento, Division, Subdivision, Seccion, Oficina
+            dest_map = {
+                'area': Area, 'direccion': Direccion, 'departamento': Departamento,
+                'division': Division, 'subdivision': Subdivision, 'seccion': Seccion, 'oficina': Oficina
+            }
+
+            # Limpiar ubicaciones actuales antes de asignar la nueva
+            expediente.actual_area = None
+            expediente.actual_direccion = None
+            expediente.actual_departamento = None
+            expediente.actual_division = None
+            expediente.actual_subdivision = None
+            expediente.actual_seccion = None
+            expediente.actual_oficina = None
+
+            if dest_type in dest_map:
+                try:
+                    obj = dest_map[dest_type].objects.get(pk=dest_id)
+                    setattr(expediente, f"actual_{dest_type}", obj)
+                    expediente.save() # Genera nro_expediente
+                    
+                    # Crear Movimiento de Confirmación
+                    mov = MovimientoExpediente(
+                        expediente=expediente,
+                        observacion=form.cleaned_data.get('nota_mesa'),
+                        usuario_emisor=expediente.registrado_por,
+                        estado='Confirmado'
+                    )
+                    setattr(mov, f"destino_{dest_type}", obj)
+                    mov.save()
+                    generar_notificaciones_destino(expediente, mov)
+                except:
+                    expediente.save()
+
             messages.success(request, f"Expediente confirmado. Se le ha asignado el número: {expediente.nro_expediente}")
             return redirect('expedientes:mesa_dashboard')
     else:
         # Previsualizar datos de destino sugeridos por el solicitante
         initial_data = {
-            'destino_oficina': expediente.oficina_destino_sugerida,
-            'destino_departamento': expediente.oficina_destino_sugerida.departamento if expediente.oficina_destino_sugerida else None,
+            'destino_oficina': expediente.destino_oficina_sugerido,
+            'destino_departamento': expediente.destino_departamento_sugerido,
+            'destino_direccion': expediente.destino_direccion_sugerido,
+            'destino_area': expediente.destino_area_sugerido,
         }
         form = ConfirmarExpedienteMesaForm(initial=initial_data)
 

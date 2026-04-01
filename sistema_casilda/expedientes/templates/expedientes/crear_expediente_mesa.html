@@ -64,8 +64,10 @@
                                     {{ form.dirigido_a }}
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold small">Oficina de Destino *</label>
-                                    {{ form.oficina_destino_sugerida }}
+                                    <label class="form-label fw-bold small">Destino de Pase Inicial *</label>
+                                    <select id="destino_search" class="form-control select2-ajax"></select>
+                                    {{ form.destino_id }}
+                                    {{ form.destino_type }}
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label fw-bold small">Adjuntar Imagen/Documento</label>
@@ -91,12 +93,35 @@
 </div>
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('.select2').select2({
+        $('#destino_search').select2({
             theme: 'bootstrap-5',
-            width: '100%'
+            width: '100%',
+            placeholder: 'Busque el destino...',
+            allowClear: true,
+            minimumInputLength: 2,
+            ajax: {
+                url: '{% url "expedientes:buscar_destinos_ajax" %}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return { q: params.term };
+                },
+                processResults: function (data) {
+                    return { results: data.results };
+                },
+                cache: true
+            }
+        });
+
+        $('#destino_search').on('select2:select', function (e) {
+            var data = e.params.data;
+            var parts = data.id.split('_');
+            $('input[name="destino_id"]').val(parts[1]);
+            $('input[name="destino_type"]').val(parts[0]);
         });
     });
 </script>

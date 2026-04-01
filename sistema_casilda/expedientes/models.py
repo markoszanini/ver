@@ -11,6 +11,9 @@ class Expediente(models.Model):
     origen_area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados')
     origen_direccion = models.ForeignKey(Direccion, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados')
     origen_departamento = models.ForeignKey(Departamento, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados')
+    origen_division = models.ForeignKey(Division, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados')
+    origen_subdivision = models.ForeignKey(Subdivision, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados')
+    origen_seccion = models.ForeignKey(Seccion, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados')
     origen_oficina = models.ForeignKey(Oficina, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados')
     
     asunto = models.TextField(max_length=2000, blank=True, null=True, verbose_name="Asunto")
@@ -19,6 +22,9 @@ class Expediente(models.Model):
     actual_area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_actuales')
     actual_direccion = models.ForeignKey(Direccion, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_actuales')
     actual_departamento = models.ForeignKey(Departamento, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_actuales')
+    actual_division = models.ForeignKey(Division, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_actuales')
+    actual_subdivision = models.ForeignKey(Subdivision, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_actuales')
+    actual_seccion = models.ForeignKey(Seccion, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_actuales')
     actual_oficina = models.ForeignKey(Oficina, on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_actuales')
 
     fecha_salida = models.DateField(blank=True, null=True, verbose_name="Fecha de Finalización")
@@ -40,9 +46,15 @@ class Expediente(models.Model):
     creado_por = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_creados_user')
     solicitante_interno = models.ForeignKey('organigrama.Funcionario', on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_solicitados')
 
-    # Destino para Expedientes Internos
+    # Destino para Expedientes Internos (Sugerido al iniciar)
     dirigido_a = models.CharField(max_length=200, blank=True, null=True, verbose_name="Dirigido a (Nombre/Cargo)")
-    oficina_destino_sugerida = models.ForeignKey('organigrama.Oficina', on_delete=models.SET_NULL, null=True, blank=True, related_name='expedientes_sugeridos_destino')
+    destino_area_sugerido = models.ForeignKey('organigrama.Area', on_delete=models.SET_NULL, null=True, blank=True, related_name='sugeridos_area')
+    destino_direccion_sugerido = models.ForeignKey('organigrama.Direccion', on_delete=models.SET_NULL, null=True, blank=True, related_name='sugeridos_direccion')
+    destino_departamento_sugerido = models.ForeignKey('organigrama.Departamento', on_delete=models.SET_NULL, null=True, blank=True, related_name='sugeridos_depto')
+    destino_division_sugerido = models.ForeignKey('organigrama.Division', on_delete=models.SET_NULL, null=True, blank=True, related_name='sugeridos_division')
+    destino_subdivision_sugerido = models.ForeignKey('organigrama.Subdivision', on_delete=models.SET_NULL, null=True, blank=True, related_name='sugeridos_subdivision')
+    destino_seccion_sugerido = models.ForeignKey('organigrama.Seccion', on_delete=models.SET_NULL, null=True, blank=True, related_name='sugeridos_seccion')
+    destino_oficina_sugerido = models.ForeignKey('organigrama.Oficina', on_delete=models.SET_NULL, null=True, blank=True, related_name='sugeridos_oficina')
 
     # Seguimiento y Flujo (Mejoras)
     visto = models.BooleanField(default=False, verbose_name="Visto por Destino Actual")
@@ -85,6 +97,12 @@ class Expediente(models.Model):
     def ubicacion_display(self):
         if self.actual_oficina:
             return f"Ofi: {self.actual_oficina.nombre}"
+        if self.actual_seccion:
+            return f"Sec: {self.actual_seccion.nombre}"
+        if self.actual_subdivision:
+            return f"Subdiv: {self.actual_subdivision.nombre}"
+        if self.actual_division:
+            return f"Div: {self.actual_division.nombre}"
         if self.actual_departamento:
             return f"Depto: {self.actual_departamento.nombre}"
         if self.actual_direccion:
@@ -131,6 +149,9 @@ class MovimientoExpediente(models.Model):
     destino_area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True, blank=True)
     destino_direccion = models.ForeignKey(Direccion, on_delete=models.SET_NULL, null=True, blank=True)
     destino_departamento = models.ForeignKey(Departamento, on_delete=models.SET_NULL, null=True, blank=True)
+    destino_division = models.ForeignKey(Division, on_delete=models.SET_NULL, null=True, blank=True)
+    destino_subdivision = models.ForeignKey(Subdivision, on_delete=models.SET_NULL, null=True, blank=True)
+    destino_seccion = models.ForeignKey(Seccion, on_delete=models.SET_NULL, null=True, blank=True)
     destino_oficina = models.ForeignKey(Oficina, on_delete=models.SET_NULL, null=True, blank=True)
     
     estado = models.CharField(max_length=50, blank=True, null=True, verbose_name="Nuevo Estado")
