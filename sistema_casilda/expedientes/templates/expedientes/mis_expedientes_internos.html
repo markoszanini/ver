@@ -1,14 +1,14 @@
 {% extends 'portal/base_portal.html' %}
 {% load static %}
 
-{% block title %}MIs Solicitudes de Expediente - Casilda{% endblock %}
+{% block title %}Gestión de Expedientes - Casilda{% endblock %}
 
 {% block content %}
-<section class="glass-hero py-4 mb-5">
+<section class="glass-hero py-4 mb-4">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
-            <h1 class="display-5 fw-bold text-white mb-2">Mis Solicitudes</h1>
-            <p class="lead text-white opacity-75">Seguimiento de expedientes iniciados por usted.</p>
+            <h1 class="display-5 fw-bold text-white mb-1">Gestión de Expedientes</h1>
+            <p class="lead text-white opacity-75">Panel unificado de su oficina.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
@@ -22,88 +22,175 @@
 </section>
 
 <div class="container mb-5">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs border-0 mb-4" id="expedienteTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'bandeja' %}active{% endif %} border-0 fw-bold px-4 py-3 rounded-top-4" 
+                    id="bandeja-tab" data-bs-toggle="tab" data-bs-target="#bandeja-content" type="button" role="tab">
+                <i class="fa-solid fa-inbox me-2"></i> Bandeja de Entrada 
+                {% if pendientes.count > 0 %}
+                    <span class="badge bg-danger ms-2">{{ pendientes.count }}</span>
+                {% endif %}
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'todos' %}active{% endif %} border-0 fw-bold px-4 py-3 rounded-top-4" 
+                    id="todos-tab" data-bs-toggle="tab" data-bs-target="#todos-content" type="button" role="tab">
+                <i class="fa-solid fa-list-check me-2"></i> Seguimiento (Todos)
+            </button>
+        </li>
+    </ul>
 
-    <div class="glass-card overflow-hidden">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="ps-4">Fecha</th>
-                        <th>Asunto</th>
-                        <th>Estado</th>
-                        <th>Nro Expediente</th>
-                        <th class="text-end pe-4">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for exp in expedientes %}
-                    <tr>
-                        <td class="ps-4">
-                            <div class="fw-bold">{{ exp.fecha_ingreso|date:"d/m/Y" }}</div>
-                            <small class="text-muted">ID: {{ exp.id_expediente }}</small>
-                        </td>
-                        <td>
-                            <div class="text-truncate fw-bold" style="max-width: 300px;">{{ exp.asunto }}</div>
-                            <div class="mt-1">
-                                {% if exp.dirigido_a %}
-                                    <small class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 me-1">
-                                        Para: {{ exp.dirigido_a }}
-                                    </small>
-                                {% endif %}
-                                {% if exp.oficina_destino_sugerida %}
-                                    <small class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-10">
-                                        Destino: {{ exp.oficina_destino_sugerida.nombre }}
-                                    </small>
-                                {% endif %}
-                            </div>
-                        </td>
-                        <td>
-                            {% if not exp.confirmado %}
-                                <span class="badge bg-warning text-dark">
-                                    <i class="fa-solid fa-clock me-1"></i> Pendiente Mesa
-                                </span>
-                            {% else %}
-                                <span class="badge bg-success">
-                                    <i class="fa-solid fa-check me-1"></i> Confirmado
-                                </span>
-                            {% endif %}
-                            <div class="small mt-1 text-muted">{{ exp.estado }}</div>
-                        </td>
-                        <td class="fw-bold font-monospace">
-                            {% if exp.nro_expediente %}
-                                {{ exp.nro_expediente }}
-                            {% else %}
-                                <span class="text-muted fst-italic">Sin asignar</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-end pe-4">
-                            <a href="{% url 'expedientes:seguimiento_expediente' exp.id_expediente %}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                <i class="fa-solid fa-eye me-1"></i> Seguimiento
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center py-5">
-                            <div class="opacity-50">
-                                <i class="fa-solid fa-folder-open fs-1 mb-3"></i>
-                                <p>No has iniciado ninguna solicitud de expediente todavía.</p>
-                                <a href="{% url 'expedientes:iniciar_expediente_staff' %}" class="btn btn-primary mt-2">Iniciar mi primer expediente</a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="tab-content" id="expedienteTabsContent">
+        <!-- TAB 1: BANDEJA DE ENTRADA -->
+        <div class="tab-pane fade {% if active_tab == 'bandeja' %}show active{% endif %}" id="bandeja-content" role="tabpanel">
+            <div class="glass-card overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="ps-4">Estado</th>
+                                <th>Fecha Recibido</th>
+                                <th>Nro / Asunto</th>
+                                <th>Origen</th>
+                                <th class="text-end pe-4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exp in pendientes %}
+                            <tr {% if not exp.visto %}class="table-warning bg-opacity-10"{% endif %}>
+                                <td class="ps-4">
+                                    {% if not exp.visto %}
+                                        <span class="badge bg-danger rounded-pill pulse-small">NUEVO</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary rounded-pill" style="font-size: 0.65rem;">Visto</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="fw-bold">{{ exp.fecha_ingreso|date:"d/m/Y" }}</div>
+                                    <small class="text-muted">{{ exp.fecha_ingreso|timesince }}</small>
+                                </td>
+                                <td>
+                                    <div class="text-primary fw-bold">{{ exp.nro_expediente|default:"S/N" }}</div>
+                                    <div class="text-truncate" style="max-width: 300px;">{{ exp.asunto }}</div>
+                                </td>
+                                <td>
+                                    <span class="small">{{ exp.origen_display }}</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a href="{% url 'expedientes:procesar_expediente' exp.id_expediente %}" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm">
+                                        <i class="fa-solid fa-file-signature me-1"></i> Procesar
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="opacity-50">
+                                        <i class="fa-solid fa-circle-check fs-1 mb-3 text-success"></i>
+                                        <p class="lead mb-0">¡Todo al día! No hay pendientes en la bandeja.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: TODOS LOS EXPEDIENTES (SEGUIMIENTO) -->
+        <div class="tab-pane fade {% if active_tab == 'todos' %}show active{% endif %}" id="todos-content" role="tabpanel">
+            <div class="glass-card overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="ps-4">Fecha</th>
+                                <th>Nro / Estado</th>
+                                <th>Asunto</th>
+                                <th>Ubicación / Relación</th>
+                                <th class="text-end pe-4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exp in todos %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-bold">{{ exp.fecha_ingreso|date:"d/m/Y" }}</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark">{{ exp.nro_expediente|default:"S/N" }}</div>
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size: 0.65rem;">{{ exp.estado }}</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate fw-bold" style="max-width: 250px;">{{ exp.asunto }}</div>
+                                </td>
+                                <td>
+                                    <div class="small fw-bold">{{ exp.ubicacion_display }}</div>
+                                    {% if exp.origen_oficina == funcionario.oficina or exp.origen_departamento == funcionario.departamento or exp.origen_direccion == funcionario.direccion or exp.origen_area == funcionario.area %}
+                                        <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 small mt-1" style="font-size: 0.6rem;">INICIADO AQUÍ</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 small mt-1" style="font-size: 0.6rem;">RECIBIDO</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end pe-4">
+                                    {# Lógica solicitada: Si fue creado aquí, el botón es siempre "Detalle" #}
+                                    {% if exp.origen_oficina == funcionario.oficina or exp.origen_departamento == funcionario.departamento or exp.origen_direccion == funcionario.direccion or exp.origen_area == funcionario.area %}
+                                        <a href="{% url 'expedientes:seguimiento_expediente' exp.id_expediente %}" class="btn btn-outline-primary btn-sm rounded-pill px-4">
+                                            <i class="fa-solid fa-eye me-1"></i> Detalle
+                                        </a>
+                                    {% elif exp.actual_oficina == funcionario.oficina or exp.actual_departamento == funcionario.departamento or exp.actual_area == funcionario.area %}
+                                        <a href="{% url 'expedientes:procesar_expediente' exp.id_expediente %}" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm">
+                                            <i class="fa-solid fa-file-signature me-1"></i> Procesar
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'expedientes:seguimiento_expediente' exp.id_expediente %}" class="btn btn-outline-secondary btn-sm rounded-pill px-4">
+                                            <i class="fa-solid fa-eye me-1"></i> Detalle
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <p class="text-muted">No hay registros históricos de expedientes.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .nav-tabs .nav-link {
+        color: var(--muni-text-muted);
+        background: rgba(0,0,0,0.03);
+        margin-right: 5px;
+        transition: all 0.3s ease;
+    }
+    .nav-tabs .nav-link.active {
+        background: white !important;
+        color: var(--muni-green) !important;
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+    }
+    .nav-tabs .nav-link:hover:not(.active) {
+        background: rgba(0,0,0,0.06);
+    }
+    .pulse-small {
+        animation: pulse-red 2s infinite;
+        font-size: 0.6rem;
+        vertical-align: middle;
+    }
+    @keyframes pulse-red {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(220, 53, 69, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+    }
+</style>
 {% endblock %}

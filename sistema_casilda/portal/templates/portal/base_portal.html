@@ -233,6 +233,19 @@
                             </a>
                         </li>
                         {% if user.is_staff %}
+                        <li class="nav-item me-2">
+                            <a class="nav-link text-white position-relative" 
+                               href="{% if is_mesa_staff %}{% url 'expedientes:mesa_dashboard' %}{% else %}{% url 'expedientes:bandeja_entrada' %}{% endif %}" 
+                               title="Bandeja de Expedientes">
+                                <i class="fa-solid fa-bell"></i>
+                                {% if unread_expediente_count and unread_expediente_count > 0 %}
+                                    <span class="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                                        {{ unread_expediente_count }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/admin/" style="color: #ffca28 !important;">
                                 <i class="fa-solid fa-lock me-1"></i> Panel de Gestión
@@ -250,6 +263,7 @@
                             </a>
                         </li>
                         {% endif %}
+
                         <li class="nav-item ms-3">
                             <span class="text-white-50 me-3">Hola, {{ user.first_name|default:user.username }}</span>
                             <a class="btn btn-outline-light btn-sm" href="{% url 'portal:logout' %}">Salir</a>

@@ -52,9 +52,13 @@
                     <a href="{% url 'recursos_humanos:mis_vacaciones' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-umbrella-beach me-2 w-20"></i> Vacaciones
                     </a>
+                    
                     <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
-                        <i class="fa-solid fa-folder-tree me-2 w-20"></i> Mis Solicitudes
+                        <i class="fa-solid fa-folder-tree me-2 w-20"></i> Mis Expedientes
                     </a>
+
+
+
                     <a href="{% url 'compras:mis_ordenes_portal' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
                         <i class="fa-solid fa-receipt me-2 w-20"></i> Mis Órdenes
                     </a>
@@ -74,12 +78,12 @@
                 <div class="row g-3">
                     {% if perms.expedientes.view_expediente or funcionario.rango == 'JEFE' or funcionario.rango == 'SECRETARIO' %}
                     <div class="col-md-4">
-                        {% if 'mesa de entrada' in funcionario.departamento.nombre|lower %}
-                        <a href="/admin/expedientes/expediente/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                        {% if funcionario.departamento and 'mesa' in funcionario.departamento.nombre|lower %}
+                        <a href="{% url 'expedientes:mesa_dashboard' %}" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
                             <i class="fa-solid fa-folder-open fs-4 text-success me-3"></i>
                             <div>
-                                <h6 class="mb-0 fw-bold">Gestionar Expedientes</h6>
-                                <small class="text-muted">Carga y seguimiento</small>
+                                <h6 class="mb-0 fw-bold">Mesa de Entradas</h6>
+                                <small class="text-muted">Control y Numeración</small>
                             </div>
                         </a>
                         {% else %}
@@ -93,6 +97,7 @@
                         {% endif %}
                     </div>
                     {% endif %}
+
 
                     {% if perms.compras.view_ordencompra or funcionario.rango == 'JEFE' or funcionario.rango == 'SECRETARIO' %}
                     <div class="col-md-4">

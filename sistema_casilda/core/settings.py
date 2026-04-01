@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     'https://*.ngrok-free.app',
     'https://*.ngrok-free.dev',
+    'https://*.onrender.com',
 ]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -88,7 +89,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'reclamos.context_processors.unread_messages_processor',
+                'expedientes.context_processors.unread_notifications',
             ],
+
         },
     },
 ]
@@ -249,10 +252,16 @@ JAZZMIN_SETTINGS = {
                 "icon": "fas fa-share",
             },
             {
+                "name": "Mesa: Control y Foliado",
+                "url": "/expedientes/mesa/dashboard/",
+                "icon": "fas fa-stamp",
+            },
+            {
                 "name": "Gestión de Expedientes",
                 "url": "admin:expedientes_expediente_changelist",
                 "icon": "fas fa-folder-open",
             }
+
         ],
         "multas": [
             {
