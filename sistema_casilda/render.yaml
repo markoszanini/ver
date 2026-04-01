@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: sistema-casilda
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn core.wsgi:application"
+    healthCheckPath: "/"
+    releaseCommand: "python manage.py migrate && python manage.py loaddata db_backup_completo.json"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.x
+      - key: DJANGO_SETTINGS_MODULE
+        value: core.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: casilda-db
+          property: connectionString
+      - key: DEBUG
+        value: "False"
+
+databases:
+  - name: casilda-db
+    plan: free

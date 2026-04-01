@@ -1,0 +1,78 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Mis Recibos - Portal del Empleado{% endblock %}
+
+{% block content %}
+<div class="glass-hero text-white mb-5" style="background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Recibos de Sueldo</h1>
+                <p class="lead opacity-75 mb-0">Historial completo de tus recibos de haberes.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <a href="{% url 'recursos_humanos:portal_empleado' %}" class="btn-volver-pill shadow-sm">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Portal
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 animate-up">
+            <div class="glass-card mb-4 overflow-hidden shadow-lg border-0">
+                <div class="px-4 py-4 border-bottom bg-light bg-opacity-50">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="fw-bold mb-0 text-dark">Documentación Disponible</h5>
+                            <p class="text-muted small mb-0">Puedes descargar tus recibos en formato PDF para presentarlos donde necesites.</p>
+                        </div>
+                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                            <i class="fa-solid fa-cloud-arrow-down fs-4 text-muted"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="ps-4">Periodo (Mes/Año)</th>
+                                <th>Fecha de Carga</th>
+                                <th class="pe-4 text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rec in recibos %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa-solid fa-file-pdf fs-4 text-danger me-3"></i>
+                                        <span class="fw-bold text-dark">Mes {{ rec.mes }} del {{ rec.anio }}</span>
+                                    </div>
+                                </td>
+                                <td><span class="text-muted">{{ rec.fecha_subida|date:"d/m/Y - H:i" }}</span></td>
+                                <td class="pe-4 text-end">
+                                    <a href="{{ rec.archivo.url }}" target="_blank" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold">
+                                        <i class="fa-solid fa-download me-1"></i> Descargar PDF
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="opacity-50 mb-3"><i class="fa-solid fa-file-circle-xmark display-4"></i></div>
+                                    <p class="text-muted italic">Todavía no hay recibos cargados en tu legajo.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

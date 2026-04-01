@@ -7,6 +7,8 @@
     <title>{% block title %}Portal del Vecino - Casilda{% endblock %}</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'img/logo_icon.png' %}">
+    <!-- jQuery (Needed for some dynamic portal features) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -147,7 +149,52 @@
             right: 20px;
             z-index: 9999;
         }
-        /* Global Fluid Adjustment for wide screens */
+        /* Botón Volver al Panel (Estilo pedido) */
+        .btn-volver-pill {
+            background-color: #f2b705 !important;
+            color: #000 !important;
+            text-transform: uppercase;
+            text-decoration: underline !important;
+            font-weight: 700;
+            border-radius: 50px !important;
+            padding: 0.5rem 1.5rem !important;
+            font-size: 0.8rem !important;
+            display: inline-flex;
+            align-items: center;
+            border: none !important;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-volver-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: #f7b731 !important;
+            color: #000 !important;
+        }
+
+        /* Botón de Acción Principal (Pill) */
+        .btn-accion-pill {
+            background-color: #f2b705 !important;
+            color: #000 !important;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: 50px !important;
+            padding: 0.5rem 1.5rem !important;
+            font-size: 0.8rem !important;
+            display: inline-flex;
+            align-items: center;
+            border: none !important;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-accion-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: #f7b731 !important;
+            color: #000 !important;
+        }
+
+        /* Fluid Adjustment for wide screens */
         @media (min-width: 1200px) {
             .container {
                 max-width: 95% !important;
@@ -181,16 +228,30 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'portal:dashboard' %}">
-                                <i class="fa-solid fa-chart-line me-1"></i> Mi Panel
+                                <i class="fa-solid fa-{% if user.is_staff %}user-tie{% else %}chart-line{% endif %} me-1"></i> 
+                                {% if user.is_staff %}Portal Empleado{% else %}Mi Panel{% endif %}
                             </a>
                         </li>
                         {% if user.is_staff %}
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/admin/" style="color: #ffca28 !important;">
-                                <i class="fa-solid fa-lock me-1"></i> Panel Empleado
+                        <li class="nav-item me-2">
+                            <a class="nav-link text-white position-relative" 
+                               href="{% if is_mesa_staff %}{% url 'expedientes:mesa_dashboard' %}{% else %}{% url 'expedientes:bandeja_entrada' %}{% endif %}" 
+                               title="Bandeja de Expedientes">
+                                <i class="fa-solid fa-bell"></i>
+                                {% if unread_expediente_count and unread_expediente_count > 0 %}
+                                    <span class="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                                        {{ unread_expediente_count }}
+                                    </span>
+                                {% endif %}
                             </a>
                         </li>
-                        {% endif %}
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/admin/" style="color: #ffca28 !important;">
+                                <i class="fa-solid fa-lock me-1"></i> Panel de Gestión
+                            </a>
+                        </li>
+                        {% else %}
                         <li class="nav-item me-2">
                             <a class="nav-link text-white position-relative" href="{% url 'reclamos:mis_reclamos' %}">
                                 <i class="fa-solid fa-bell"></i>
@@ -201,6 +262,8 @@
                                 {% endif %}
                             </a>
                         </li>
+                        {% endif %}
+
                         <li class="nav-item ms-3">
                             <span class="text-white-50 me-3">Hola, {{ user.first_name|default:user.username }}</span>
                             <a class="btn btn-outline-light btn-sm" href="{% url 'portal:logout' %}">Salir</a>

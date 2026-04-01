@@ -82,7 +82,7 @@
                 <p class="lead opacity-75 mb-0">Cargá tus datos una sola vez y postulate a múltiples vacantes del área de producción.</p>
             </div>
             <div class="col-md-4 text-center text-md-end mt-3 mt-md-0 position-relative" style="z-index: 1000;">
-                <a href="{% url 'portal:dashboard' %}" class="btn-muni btn-muni-primary shadow-lg d-inline-flex align-items-center">
+                <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
                     <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
                 </a>
             </div>
@@ -116,14 +116,126 @@
                         <div id="cDatosPersonales" class="accordion-collapse collapse show" data-bs-parent="#cvAccordion">
                             <div class="accordion-body">
                                 <div class="row g-4">
-                                    {% for field in form %}
-                                        <div class="{% if field.name == 'sobre_mi' %}col-12{% elif field.name == 'altura' %}col-md-2{% elif field.name == 'calle' %}col-md-4{% else %}col-md-6{% endif %}">
-                                            <label class="form-label">{{ field.label }}</label>
-                                            {{ field }}
-                                            {% if field.help_text %}<div class="form-text mt-1 x-small">{{ field.help_text }}</div>{% endif %}
-                                            {% if field.errors %}<div class="text-danger x-small mt-1">{{ field.errors.0 }}</div>{% endif %}
-                                        </div>
-                                    {% endfor %}
+                                    <!-- Sexo y Fecha de Nacimiento -->
+                                    <div id="div_id_sexo" class="col-md-6 animate-up">
+                                        <label class="form-label">{{ form.sexo.label }}</label>
+                                        {{ form.sexo }}
+                                        {% if form.sexo.errors %}<div class="text-danger x-small mt-1">{{ form.sexo.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_fecha_nac" class="col-md-6 animate-up">
+                                        <label class="form-label">{{ form.fecha_nac.label }}</label>
+                                        {{ form.fecha_nac }}
+                                        {% if form.fecha_nac.errors %}<div class="text-danger x-small mt-1">{{ form.fecha_nac.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <!-- Calle y Altura -->
+                                    <div id="div_id_calle" class="col-md-10 animate-up">
+                                        <label class="form-label">{{ form.calle.label }}</label>
+                                        {{ form.calle }}
+                                        {% if form.calle.errors %}<div class="text-danger x-small mt-1">{{ form.calle.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_altura" class="col-md-2 animate-up">
+                                        <label class="form-label">{{ form.altura.label }}</label>
+                                        {{ form.altura }}
+                                        {% if form.altura.errors %}<div class="text-danger x-small mt-1">{{ form.altura.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <!-- Localidad, Detalle y CP -->
+                                    <div id="div_id_localidad" class="col-md-5 animate-up">
+                                        <label class="form-label">Localidad (Casilda / Otros)</label>
+                                        {{ form.localidad }}
+                                        {% if form.localidad.errors %}<div class="text-danger x-small mt-1">{{ form.localidad.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_localidad_detalle" class="col-md-4 animate-up">
+                                        <label class="form-label">Otras Localidades</label>
+                                        {{ form.localidad_detalle }}
+                                        {% if form.localidad_detalle.errors %}<div class="text-danger x-small mt-1">{{ form.localidad_detalle.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_cp" class="col-md-3 animate-up">
+                                        <label class="form-label">{{ form.cp.label }}</label>
+                                        {{ form.cp }}
+                                        {% if form.cp.errors %}<div class="text-danger x-small mt-1">{{ form.cp.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <!-- Teléfono y Mail -->
+                                    <div id="div_id_telefono" class="col-md-6 animate-up">
+                                        <label class="form-label">{{ form.telefono.label }}</label>
+                                        {{ form.telefono }}
+                                        {% if form.telefono.errors %}<div class="text-danger x-small mt-1">{{ form.telefono.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_mail" class="col-md-6 animate-up">
+                                        <label class="form-label">{{ form.mail.label }}</label>
+                                        {{ form.mail }}
+                                        {% if form.mail.errors %}<div class="text-danger x-small mt-1">{{ form.mail.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <!-- Situación Actual -->
+                                    <div id="div_id_situacion_actual" class="col-12 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.situacion_actual.label }}</label>
+                                        {{ form.situacion_actual }}
+                                        {% if form.situacion_actual.errors %}<div class="text-danger x-small mt-1">{{ form.situacion_actual.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <!-- Sobre Mí -->
+                                    <div id="div_id_sobre_mi" class="col-12 animate-up">
+                                        <label class="form-label">Contanos sobre vos / Breve biografía</label>
+                                        {{ form.sobre_mi }}
+                                        {% if form.sobre_mi.errors %}<div class="text-danger x-small mt-1">{{ form.sobre_mi.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <!-- Movilidad Propia y Medio -->
+                                    <div id="div_id_movilidad_propia" class="col-md-6 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.movilidad_propia.label }}</label>
+                                        {{ form.movilidad_propia }}
+                                        {% if form.movilidad_propia.errors %}<div class="text-danger x-small mt-1">{{ form.movilidad_propia.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_medio_movilidad" class="col-md-6 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.medio_movilidad.label }}</label>
+                                        {{ form.medio_movilidad }}
+                                        {% if form.medio_movilidad.errors %}<div class="text-danger x-small mt-1">{{ form.medio_movilidad.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <div class="w-100 d-none d-md-block"></div>
+
+                                    <!-- Licencia Conducir, Categoría y Vencimiento -->
+                                    <div id="div_id_licencia_conducir" class="col-md-4 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.licencia_conducir.label }}</label>
+                                        {{ form.licencia_conducir }}
+                                        {% if form.licencia_conducir.errors %}<div class="text-danger x-small mt-1">{{ form.licencia_conducir.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_licencia_categoria" class="col-md-4 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.licencia_categoria.label }}</label>
+                                        {{ form.licencia_categoria }}
+                                        {% if form.licencia_categoria.errors %}<div class="text-danger x-small mt-1">{{ form.licencia_categoria.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_licencia_vencimiento" class="col-md-4 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.licencia_vencimiento.label }}</label>
+                                        {{ form.licencia_vencimiento }}
+                                        {% if form.licencia_vencimiento.errors %}<div class="text-danger x-small mt-1">{{ form.licencia_vencimiento.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <div class="w-100 d-none d-md-block"></div>
+
+                                    <!-- Disponibilidad Viajar y Horaria (Siempre visibles en una fila) -->
+                                    <div id="div_id_disponibilidad_viajar" class="col-md-6 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.disponibilidad_viajar.label }}</label>
+                                        {{ form.disponibilidad_viajar }}
+                                        {% if form.disponibilidad_viajar.errors %}<div class="text-danger x-small mt-1">{{ form.disponibilidad_viajar.errors.0 }}</div>{% endif %}
+                                    </div>
+                                    <div id="div_id_disponibilidad_horaria" class="col-md-6 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">{{ form.disponibilidad_horaria.label }}</label>
+                                        {{ form.disponibilidad_horaria }}
+                                        {% if form.disponibilidad_horaria.errors %}<div class="text-danger x-small mt-1">{{ form.disponibilidad_horaria.errors.0 }}</div>{% endif %}
+                                    </div>
+
+                                    <div class="w-100 d-none d-md-block"></div>
+                                    
+                                    <!-- CV Archivo -->
+                                    <div id="div_id_cv" class="col-12 animate-up border-top pt-3 mt-4">
+                                        <label class="form-label">Adjuntar CV en PDF (opcional si ya cargó sus datos arriba)</label>
+                                        {{ form.cv }}
+                                        {% if form.cv.errors %}<div class="text-danger x-small mt-1">{{ form.cv.errors.0 }}</div>{% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -238,8 +350,46 @@
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
+{% endblock %}
 
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fieldMap = {
+            'movilidad_propia': ['medio_movilidad'],
+            'licencia_conducir': ['licencia_categoria', 'licencia_vencimiento']
+        };
+
+        function toggleFields() {
+            Object.keys(fieldMap).forEach(key => {
+                const parentField = document.querySelector(`[name="${key}"]`);
+                const childIds = fieldMap[key];
+                
+                if (parentField) {
+                    childIds.forEach(childId => {
+                        const childDiv = document.getElementById(`div_id_${childId}`);
+                        if (childDiv) {
+                            if (parentField.value === 'S') {
+                                childDiv.style.display = 'block';
+                            } else {
+                                childDiv.style.display = 'none';
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // Event listeners para cambios
+        Object.keys(fieldMap).forEach(key => {
+            const field = document.querySelector(`[name="${key}"]`);
+            if (field) {
+                field.addEventListener('change', toggleFields);
+            }
+        });
+
+        // Ejecutar al inicio para el estado actual
+        toggleFields();
+    });
+</script>
 {% endblock %}

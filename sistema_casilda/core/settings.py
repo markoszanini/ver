@@ -25,9 +25,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-6j((ys)amt4zbx+vv@osog04q$@yz6g$v-1w)m#=*6+@0_sj=6')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'regiodesarrollos.com.ar', 'www.regiodesarrollos.com.ar']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    'https://*.ngrok-free.dev',
+    'https://*.onrender.com',
+    'https://regiodesarrollos.com.ar',
+    'https://www.regiodesarrollos.com.ar',
+]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -55,6 +63,7 @@ INSTALLED_APPS = [
     'impuestos',
     'turnos',
     'capacitaciones',
+    'recursos_humanos',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +91,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'reclamos.context_processors.unread_messages_processor',
+                'expedientes.context_processors.unread_notifications',
             ],
+
         },
     },
 ]
@@ -95,7 +106,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        default=os.environ.get('DATABASE_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}'),
         conn_max_age=600
     )
 }
@@ -143,7 +154,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
@@ -182,6 +193,8 @@ JAZZMIN_SETTINGS = {
             "expedientes.MovimientoExpediente",
             "apicultura.Apicultor",
             "apicultura.Extraccion",
+            "compras.OrdenCompra",
+            "compras.DetalleOrdenCompra",
         ],
     "navigation_expanded": False,
     "show_ui_builder": False,
@@ -241,10 +254,16 @@ JAZZMIN_SETTINGS = {
                 "icon": "fas fa-share",
             },
             {
+                "name": "Mesa: Control y Foliado",
+                "url": "/expedientes/mesa/dashboard/",
+                "icon": "fas fa-stamp",
+            },
+            {
                 "name": "Gestión de Expedientes",
                 "url": "admin:expedientes_expediente_changelist",
                 "icon": "fas fa-folder-open",
             }
+
         ],
         "multas": [
             {
@@ -308,6 +327,18 @@ JAZZMIN_SETTINGS = {
             {"name": "Nueva extracción", "url": "admin:apicultura_extraccion_add", "icon": "fas fa-plus-circle"},
             {"name": "Listado de extracciones", "url": "admin:apicultura_extraccion_changelist", "icon": "fas fa-clipboard-list"},
             {"name": "Generar informe", "url": "/admin/apicultura/generar-informe/", "icon": "fas fa-file-pdf"},
+        ],
+        "compras": [
+            {
+                "name": "Gestión de Compras",
+                "url": "/compras/iniciar/",
+                "icon": "fas fa-cart-shopping",
+            },
+            {
+                "name": "Mis Órdenes",
+                "url": "/compras/mis-ordenes/",
+                "icon": "fas fa-list-check",
+            }
         ]
     },
 }

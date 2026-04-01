@@ -1,0 +1,122 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Mis Órdenes de Compra - Casilda{% endblock %}
+
+{% block content %}
+<section class="glass-hero py-4 mb-5">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5 fw-bold text-white mb-0">Mis Órdenes de Compra</h1>
+            <p class="lead text-white opacity-75 mb-0">Listado de sus solicitudes generadas.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
+                <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+            </a>
+            <a href="{% url 'compras:iniciar_oc_portal' %}" class="btn-accion-pill shadow-lg">
+                <i class="fa-solid fa-plus me-2"></i> Nueva Orden
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="glass-card overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Fecha</th>
+                        <th>Nro OC / ID</th>
+                        <th>Destino / Detalles</th>
+                        <th>Estado</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for oc in ordenes %}
+                    <tr>
+                        <td class="ps-4">
+                            <div class="fw-bold">{{ oc.fecha_solicitud|date:"d/m/Y" }}</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-dark bg-opacity-10 text-dark border border-dark border-opacity-10 font-monospace">
+                                {{ oc.nro_oc|default:"PENDIENTE" }}
+                            </span>
+                            <div class="small text-muted mt-1">Ref: #{{ oc.id_oc }}</div>
+                        </td>
+                        <td>
+                            <div class="fw-bold text-primary">{{ oc.destino|default:"Sin destino" }}</div>
+                            <div class="small text-muted text-truncate" style="max-width: 300px;">
+                                {{ oc.detalles.all|join:", " }}
+                            </div>
+                        </td>
+                        <td>
+                            {% if oc.estado == 'En curso' %}
+                                <span class="badge bg-warning text-dark px-3 rounded-pill">
+                                    <i class="fa-solid fa-clock me-1"></i> {{ oc.estado }}
+                                </span>
+                            {% elif oc.estado == 'Finalizado' %}
+                                <span class="badge bg-success px-3 rounded-pill">
+                                    <i class="fa-solid fa-check me-1"></i> {{ oc.estado }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary px-3 rounded-pill">{{ oc.estado }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end pe-4">
+                            <!-- Link to admin or a detail view if we build one -->
+                            <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill opacity-50" style="cursor: not-allowed;">
+                                Ver Detalle
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <div class="opacity-50">
+                                <i class="fa-solid fa-cart-shopping fs-1 mb-3"></i>
+                                <p>No has generado ninguna orden de compra todavía.</p>
+                                <a href="{% url 'compras:iniciar_oc_portal' %}" class="btn btn-primary rounded-pill px-4 mt-2">Iniciar mi primera OC</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
+    .btn-muni-primary {
+        background: linear-gradient(135deg, #1f5f8b 0%, #164a6d 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+    .btn-muni-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(31, 95, 139, 0.3);
+        color: white;
+    }
+</style>
+{% endblock %}

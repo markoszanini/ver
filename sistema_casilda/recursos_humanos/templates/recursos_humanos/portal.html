@@ -1,0 +1,313 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Portal del Empleado - Casilda Conecta{% endblock %}
+
+{% block extra_css %}
+<style>
+    .w-20 { width: 25px; text-align: center; }
+    .hover-lift {
+        transition: all 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        background-color: #f8f9fa !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-hero text-white mb-5" style="background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-1">Portal del Empleado</h1>
+                <p class="lead opacity-75 mb-0">Bienvenido/a, <strong>{{ funcionario.nombre }} {{ funcionario.apellido }}</strong>. Tu información laboral en un solo lugar.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <span class="badge fs-6 py-2 px-4 rounded-pill bg-white bg-opacity-25" style="backdrop-filter: blur(4px);">
+                    <i class="fa-solid fa-user-tie me-1 text-info"></i> {{ funcionario.rango|title }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <!-- Sidebar Navigation (Employee specific) -->
+        <div class="col-lg-3 animate-up">
+            <div class="glass-card p-4 sticky-top" style="top: 100px; z-index: 10;">
+                <div class="bg-dark p-2 mb-4 rounded-3 text-center border-bottom border-info border-2">
+                    <h6 class="fw-bold text-info small text-uppercase mb-0">Mi Perfil Laboral</h6>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    <a href="{% url 'recursos_humanos:portal_empleado' %}" class="dash-sidebar-link active text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-house me-2 w-20"></i> Inicio Portal
+                    </a>
+                    <a href="{% url 'recursos_humanos:mis_recibos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-file-pdf me-2 w-20"></i> Recibos de Sueldo
+                    </a>
+                    <a href="{% url 'recursos_humanos:mis_vacaciones' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-umbrella-beach me-2 w-20"></i> Vacaciones
+                    </a>
+                    
+                    <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-folder-tree me-2 w-20"></i> Mis Expedientes
+                    </a>
+
+
+
+                    <a href="{% url 'compras:mis_ordenes_portal' %}" class="dash-sidebar-link text-dark text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-receipt me-2 w-20"></i> Mis Órdenes
+                    </a>
+                    <hr>
+                    <a href="{% url 'portal:logout' %}" class="dash-sidebar-link text-danger text-decoration-none d-flex align-items-center">
+                        <i class="fa-solid fa-right-from-bracket me-2 w-20"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9 animate-up">
+            <!-- Herramientas de Gestión Directa -->
+            <div class="glass-card p-4 mb-4 border-start border-4 border-warning bg-warning bg-opacity-5">
+                <h5 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-briefcase me-2 text-warning"></i> Mis Herramientas de Trabajo</h5>
+                <div class="row g-3">
+                    {% if perms.expedientes.view_expediente or funcionario.rango == 'JEFE' or funcionario.rango == 'SECRETARIO' %}
+                    <div class="col-md-4">
+                        {% if funcionario.departamento and 'mesa' in funcionario.departamento.nombre|lower %}
+                        <a href="{% url 'expedientes:mesa_dashboard' %}" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-folder-open fs-4 text-success me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Mesa de Entradas</h6>
+                                <small class="text-muted">Control y Numeración</small>
+                            </div>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-folder-plus fs-4 text-success me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Iniciar Expediente</h6>
+                                <small class="text-muted">Solicitudes internas</small>
+                            </div>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+
+                    {% if perms.compras.view_ordencompra or funcionario.rango == 'JEFE' or funcionario.rango == 'SECRETARIO' %}
+                    <div class="col-md-4">
+                        <a href="{% url 'compras:iniciar_oc_portal' %}" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-cart-plus fs-4 text-primary me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Gestión de Compras</h6>
+                                <small class="text-muted">Nuevo Sistema Profesional</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if perms.turnos.view_turno %}
+                    <div class="col-md-4">
+                        <a href="/admin/turnos/turno/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-calendar-check fs-4 text-danger me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Agenda de Turnos</h6>
+                                <small class="text-muted">Licencias y trámites</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if perms.reclamos.view_reclamo %}
+                    <div class="col-md-4">
+                        <a href="/admin/reclamos/reclamo/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-bullhorn fs-4 text-warning me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Reclamos Vecinales</h6>
+                                <small class="text-muted">Atención y resolución</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if perms.apicultura.view_apicultor %}
+                    <div class="col-md-4">
+                        <a href="/admin/apicultura/apicultor/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-bug fs-4 text-warning me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Apicultura</h6>
+                                <small class="text-muted">Manejo de registros</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if perms.empleo.view_postulante %}
+                    <div class="col-md-4">
+                        <a href="/admin/empleo/postulante/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-user-graduate fs-4 text-info me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Bolsa de Empleo</h6>
+                                <small class="text-muted">Postulantes y perfiles</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if perms.ferias.view_feriante %}
+                    <div class="col-md-4">
+                        <a href="/admin/ferias/feriante/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-shop fs-4 text-success me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Gestión de Ferias</h6>
+                                <small class="text-muted">Feriantes e inscripciones</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if perms.capacitaciones.view_capacitacion %}
+                    <div class="col-md-4">
+                        <a href="/admin/capacitaciones/capacitacion/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-graduation-cap fs-4 text-primary me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Capacitaciones</h6>
+                                <small class="text-muted">Cursos e inscritos</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if perms.multas.view_acta %}
+                    <div class="col-md-4">
+                        <a href="/admin/multas/acta/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center">
+                            <i class="fa-solid fa-file-invoice fs-4 text-secondary me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Juzgado de Faltas</h6>
+                                <small class="text-muted">Gestión de infracciones</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if puede_gestionar_rrhh %}
+                    <div class="col-md-4">
+                        <a href="/admin/recursos_humanos/" class="btn btn-white w-100 shadow-sm border-0 py-3 rounded-4 hover-lift text-start d-flex align-items-center" style="border: 2px solid #ffca28 !important;">
+                            <i class="fa-solid fa-users-gear fs-4 text-warning me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Gestión de RRHH</h6>
+                                <small class="text-muted">Recibos, novedades y vacaciones</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if novedades %}
+            <div class="glass-card bg-info bg-opacity-10 border-info border-opacity-20 p-4 mb-4">
+                <h5 class="fw-bold mb-3 text-info"><i class="fa-solid fa-bullhorn me-2"></i> Noticias de RRHH</h5>
+                <div class="list-group list-group-flush bg-transparent">
+                    {% for nov in novedades %}
+                    <div class="list-group-item bg-transparent px-0 border-info border-opacity-10">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1 fw-bold">{{ nov.titulo }}</h6>
+                            <small class="text-muted">{{ nov.fecha|date:"d/m/Y" }}</small>
+                        </div>
+                        <p class="mb-1 small text-muted">{{ nov.mensaje }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row g-4">
+                <!-- Info Laboral -->
+                <div class="col-md-6">
+                    <div class="glass-card p-4 h-100 shadow-sm border-0">
+                        <h5 class="fw-bold mb-4 border-bottom pb-2">Información de Legajo</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-3 d-flex justify-content-between">
+                                <span class="text-muted">Legajo Nro:</span>
+                                <span class="fw-bold text-dark">{{ funcionario.nro_legajo|default:"No asignado" }}</span>
+                            </li>
+                            <li class="mb-3 d-flex justify-content-between">
+                                <span class="text-muted">Área:</span>
+                                <span class="fw-bold text-dark">{{ funcionario.area.nombre|default:"General" }}</span>
+                            </li>
+                            <li class="mb-3 d-flex justify-content-between">
+                                <span class="text-muted">Fecha Ingreso:</span>
+                                <span class="fw-bold text-dark">{{ funcionario.fecha_alta|date:"d/m/Y" }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Resumen Vacaciones -->
+                <div class="col-md-6">
+                    <div class="glass-card p-4 h-100 shadow-sm border-0">
+                        <h5 class="fw-bold mb-4 border-bottom pb-2">Estado de Vacaciones</h5>
+                        {% if vacaciones %}
+                        <div class="text-center">
+                            <h2 class="display-4 fw-bold text-success mb-0">{{ vacaciones.dias_disponibles }}</h2>
+                            <p class="text-muted">Días Disponibles (Año {{ vacaciones.anio_correspondiente }})</p>
+                            <div class="progress mt-3" style="height: 10px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {% widthratio vacaciones.dias_tomados vacaciones.dias_totales 100 %}%;"></div>
+                            </div>
+                            <small class="text-muted mt-2 d-block">Has tomado {{ vacaciones.dias_tomados }} de {{ vacaciones.dias_totales }} días.</small>
+                        </div>
+                        {% else %}
+                        <p class="text-muted italic text-center py-4">Información de vacaciones no cargada.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Últimos Recibos -->
+                <div class="col-12">
+                    <div class="glass-card mb-4 overflow-hidden">
+                        <div class="px-4 py-3 border-bottom d-flex align-items-center justify-content-between bg-light bg-opacity-50">
+                            <h5 class="fw-bold mb-0 small text-uppercase text-muted letter-spacing-1">
+                                <i class="fa-solid fa-file-invoice-dollar me-2 text-primary"></i> Últimos Recibos de Sueldo
+                            </h5>
+                            <a href="{% url 'recursos_humanos:mis_recibos' %}" class="text-decoration-none small fw-bold">Ver todos los meses <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <tbody>
+                                    {% for rec in recibos %}
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fa-solid fa-file-pdf fs-3 text-danger me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold">Mes {{ rec.mes }} - {{ rec.anio }}</h6>
+                                                    <small class="text-muted">Subido el {{ rec.fecha_subida|date:"d/m/Y" }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="pe-4 text-end">
+                                            <a href="{{ rec.archivo.url }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                                <i class="fa-solid fa-download me-1"></i> Descargar
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="2" class="text-center py-4 text-muted">No tenés recibos cargados todavía.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Direccion, Departamento, Division, Subdivision, Seccion, Oficina
+
+def get_direcciones(request):
+    area_id = request.GET.get('area_id')
+    if not area_id:
+        return JsonResponse({'results': []})
+    qs = Direccion.objects.filter(area_id=area_id)
+    return JsonResponse({'results': [{'id': q.pk, 'text': q.nombre} for q in qs]})
+
+def get_departamentos(request):
+    area_id = request.GET.get('area_id')
+    dir_id = request.GET.get('dir_id')
+    
+    if dir_id:
+        qs = Departamento.objects.filter(direccion_id=dir_id)
+    elif area_id:
+        # Mostramos todos los deptos del área si no hay dirección seleccionada
+        qs = Departamento.objects.filter(area_id=area_id)
+    else:
+        qs = Departamento.objects.none()
+        
+    return JsonResponse({'results': [{'id': q.pk, 'text': q.nombre} for q in qs]})
+
+def get_divisiones(request):
+    area_id = request.GET.get('area_id')
+    if area_id == '24':
+        return JsonResponse({'results': []})
+    depto_id = request.GET.get('depto_id')
+    if not depto_id:
+        return JsonResponse({'results': []})
+    qs = Division.objects.filter(departamento_id=depto_id)
+    return JsonResponse({'results': [{'id': q.pk, 'text': q.nombre} for q in qs]})
+
+def get_subdivisiones(request):
+    area_id = request.GET.get('area_id')
+    if area_id == '24':
+        return JsonResponse({'results': []})
+    depto_id = request.GET.get('depto_id')
+    div_id = request.GET.get('div_id')
+    if div_id:
+        qs = Subdivision.objects.filter(division_id=div_id)
+    elif depto_id:
+        qs = Subdivision.objects.filter(departamento_id=depto_id)
+    else:
+        return JsonResponse({'results': []})
+    return JsonResponse({'results': [{'id': q.pk, 'text': q.nombre} for q in qs]})
+
+def get_secciones(request):
+    area_id = request.GET.get('area_id')
+    if area_id == '24':
+        return JsonResponse({'results': []})
+    depto_id = request.GET.get('depto_id')
+    subdiv_id = request.GET.get('subdiv_id')
+    if subdiv_id:
+        qs = Seccion.objects.filter(subdivision_id=subdiv_id)
+    elif depto_id:
+        qs = Seccion.objects.filter(departamento_id=depto_id)
+    else:
+        return JsonResponse({'results': []})
+    return JsonResponse({'results': [{'id': q.pk, 'text': q.nombre} for q in qs]})
+
+def get_oficinas(request):
+    area_id = request.GET.get('area_id')
+    dir_id = request.GET.get('dir_id')
+    depto_id = request.GET.get('depto_id')
+    div_id = request.GET.get('div_id')
+    subdiv_id = request.GET.get('subdiv_id')
+    sec_id = request.GET.get('sec_id')
+    
+    # REGLA ESPECIAL AREA 24 (PRODUCCION)
+    if area_id == '24':
+        if not depto_id:
+            return JsonResponse({'results': []})
+        qs = Oficina.objects.filter(area_id=area_id, departamento_id=depto_id)
+        return JsonResponse({'results': [{'id': q.pk, 'text': q.nombre} for q in qs]})
+
+    if sec_id:
+        qs = Oficina.objects.filter(seccion_id=sec_id)
+    elif subdiv_id:
+        qs = Oficina.objects.filter(subdivision_id=subdiv_id)
+    elif div_id:
+        qs = Oficina.objects.filter(division_id=div_id)
+    elif depto_id:
+        qs = Oficina.objects.filter(departamento_id=depto_id)
+    elif dir_id:
+        qs = Oficina.objects.filter(direccion_id=dir_id)
+    elif area_id:
+        qs = Oficina.objects.filter(area_id=area_id)
+    else:
+        qs = Oficina.objects.none()
+        
+    return JsonResponse({'results': [{'id': q.pk, 'text': q.nombre} for q in qs]})

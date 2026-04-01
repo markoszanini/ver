@@ -54,6 +54,9 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
+    if request.user.is_staff:
+        return redirect('recursos_humanos:portal_empleado')
+        
     vecino = getattr(request.user, 'vecino_profile', None)
     expedientes = []
     notificaciones = []
@@ -204,3 +207,7 @@ def inscribirse_feria(request, feria_id):
         messages.success(request, f"Te has inscripto correctamente a {feria.nombre}. Sujeto a validación.")
         
     return redirect('portal:mis_ferias')
+
+@login_required
+def omic_view(request):
+    return render(request, 'portal/omic.html')

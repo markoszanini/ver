@@ -68,7 +68,7 @@
                         {% if tipo_consulta == 'general' or tipo_consulta == 'nomenclatura' %}
                         <div class="col-md-{% if tipo_consulta == 'general' %}4{% else %}12{% endif %}">
                             <label class="form-label fw-bold text-muted small text-uppercase">Nomenclatura Catastral</label>
-                            <input type="text" name="nomenclatura" class="form-control form-control-lg border-0 bg-light shadow-sm" placeholder="Opcional" {% if tipo_consulta == 'nomenclatura' %}required{% endif %}>
+                            <input type="text" name="nomenclatura" class="form-control form-control-lg border-0 bg-light shadow-sm" placeholder="Ej: 02-34-05" {% if tipo_consulta == 'nomenclatura' %}required{% endif %}>
                         </div>
                         {% endif %}
 

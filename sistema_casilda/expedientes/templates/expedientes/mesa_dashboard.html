@@ -1,0 +1,223 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Dashboard Mesa de Entrada - Casilda{% endblock %}
+
+{% block content %}
+<section class="glass-hero py-4 mb-4">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5 fw-bold text-white mb-1">Mesa de Entradas</h1>
+            <p class="lead text-white opacity-75">Control Central y Numeración Oficial.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
+                <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+            </a>
+            <a href="{% url 'expedientes:crear_expediente_mesa' %}" class="btn-accion-pill shadow-lg">
+                <i class="fa-solid fa-plus me-2"></i> Nuevo Expediente Externo
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <!-- Global Search Bar -->
+    <div class="glass-card p-3 mb-4 shadow-sm border-0 animate-up">
+        <form method="GET" action="." class="row g-2 align-items-center">
+            <div class="col-md-10">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3">
+                        <i class="fa-solid fa-magnifying-glass text-primary opacity-50"></i>
+                    </span>
+                    <input type="text" name="q" class="form-control border-start-0 rounded-end-pill py-2" 
+                           placeholder="Buscar por DNI, Nro Expediente, Oficinas o Nombres..." 
+                           value="{{ q }}">
+                </div>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold">Buscar</button>
+                {% if q %}
+                    <a href="." class="btn btn-outline-secondary rounded-circle" title="Limpiar búsqueda">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+        {% if q %}
+            <div class="mt-2 small text-muted ps-2">
+                <i class="fa-solid fa-filter me-1"></i> Resultados para: <strong>"{{ q }}"</strong> 
+                ({{ por_confirmar.count|add:en_tramite.count }} encontrados)
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs border-0 mb-4" id="mesaTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active border-0 fw-bold px-4 py-3 rounded-top-4" 
+                    id="confirmar-tab" data-bs-toggle="tab" data-bs-target="#confirmar-content" type="button" role="tab">
+                <i class="fa-solid fa-stamp me-2"></i> Por Confirmar (Staff)
+                {% if por_confirmar.count > 0 %}
+                    <span class="badge bg-danger ms-2">{{ por_confirmar.count }}</span>
+                {% endif %}
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link border-0 fw-bold px-4 py-3 rounded-top-4" 
+                    id="tramite-tab" data-bs-toggle="tab" data-bs-target="#tramite-content" type="button" role="tab">
+                <i class="fa-solid fa-folder-tree me-2"></i> En Trámite / Control Global
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="mesaTabsContent">
+        <!-- TAB 1: POR CONFIRMAR -->
+        <div class="tab-pane fade show active" id="confirmar-content" role="tabpanel">
+            <div class="glass-card overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="ps-4">Fecha</th>
+                                <th>Solicitante</th>
+                                <th>Asunto / Sugerencia</th>
+                                <th class="text-end pe-4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exp in por_confirmar %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-bold">{{ exp.fecha_ingreso|date:"d/m/Y" }}</div>
+                                    <small class="text-muted">Iniciado por Staff</small>
+                                </td>
+                                <td>
+                                    <div class="fw-bold">
+                                        {% if exp.solicitante_interno %}
+                                            {{ exp.solicitante_interno.apellido }}, {{ exp.solicitante_interno.nombre }}
+                                        {% else %}
+                                            {{ exp.origen_display }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="small text-muted">
+                                        {% if exp.solicitante_interno %}
+                                            {{ exp.solicitante_interno.oficina|default:exp.solicitante_interno.departamento|default:"Sin Oficina/Depto" }}
+                                        {% else %}
+                                            <i class="fa-solid fa-user-tag me-1 opacity-50"></i> Origen Externo / Manual
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-dark fw-bold text-truncate" style="max-width: 300px;">{{ exp.asunto }}</div>
+                                    <div class="small text-primary">Sugerencia: {{ exp.oficina_destino_sugerida.nombre|default:"Sin sugerencia" }}</div>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a href="{% url 'expedientes:confirmar_expediente_mesa' exp.id_expediente %}" class="btn btn-warning btn-sm rounded-pill px-4 shadow-sm fw-bold">
+                                        <i class="fa-solid fa-stamp me-1"></i> Numerar
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <div class="opacity-50">
+                                        <i class="fa-solid fa-circle-check fs-1 mb-3 text-success"></i>
+                                        <p class="lead mb-0">No hay expedientes internos pendientes de numeración{% if q %} con ese criterio{% endif %}.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: EN TRÁMITE / CONTROL GLOBAL -->
+        <div class="tab-pane fade" id="tramite-content" role="tabpanel">
+            <div class="glass-card overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="ps-4">Nro Expediente</th>
+                                <th>Título / Asunto</th>
+                                <th class="text-center">Ubicación Actual</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-end pe-4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exp in en_tramite %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-bold text-primary">{{ exp.nro_expediente }}</div>
+                                    <small class="text-muted">{{ exp.fecha_ingreso|date:"d/m/Y" }}</small>
+                                </td>
+                                <td>
+                                    <div class="text-truncate fw-bold" style="max-width: 250px;">{{ exp.asunto }}</div>
+                                    <div class="small text-muted">Origen: {{ exp.origen_display }}</div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="small fw-bold text-dark">{{ exp.ubicacion_display }}</div>
+                                    {% if exp.actual_departamento == funcionario.departamento %}
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 mt-1" style="font-size: 0.6rem;">ESTÁ AQUÍ</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">{{ exp.estado }}</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    {% if exp.actual_departamento == funcionario.departamento %}
+                                        <a href="{% url 'expedientes:procesar_expediente' exp.id_expediente %}" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
+                                            <i class="fa-solid fa-file-signature me-1"></i> Procesar
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'expedientes:seguimiento_expediente' exp.id_expediente %}" class="btn btn-outline-primary btn-sm rounded-pill px-3 shadow-sm">
+                                            <i class="fa-solid fa-eye me-1"></i> Detalle
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <p class="text-muted">No hay expedientes activos para realizar el seguimiento{% if q %} con ese criterio{% endif %}.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-tabs .nav-link {
+        color: var(--muni-text-muted);
+        background: rgba(0,0,0,0.03);
+        margin-right: 5px;
+        transition: all 0.3s ease;
+    }
+    .nav-tabs .nav-link.active {
+        background: white !important;
+        color: var(--muni-green) !important;
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+    }
+    .nav-tabs .nav-link:hover:not(.active) {
+        background: rgba(0,0,0,0.06);
+    }
+    
+    /* Search Bar enhancements */
+    .input-group-text {
+        border-color: rgba(0,0,0,0.1);
+    }
+    .form-control:focus {
+        box-shadow: none;
+        border-color: var(--muni-green);
+    }
+</style>
+{% endblock %}

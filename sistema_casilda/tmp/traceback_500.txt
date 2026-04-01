@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\tmp\find_500_robust.py", line 24, in find_error
+    request._messages = FallbackStorage(request)
+                        ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\contrib\messages\storage\fallback.py", line 17, in __init__
+    storage_class(*args, **kwargs) for storage_class in self.storage_classes
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\tecno\Desktop\Marcos\Ver\sistema_casilda\venv\Lib\site-packages\django\contrib\messages\storage\session.py", line 17, in __init__
+    raise ImproperlyConfigured(
+    ...<3 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: The session-based temporary message storage requires session middleware to be installed, and come before the message middleware in the MIDDLEWARE list.

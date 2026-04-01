@@ -1,0 +1,131 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}Iniciar Expediente Interno - Casilda{% endblock %}
+
+{% block content %}
+<section class="glass-hero py-4 mb-5">
+    <div class="container">
+        <h1 class="display-5 fw-bold text-white mb-2">Nuevo Expediente Interno</h1>
+        <p class="lead text-white opacity-75">Inicie una solicitud oficial dirigida a otra oficina municipal.</p>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-card p-4 p-md-5">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="card bg-info bg-opacity-5 border-info border-opacity-10 mb-4">
+                        <div class="card-body d-flex align-items-center">
+                            <i class="fa-solid fa-building-user fs-3 text-info me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Oficina de Origen (Configurado por su perfil)</h6>
+                                <p class="mb-0 text-muted small">
+                                    {% if funcionario.oficina %}
+                                        {{ funcionario.oficina.nombre }}
+                                    {% elif funcionario.departamento %}
+                                        {{ funcionario.departamento.nombre }}
+                                    {% endif %}
+                                    {% if funcionario.area %}- {{ funcionario.area.nombre }}{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Asunto / Motivo *</label>
+                        {{ form.asunto }}
+                        <div class="form-text">Sea descriptivo para facilitar la clasificación en Mesa de Entradas.</div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Dirigido a *</label>
+                            {{ form.dirigido_a }}
+                            <div class="form-text">Persona o Cargo al que se envía.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Documento / Foto</label>
+                            {{ form.foto }}
+                            <div class="form-text">Adjunte la nota o documentación respaldatoria.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Destino Sugerido *</label>
+                        <select id="destino_search" class="form-control select2-ajax"></select>
+                        {{ form.destino_id }}
+                        {{ form.destino_type }}
+                        <div class="form-text">Busque por nombre (Área, Dirección, Oficina, etc.)</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Observaciones Internas</label>
+                        {{ form.observaciones }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'expedientes:mis_expedientes_internos' %}" class="btn btn-light px-4">Cancelar</a>
+                        <button type="submit" class="btn-muni btn-muni-primary px-5">Iniciar Expediente</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#destino_search').select2({
+            theme: 'bootstrap-5',
+            width: '100%',
+            placeholder: 'Busque el destino (ej: Tránsito, Mesa, Gobierno...)',
+            allowClear: true,
+            minimumInputLength: 2,
+            ajax: {
+                url: '{% url "expedientes:buscar_destinos_ajax" %}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('#destino_search').on('select2:select', function (e) {
+            var data = e.params.data;
+            var parts = data.id.split('_');
+            var type = parts[0];
+            var id = parts[1];
+            
+            // Llenamos los campos ocultos
+            $('input[name="destino_id"]').val(id);
+            $('input[name="destino_type"]').val(type);
+        });
+
+        $('#destino_search').on('select2:unselect', function (e) {
+            $('input[name="destino_id"]').val('');
+            $('input[name="destino_type"]').val('');
+        });
+    });
+</script>
+{% endblock %}

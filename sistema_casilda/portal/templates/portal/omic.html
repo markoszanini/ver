@@ -1,0 +1,52 @@
+{% extends 'portal/base_portal.html' %}
+{% load static %}
+
+{% block title %}OMIC - Casilda Conecta{% endblock %}
+
+{% block content %}
+<div class="glass-hero text-white mb-5">
+    <div class="container animate-up">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h1 class="display-5 fw-bold mb-2">OMIC - Defensa del Consumidor</h1>
+                <p class="lead opacity-75 mb-0">Realizá tu reclamo por compras o servicios de manera gratuita y online.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-4 mt-md-0">
+                <a href="{% url 'portal:dashboard' %}" class="btn-volver-pill shadow-lg">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al Panel
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 animate-up">
+            <div class="glass-card p-5 text-center bg-white shadow-lg border-0">
+                <div class="mb-4">
+                    <div class="indicator-badge bg-primary bg-opacity-10 text-primary mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2.5rem; border-radius: 20px;">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark">Servicio de Orientación al Consumidor</h2>
+                    <p class="text-muted mt-3">Para iniciar un reclamo formal por inconvenientes con locales comerciales o servicios, serás redirigido al portal nacional de autogestión para consumidores.</p>
+                </div>
+
+                <div class="p-4 bg-light rounded-4 mb-4 border-start border-4 border-primary">
+                    <p class="mb-0 text-start">
+                        <i class="fa-solid fa-circle-info text-primary me-2"></i>
+                        <strong>¿Qué necesito?</strong> Deberás contar con los datos del comercio (CUIT/Nombre) y la documentación de la compra (factura, ticket, contrato).
+                    </p>
+                </div>
+
+                <div class="d-grid gap-3">
+                    <a href="https://autogestion.produccion.gob.ar/consumidores" target="_blank" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm rounded-pill">
+                        <i class="fa-solid fa-external-link me-2"></i> INICIAR RECLAMO ONLINE
+                    </a>
+                    <p class="small text-muted mt-2">Serás redirigido a una web externa oficial del Ministerio de Economía de la Nación.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

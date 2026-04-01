@@ -1,0 +1,51 @@
+# Django/Python gitignore
+*.py[cod]
+*$py.class
+__pycache__/
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+*.sql
+*.json
+!db_backup_*.json
+
+# Media and Static
+media/
+static/
+
+# Environment Variables
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
